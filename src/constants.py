@@ -30,3 +30,8 @@ class LimelightConstants(ConstantsClass):
     Ka = 0
 
     DEFAULT_ROTATION_SPEED = 0
+
+
+class ShooterConstants(ConstantsClass):
+    IDs = 0,
+    DEFAULT_SHOOTER_SPEED = 0

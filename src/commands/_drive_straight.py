@@ -4,9 +4,11 @@ import subsystems
 
 
 class DriveStraight(commands2.CommandBase):
+    """Drive straight for a certain distance"""
 
     def __init__(self, speed: float, distance: float, tolerance: float = 0) -> None:
         super().addRequirements(subsystems.drivetrain)
+        super().setName("DriveStraight")
 
         self._speed = speed
         self._distance = distance
