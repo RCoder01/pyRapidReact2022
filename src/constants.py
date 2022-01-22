@@ -4,16 +4,22 @@ from utils import (
 
 class DrivetrainConstants(ConstantsClass):
     class LeftMotor(ConstantsClass):
-        IDs = (13, 14, 15)
+        IDs = 13, 14, 15
         Kp = 0
         Ki = 0
         Kd = 0
     
     class RightMotor(ConstantsClass):
-        IDs = (1, 2, 20)
+        IDs = 1, 2, 20
         Kp = 0
         Ki = 0
         Kd = 0
+    
+    ENCODER_COUNTS_PER_FOOT = 0
 
-class TeleopConstants(ConstantsClass):
-    TARGET_SPEED = 0.5
+
+class LimelightConstants(ConstantsClass):
+    Kp = 0
+    Ki = 0
+    Kd = 0
+    Ka = 0

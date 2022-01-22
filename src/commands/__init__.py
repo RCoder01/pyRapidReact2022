@@ -1,2 +1,2 @@
 from ._teleop_tank_drive import TeleopTankDrive
-from ._target import Target
+from ._aim_at_target import AimAtTarget

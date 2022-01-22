@@ -15,7 +15,7 @@ class RobotContainer():
         ))
 
     def configure_bindings(self) -> None:
-        input.button_limelight_activate.whenPressed(commands.Target())
+        input.button_limelight_activate.whenPressed(commands.AimAtTarget())
     
     def get_autonomous_command(self) -> commands2.Command:
         ...
