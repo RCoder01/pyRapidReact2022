@@ -3,12 +3,11 @@ import commands2
 import subsystems
 
 
-class DriveStraight(commands2.Command):
-
-    def getRequirements(self) -> set[commands2.Subsystem]:
-        return {subsystems.drivetrain}
+class DriveStraight(commands2.CommandBase):
 
     def __init__(self, speed: float, distance: float, tolerance: float = 0) -> None:
+        super().addRequirements(subsystems.drivetrain)
+
         self._speed = speed
         self._distance = distance
         self._tolerance = tolerance

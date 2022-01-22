@@ -5,12 +5,11 @@ import commands2
 import subsystems
 
 
-class TeleopTankDrive(commands2.Command):
-    
-    def getRequirements(self) -> set[commands2.Subsystem]:
-        return {subsystems.drivetrain}
+class TeleopTankDrive(commands2.CommandBase):
     
     def __init__(self, left_power_supplier: Callable[[], float], right_power_supplier: Callable[[], float]) -> None:
+        super().addRequirements(subsystems.drivetrain)
+
         self._left_power_supplier = left_power_supplier
         self._right_power_supplier = right_power_supplier
     
