@@ -10,11 +10,14 @@ class Limelight(commands2.SubsystemBase):
             "Limelight XYAV",
             [self.tx, self.ty, self.ta, self.tv]
         )
+        super().periodic()
     
     def __init__(self):
         self._table = NetworkTables.getTable("limelight")
         self._table.getEntry("pipeline").setNumber(1)
         self._table.getEntry("ledMode").setNumber(3)
+
+        super().__init__()
 
     @property
     def tx(self):

@@ -6,11 +6,15 @@ import constants
 
 class Intake(commands2.SubsystemBase):
     
-    def __init__(self) -> None:
-        self._motors = [MotorType(ID) for ID in constants.IntakeConstants.IDs]
-    
     def periodic(self) -> None:
         wpilib.SmartDashboard.putNumber("Intake Speed", self.get_current_speed())
+
+        super().periodic()
+    
+    def __init__(self) -> None:
+        self._motors = [MotorType(ID) for ID in constants.IntakeConstants.IDs]
+        
+        super().__init__()
     
     def set_speed(self, speed: float) -> None:
         """Sets the speed of the intake motors."""

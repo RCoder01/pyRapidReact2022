@@ -6,13 +6,15 @@ import constants
 
 
 class Drivetrain(commands2.SubsystemBase):
+
     def periodic(self) -> None:
         wpilib.SmartDashboard.putNumber('Dirvetrain Left Encoder', self.get_left_encoder_position())
         wpilib.SmartDashboard.putNumber('Dirvetrain Right Encoder', self.get_right_encoder_position())
+        super().periodic()
     
     def __init__(self) -> None:
-        self._left_motors = [rev.CANSparkMax(ID) for ID in constants.DrivetrainConstants.LeftMotor.IDs]
-        self._right_motors = [rev.CANSparkMax(ID) for ID in constants.DrivetrainConstants.RightMotor.IDs]
+        self._left_motors = [rev.CANSparkMax(ID, rev.CANSparkMaxLowLevel.MotorType.kBrushless) for ID in constants.DrivetrainConstants.LeftMotor.IDs]
+        self._right_motors = [rev.CANSparkMax(ID, rev.CANSparkMaxLowLevel.MotorType.kBrushless) for ID in constants.DrivetrainConstants.RightMotor.IDs]
 
         for motor in self._left_motors[1:]:
             motor.follow(self._left_motors[0])
@@ -25,6 +27,8 @@ class Drivetrain(commands2.SubsystemBase):
 
         self._left_lead_PID_controller = self._left_lead_motor.getPIDController()
         self._right_lead_PID_controller = self._right_lead_motor.getPIDController()
+
+        super().__init__()
     
     def set_speed(self, left: float, right: float) -> None:
         """Sets the speed of the left and right motors."""

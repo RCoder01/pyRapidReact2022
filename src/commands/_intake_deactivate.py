@@ -5,7 +5,7 @@ import constants
 import subsystems
 
 
-class DeactivateIntake(commands2.InstantCommand):
+class IntakeDeactivate(commands2.InstantCommand):
     """Deactivates the intake (sets speed to 0)."""
 
     def __init__(self) -> None:
