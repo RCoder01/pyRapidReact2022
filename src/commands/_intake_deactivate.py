@@ -12,9 +12,13 @@ class IntakeDeactivate(commands2.InstantCommand):
         super().addRequirements(subsystems.intake)
         super().setName("DeactivateIntake")
 
+        super().__init__()
+
     def execute(self):
         subsystems.intake.set_speed(0)
         wpilib.SmartDashboard.putBoolean("Intake Active", False)
+
+        super().execute()
 
     def isFinished(self) -> bool:
         return True

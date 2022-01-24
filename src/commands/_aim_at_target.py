@@ -20,6 +20,8 @@ class AimAtTarget(commands2.CommandBase):
         
         self._controller.setSetpoint(0)
 
+        super().__init__()
+
     def execute(self) -> None:
         if subsystems.limelight.tv:
             output = self._controller.calculate(
@@ -34,9 +36,13 @@ class AimAtTarget(commands2.CommandBase):
                 -constants.LimelightConstants.DEFAULT_ROTATION_SPEED,
                 constants.LimelightConstants.DEFAULT_ROTATION_SPEED
             )
+        
+        super().execute()
 
     def isFinished(self) -> bool:
         return self._controller.atSetpoint()
 
     def end(self) -> None:
         subsystems.drivetrain.set_speed(0, 0)
+
+        super().end()

@@ -14,12 +14,16 @@ class TeleopTankDrive(commands2.CommandBase):
 
         self._left_power_supplier = left_power_supplier
         self._right_power_supplier = right_power_supplier
+
+        super().__init__()
     
     def execute(self) -> None:
         subsystems.drivetrain.set_speed(
             self._left_power_supplier,
             self._right_power_supplier
         )
+        
+        super().execute()
     
     def isFinished(self) -> bool:
         return False

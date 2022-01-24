@@ -19,6 +19,8 @@ class DriveStraight(commands2.CommandBase):
             self._speed,
         )
 
+        super().__init__()
+
     def end(self, interrupted: bool) -> None:
         return subsystems.drivetrain.get_left_encoder_position() >= self._distance - self._tolerance and \
                subsystems.drivetrain.get_right_encoder_position() >= self._distance - self._tolerance
