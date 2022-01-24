@@ -28,6 +28,9 @@ class Drivetrain(commands2.SubsystemBase):
         self._left_lead_PID_controller = self._left_lead_motor.getPIDController()
         self._right_lead_PID_controller = self._right_lead_motor.getPIDController()
 
+        self._left_lead_motor_encoder = self._left_lead_motor.getEncoder()
+        self._right_lead_motor_encoder = self._right_lead_motor.getEncoder()
+
         super().__init__()
     
     def set_speed(self, left: float, right: float) -> None:
@@ -43,13 +46,13 @@ class Drivetrain(commands2.SubsystemBase):
     def reset_encoders(self) -> None:
         """Resets the encoders.""" # TODO: Check if this resets reference frame or resets setpoint
         # TODO: Check if this is actually correct
-        self._left_lead_motor.getEncoder().setPosition(0)
-        self._right_lead_motor.getEncoder().setPosition(0)
+        self._left_lead_motor_encoder.setPosition(0)
+        self._right_lead_motor_encoder.setPosition(0)
     
     def get_left_encoder_position(self) -> float:
         """Returns the position of the drivetrain left encoder."""
-        return self._left_lead_motor.getEncoder().getPosition()
+        return self._left_lead_motor_encoder.getPosition()
     
     def get_right_encoder_position(self) -> float:
         """Returns the position of the drivetrain right encoder."""
-        return self._right_lead_motor.getEncoder().getPosition()
+        return self._right_lead_motor_encoder.getPosition()

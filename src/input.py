@@ -8,19 +8,19 @@ _manip = wpilib.XboxController(1)
 
 
 def get_tank_left_speed() -> float:
-    return _driver.getY(wpilib.interfaces.GenericHID.Hand.kLeftHand)
+    return -_driver.getLeftY()
 
 
 def get_tank_right_speed() -> float:
-    return _driver.getY(wpilib.interfaces.GenericHID.Hand.kRightHand)
+    return -_driver.getRightY()
 
 
 def get_arcade_forward_speed() -> float:
-    return _driver.getY(wpilib.interfaces.GenericHID.Hand.kLeftHand)
+    return _driver.getLeftY()
 
 
 def get_arcade_turn_speed() -> float:
-    return _driver.getX(wpilib.interfaces.GenericHID.Hand.kRightHand)
+    return _driver.getRightX()
 
 
 button_limelight_activate = JoystickButton(_driver, _driver.Button.kLeftBumper)
