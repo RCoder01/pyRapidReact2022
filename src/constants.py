@@ -2,7 +2,7 @@ from utils import (
     ConstantsClass
 )
 
-class DrivetrainConstants(ConstantsClass):
+class Drivetrain(ConstantsClass):
     class LeftMotor(ConstantsClass):
         IDs = 13, 14, 15
         Kp = 0
@@ -18,12 +18,14 @@ class DrivetrainConstants(ConstantsClass):
     ENCODER_COUNTS_PER_FOOT = 0
 
 
-class IntakeConstants(ConstantsClass):
+class Intake(ConstantsClass):
     IDs = 0,
     DEFAULT_INTAKE_SPEED = 0
 
 
-class LimelightConstants(ConstantsClass):
+class Limelight(ConstantsClass):
+    MOUNT_ANGLE = 0
+
     Kp = 0
     Ki = 0
     Kd = 0
@@ -32,6 +34,6 @@ class LimelightConstants(ConstantsClass):
     DEFAULT_ROTATION_SPEED = 0
 
 
-class ShooterConstants(ConstantsClass):
+class Shooter(ConstantsClass):
     IDs = 0,
     DEFAULT_SHOOTER_SPEED = 0

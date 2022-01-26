@@ -7,6 +7,7 @@ from ._template import BaseInput
 
 class XboxDriverController(BaseInput):
     def __init__(self):
+        super().__init__()
         self.mController = XboxController(0)
 
     @typing.override

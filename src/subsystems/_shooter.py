@@ -12,9 +12,9 @@ class Shooter(commands2.SubsystemBase):
         super().periodic()
     
     def __init__(self) -> None:
-        self._motors = [MotorType(ID) for ID in constants.ShooterConstants.IDs]
-
-        super().__init__()
+        self.__init__()
+        
+        self._motors = [MotorType(ID) for ID in constants.Shooter.IDs]
     
     def set_speed_setpoint(self, speed: float) -> None:
         """Sets the speed of the shooter motors."""

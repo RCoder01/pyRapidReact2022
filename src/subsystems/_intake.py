@@ -12,9 +12,9 @@ class Intake(commands2.SubsystemBase):
         super().periodic()
     
     def __init__(self) -> None:
-        self._motors = [MotorType(ID) for ID in constants.IntakeConstants.IDs]
-        
-        super().__init__()
+        self.__init__()
+
+        self._motors = [MotorType(ID) for ID in constants.Intake.IDs]
     
     def set_speed(self, speed: float) -> None:
         """Sets the speed of the intake motors."""

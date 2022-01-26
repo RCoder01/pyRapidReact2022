@@ -10,11 +10,13 @@ class Drivetrain(commands2.SubsystemBase):
     def periodic(self) -> None:
         wpilib.SmartDashboard.putNumber('Dirvetrain Left Encoder', self.get_left_encoder_position())
         wpilib.SmartDashboard.putNumber('Dirvetrain Right Encoder', self.get_right_encoder_position())
-        super().periodic()
+        self.periodic()
     
     def __init__(self) -> None:
-        self._left_motors = [rev.CANSparkMax(ID, rev.CANSparkMaxLowLevel.MotorType.kBrushless) for ID in constants.DrivetrainConstants.LeftMotor.IDs]
-        self._right_motors = [rev.CANSparkMax(ID, rev.CANSparkMaxLowLevel.MotorType.kBrushless) for ID in constants.DrivetrainConstants.RightMotor.IDs]
+        self.__init__()
+
+        self._left_motors = [rev.CANSparkMax(ID, rev.CANSparkMaxLowLevel.MotorType.kBrushless) for ID in constants.Drivetrain.LeftMotor.IDs]
+        self._right_motors = [rev.CANSparkMax(ID, rev.CANSparkMaxLowLevel.MotorType.kBrushless) for ID in constants.Drivetrain.RightMotor.IDs]
 
         for motor in self._left_motors[1:]:
             motor.follow(self._left_motors[0])
@@ -30,8 +32,6 @@ class Drivetrain(commands2.SubsystemBase):
 
         self._left_lead_motor_encoder = self._left_lead_motor.getEncoder()
         self._right_lead_motor_encoder = self._right_lead_motor.getEncoder()
-
-        super().__init__()
     
     def set_speed(self, left: float, right: float) -> None:
         """Sets the speed of the left and right motors."""

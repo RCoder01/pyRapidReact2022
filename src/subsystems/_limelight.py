@@ -1,6 +1,9 @@
+import math
 import commands2
 from networktables import NetworkTables
 from wpilib import SmartDashboard
+
+import constants
 
 
 class Limelight(commands2.SubsystemBase):
@@ -13,11 +16,11 @@ class Limelight(commands2.SubsystemBase):
         super().periodic()
     
     def __init__(self):
+        self.__init__()
+
         self._table = NetworkTables.getTable("limelight")
         self._table.getEntry("pipeline").setNumber(1)
         self._table.getEntry("ledMode").setNumber(3)
-
-        super().__init__()
 
     @property
     def tx(self):
@@ -38,3 +41,15 @@ class Limelight(commands2.SubsystemBase):
     def tv(self):
         """The number of targets being tracked (0 or 1)."""
         return self._table.getNumber('tv', None)
+    
+    @property
+    def x(self):
+        return 0
+
+    @property
+    def y(self):
+        return math.sin(self.ty + constants.Limelight.MOUNT_ANGLE)
+
+    @property
+    def z(self):
+        return math.cos(self.ty + constants.Limelight.MOUNT_ANGLE)

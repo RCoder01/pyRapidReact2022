@@ -9,40 +9,41 @@ class AimAtTarget(commands2.CommandBase):
     """Control mode where the robot will rotate to face and maintain the target."""
 
     def __init__(self) -> None:
-        super().addRequirements(subsystems.drivetrain)
-        super().setName("AimAtTarget")
+        self.__init__()
+        self.addRequirements(subsystems.drivetrain)
+        self.setName("AimAtTarget")
 
         self._controller = wpimath.controller.PIDController(
-            constants.LimelightConstants.kP,
-            constants.LimelightConstants.kI,
-            constants.LimelightConstants.kD,
+            constants.Limelight.kP,
+            constants.Limelight.kI,
+            constants.Limelight.kD,
         )
         
         self._controller.setSetpoint(0)
 
-        super().__init__()
 
     def execute(self) -> None:
+        self.execute()
+
         if subsystems.limelight.tv:
             output = self._controller.calculate(
                 subsystems.limelight.tx
                 * subsystems.limelight.ta
-                * constants.LimelightConstants.Ka
+                * constants.Limelight.Ka
             )
 
             subsystems.drivetrain.set_speed(output, -output)
         else:
             subsystems.drivetrain.set_speed(
-                -constants.LimelightConstants.DEFAULT_ROTATION_SPEED,
-                constants.LimelightConstants.DEFAULT_ROTATION_SPEED
+                -constants.Limelight.DEFAULT_ROTATION_SPEED,
+                constants.Limelight.DEFAULT_ROTATION_SPEED
             )
-        
-        super().execute()
 
     def isFinished(self) -> bool:
         return self._controller.atSetpoint()
 
     def end(self) -> None:
-        subsystems.drivetrain.set_speed(0, 0)
+        self.end()
 
-        super().end()
+        subsystems.drivetrain.set_speed(0, 0)
+        

@@ -8,25 +8,25 @@ class Robot(commands2.TimedCommandRobot):
     def robotInit(self) -> None:
         self._container = RobotContainer()
 
-        super().robotInit()
+        return super().robotInit()
     
     def robotPeriodic(self) -> None:
         commands2.CommandScheduler.getInstance().run()
 
-        super().robotPeriodic()
+        return super().robotPeriodic()
     
     def autonomousInit(self) -> None:
         self._auton_command = self._container.get_autonomous_command()
         if self._auton_command is not None:
             self._auton_command.schedule()
         
-        super().autonomousInit()
+        return super().autonomousInit()
     
     def teleopInit(self) -> None:
         if getattr(self, '_auton_command', None) is not None:
             self._auton_command.cancel()
 
-        super().teleopInit()
+        return super().teleopInit()
     
     def teleopPeriodic(self) -> None:
         wpilib.SmartDashboard.putNumber('left speed', input.get_tank_left_speed())
