@@ -16,11 +16,11 @@ class Limelight(commands2.SubsystemBase):
         super().periodic()
     
     def __init__(self):
-        self.__init__()
+        commands2.SubsystemBase.__init__(self)
 
         self._table = NetworkTables.getTable("limelight")
-        self._table.getEntry("pipeline").setNumber(1)
-        self._table.getEntry("ledMode").setNumber(3)
+        self._table.getEntry("pipeline").setDouble(1)
+        self._table.getEntry("ledMode").setDouble(3)
 
     @property
     def tx(self):

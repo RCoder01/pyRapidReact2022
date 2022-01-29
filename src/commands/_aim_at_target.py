@@ -9,22 +9,19 @@ class AimAtTarget(commands2.CommandBase):
     """Control mode where the robot will rotate to face and maintain the target."""
 
     def __init__(self) -> None:
-        self.__init__()
+        commands2.CommandBase.__init__(self)
         self.addRequirements(subsystems.drivetrain)
         self.setName("AimAtTarget")
 
         self._controller = wpimath.controller.PIDController(
-            constants.Limelight.kP,
-            constants.Limelight.kI,
-            constants.Limelight.kD,
+            constants.Limelight.PID.P,
+            constants.Limelight.PID.I,
+            constants.Limelight.PID.D,
         )
         
         self._controller.setSetpoint(0)
 
-
     def execute(self) -> None:
-        self.execute()
-
         if subsystems.limelight.tv:
             output = self._controller.calculate(
                 subsystems.limelight.tx
@@ -39,11 +36,12 @@ class AimAtTarget(commands2.CommandBase):
                 constants.Limelight.DEFAULT_ROTATION_SPEED
             )
 
+        super().execute(self)
+
     def isFinished(self) -> bool:
         return self._controller.atSetpoint()
 
-    def end(self) -> None:
-        self.end()
-
+    def end(self, interrupted) -> None:
         subsystems.drivetrain.set_speed(0, 0)
-        
+
+        super().end(self, interrupted)

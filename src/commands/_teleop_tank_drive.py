@@ -9,9 +9,9 @@ class TeleopTankDrive(commands2.CommandBase):
     """Controls drivetrain with tank drive controls"""
 
     def __init__(self, left_power_supplier: Callable[[], float], right_power_supplier: Callable[[], float]) -> None:
-        self.__init__()
-        self.addRequirements(self, subsystems.drivetrain)
-        self.setName(self, "TeleopTankDrive")
+        commands2.CommandBase.__init__(self)
+        self.addRequirements(subsystems.drivetrain)
+        self.setName("TeleopTankDrive")
 
         self._left_power_supplier = left_power_supplier
         self._right_power_supplier = right_power_supplier
@@ -22,7 +22,7 @@ class TeleopTankDrive(commands2.CommandBase):
             self._right_power_supplier()
         )
         
-        self.execute()
+        super().execute()
     
     def isFinished(self) -> bool:
         return False

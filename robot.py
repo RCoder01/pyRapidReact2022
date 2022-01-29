@@ -8,7 +8,7 @@ example_subsystem_instance = ExampleSubsystem()
 
 class DefaultCommand(commands2.CommandBase):
     def __init__(self):
-        self.__init__()
+        commands2.CommandBase.__init__(self)
         self.addRequirements(example_subsystem_instance) # line 11
     
     def isFinished(self):
@@ -18,7 +18,7 @@ class Robot(commands2.TimedCommandRobot):
     def robotInit(self) -> None:
         example_subsystem_instance.setDefaultCommand(DefaultCommand()) # line 19
 
-        return self.robotInit()
+        return super().robotInit()
 
 if __name__ == '__main__':
     wpilib.run(Robot) # line 24

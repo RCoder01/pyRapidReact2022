@@ -7,7 +7,7 @@ class DriveStraight(commands2.CommandBase):
     """Drive straight for a certain distance"""
 
     def __init__(self, speed: float, distance: float, tolerance: float = 0) -> None:
-        self.__init__()
+        commands2.CommandBase.__init__(self)
         self.addRequirements(subsystems.drivetrain)
         self.setName("DriveStraight")
 
@@ -19,7 +19,6 @@ class DriveStraight(commands2.CommandBase):
             self._speed,
             self._speed,
         )
-
 
     def end(self, interrupted: bool) -> None:
         return subsystems.drivetrain.get_left_encoder_position() >= self._distance - self._tolerance and \
