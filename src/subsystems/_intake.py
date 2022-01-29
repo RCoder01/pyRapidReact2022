@@ -8,9 +8,13 @@ import constants
 class Intake(commands2.SubsystemBase):
     
     def periodic(self) -> None:
-        wpilib.SmartDashboard.putNumber("Intake Speed", self.get_current_speed())
-
-        super().periodic()
+        wpilib.SmartDashboard.putNumber('Intake Speed', self.get_current_speed())
+        
+        return super().periodic()
+    
+    def simulationPeriodic(self) -> None:
+        wpilib.SmartDashboard.putNumber('Intake Motor Output', self._speed)
+        return super().simulationPeriodic()
     
     def __init__(self) -> None:
         commands2.SubsystemBase.__init__(self)
@@ -19,6 +23,10 @@ class Intake(commands2.SubsystemBase):
         self._lead_motor = self._motors[0]
         for motor in self._motors[1:]:
             motor.follow(self._lead_motor)
+        
+        self._lead_motor_sensor_collection = self._lead_motor.getSensorCollection()
+        
+        self._speed = 0
     
     def set_speed(self, speed: float) -> None:
         """Sets the speed of the intake motors."""
@@ -27,8 +35,8 @@ class Intake(commands2.SubsystemBase):
     
     def get_intended_speed(self) -> float:
         """Returns the set speed of the intake motor."""
-        ...
+        return self._speed
     
     def get_current_speed(self) -> float:
         """Returns the actual speed of the intake motor."""
-        ...
+        return self._lead_motor_sensor_collection.getIntegratedSensorVelocity()

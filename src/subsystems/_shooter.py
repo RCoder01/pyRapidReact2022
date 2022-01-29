@@ -9,13 +9,17 @@ import constants
 class Shooter(commands2.SubsystemBase):
     
     def periodic(self) -> None:
-        wpilib.SmartDashboard.putNumber("Shooter Speed", self.get_speed())
+        wpilib.SmartDashboard.putNumber('Shooter Speed', self.get_speed())
 
-        output = self._pid_controller.calculate(self.get_speed())
-        self._lead_motor.set(ctre.ControlMode.PercentOutput, output)
+        self._output = self._pid_controller.calculate(self.get_speed())
+        self._lead_motor.set(ctre.ControlMode.PercentOutput, self._output)
 
-        super().periodic()
+        return super().periodic()
     
+    def simulationPeriodic(self) -> None:
+        wpilib.SmartDashboard.putNumber('Shooter Motor Output', self._output)
+        return super().simulationPeriodic()
+
     def __init__(self) -> None:
         commands2.SubsystemBase.__init__(self)
 
@@ -31,6 +35,8 @@ class Shooter(commands2.SubsystemBase):
         )
 
         self._lead_sensor_collection = self._lead_motor.getSensorCollection()
+
+        self._output = 0
     
     def set_speed_setpoint(self, speed: float) -> None:
         """Sets the speed of the shooter motors."""

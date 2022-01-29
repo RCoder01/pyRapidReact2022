@@ -15,6 +15,10 @@ class Robot(commands2.TimedCommandRobot):
 
         return super().robotPeriodic()
     
+    def _simulationPeriodic(self) -> None:
+        
+        return super()._simulationPeriodic()
+
     def autonomousInit(self) -> None:
         self._auton_command = self._container.get_autonomous_command()
         if self._auton_command is not None:

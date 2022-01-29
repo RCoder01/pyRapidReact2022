@@ -10,11 +10,13 @@ class Drivetrain(commands2.SubsystemBase):
     def periodic(self) -> None:
         wpilib.SmartDashboard.putNumber('Dirvetrain Left Encoder', self.get_left_encoder_position())
         wpilib.SmartDashboard.putNumber('Dirvetrain Right Encoder', self.get_right_encoder_position())
-        super().periodic()
+
+        return super().periodic()
     
     def simulationPeriodic(self) -> None:
-        for sim_sensor in self._left_sim_collections + self._right_sim_collections:
-            sim_sensor.setBusVoltage(wpilib.RobotController.getBatteryVoltage())
+        wpilib.SmartDashboard.putNumber('Drivetrain Left Motor Output', self._left_speed)
+        wpilib.SmartDashboard.putNumber('Drivetrain Right Motor Output', self._right_speed)
+
         return super().simulationPeriodic()
     
     def __init__(self) -> None:
@@ -34,6 +36,9 @@ class Drivetrain(commands2.SubsystemBase):
 
         self._left_lead_motor_sensor_collection = self._left_lead_motor.getSensorCollection()
         self._right_lead_motor_sensor_collection = self._right_lead_motor.getSensorCollection()
+
+        self._left_speed = 0
+        self._right_speed = 0
     
     def set_speed(self, left: float, right: float) -> None:
         """Sets the speed of the left and right motors."""

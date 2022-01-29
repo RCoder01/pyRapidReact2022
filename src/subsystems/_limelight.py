@@ -13,34 +13,34 @@ class Limelight(commands2.SubsystemBase):
             "Limelight XYAV",
             [self.tx, self.ty, self.ta, self.tv]
         )
-        super().periodic()
+        return super().periodic()
     
     def __init__(self):
         commands2.SubsystemBase.__init__(self)
 
-        self._table = NetworkTables.getTable("limelight")
-        self._table.getEntry("pipeline").setDouble(1)
-        self._table.getEntry("ledMode").setDouble(3)
+        self._table = NetworkTables.getTable('limelight')
+        self._table.getEntry('pipeline').setDouble(1)
+        self._table.getEntry('ledMode').setDouble(3)
 
     @property
     def tx(self):
         """The horizontal offset from crosshair to target."""
-        return self._table.getNumber('tx', None)
+        return self._table.getNumber('tx', None) or 0
     
     @property
     def ty(self):
         """The vertical offset from crosshair to target."""
-        return self._table.getNumber('ty', None)
+        return self._table.getNumber('ty', None) or 0
     
     @property
     def ta(self):
         """The relative size (distance) of the target."""
-        return self._table.getNumber('ta', None)
+        return self._table.getNumber('ta', None) or 0
     
     @property
     def tv(self):
         """The number of targets being tracked (0 or 1)."""
-        return self._table.getNumber('tv', None)
+        return self._table.getNumber('tv', None) or 0
     
     @property
     def x(self):
