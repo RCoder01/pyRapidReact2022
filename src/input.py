@@ -33,7 +33,7 @@ def get_shoot() -> bool:
 
 @Button
 def get_intake() -> bool:
-    ...
+    return _driver.getBButton()
 
 
 @Button

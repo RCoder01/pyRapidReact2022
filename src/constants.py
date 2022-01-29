@@ -24,7 +24,7 @@ class Drivetrain(ConstantsClass):
 
 class Intake(ConstantsClass):
     IDs = 0,
-    DEFAULT_INTAKE_SPEED = 0
+    DEFAULT_INTAKE_SPEED = 1
 
 
 class Limelight(ConstantsClass):

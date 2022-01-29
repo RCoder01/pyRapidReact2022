@@ -13,17 +13,17 @@ class Drivetrain(commands2.SubsystemBase):
 
         return super().periodic()
     
-    def simulationPeriodic(self) -> None:
-        wpilib.SmartDashboard.putNumber('Drivetrain Left Motor Output', self._left_speed)
-        wpilib.SmartDashboard.putNumber('Drivetrain Right Motor Output', self._right_speed)
+    # def simulationPeriodic(self) -> None:
+    #     wpilib.SmartDashboard.putNumber('Drivetrain Left Motor Output', self._left_speed)
+    #     wpilib.SmartDashboard.putNumber('Drivetrain Right Motor Output', self._right_speed)
 
-        return super().simulationPeriodic()
+    #     return super().simulationPeriodic()
     
     def __init__(self) -> None:
         commands2.SubsystemBase.__init__(self)
 
         self._left_motors = [ctre.WPI_TalonFX(ID) for ID in constants.Drivetrain.LeftMotor.IDs]
-        self._right_motors = [ctre.TalonFX(ID) for ID in constants.Drivetrain.RightMotor.IDs]
+        self._right_motors = [ctre.WPI_TalonFX(ID) for ID in constants.Drivetrain.RightMotor.IDs]
 
         for motor in self._left_motors[1:]:
             motor.follow(self._left_motors[0])

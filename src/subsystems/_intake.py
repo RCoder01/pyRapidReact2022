@@ -12,14 +12,14 @@ class Intake(commands2.SubsystemBase):
         
         return super().periodic()
     
-    def simulationPeriodic(self) -> None:
-        wpilib.SmartDashboard.putNumber('Intake Motor Output', self._speed)
-        return super().simulationPeriodic()
+    # def simulationPeriodic(self) -> None:
+    #     wpilib.SmartDashboard.putNumber('Intake Motor Output', self._speed)
+    #     return super().simulationPeriodic()
     
     def __init__(self) -> None:
         commands2.SubsystemBase.__init__(self)
 
-        self._motors = [ctre.TalonFX(ID) for ID in constants.Intake.IDs]
+        self._motors = [ctre.WPI_TalonFX(ID) for ID in constants.Intake.IDs]
         self._lead_motor = self._motors[0]
         for motor in self._motors[1:]:
             motor.follow(self._lead_motor)
