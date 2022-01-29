@@ -23,7 +23,7 @@ class Shooter(commands2.SubsystemBase):
     def __init__(self) -> None:
         commands2.SubsystemBase.__init__(self)
 
-        self._motors = [ctre.TalonFX(ID) for ID in constants.Shooter.IDs]
+        self._motors = [ctre.WPI_TalonFX(ID) for ID in constants.Shooter.IDs]
         self._lead_motor = self._motors[0]
         for motor in self._motors[1:]:
             motor.follow(self._lead_motor)
