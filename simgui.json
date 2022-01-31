@@ -11,12 +11,22 @@
           "open": true
         }
       },
+      "Talon FX[13]/Integrated Sensor": {
+        "header": {
+          "open": true
+        }
+      },
       "Talon FX[14]": {
         "header": {
           "open": true
         }
       },
       "Talon FX[15]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX[15]/Fwd Limit": {
         "header": {
           "open": true
         }
@@ -32,6 +42,21 @@
         }
       },
       "Talon FX[2]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX[5]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX[6]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Talon FX[6]/Integrated Sensor": {
         "header": {
           "open": true
         }

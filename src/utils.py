@@ -1,11 +1,9 @@
 from __future__ import annotations
 import warnings
-from typing import (
-    Any,
-    Iterator,
-    overload
-)
+import typing
 import math
+
+import constants
 
 
 def deadzone(
@@ -127,15 +125,15 @@ class ConstantsType(NonwritableType):
         
         return super().__new__(mcls, clsname, bases, clsdict)
     
-    @overload
-    def __getitem__(self, name: str) -> Any:
+    @typing.overload
+    def __getitem__(self, name: str) -> typing.Any:
         """Get item from key"""
 
-    @overload
-    def __getitem__(self, name: tuple[str]) -> Any:
+    @typing.overload
+    def __getitem__(self, name: tuple[str]) -> typing.Any:
         """Get nested item from tuple of keys"""
 
-    def __getitem__(self, name) -> Any:
+    def __getitem__(self, name) -> typing.Any:
         if not isinstance(name, (str, tuple)):
             raise TypeError(f'Items must be of type str or tuple[str], not {type(name)}')
         
@@ -174,7 +172,7 @@ class ConstantsType(NonwritableType):
     def items(self) -> tuple:
         return tuple((k, v) for k, v in remove_dunder_attrs(self.__dict__).items())
     
-    def __iter__(self) -> Iterator[str]:
+    def __iter__(self) -> typing.Iterator[str]:
         return self.keys().__iter__()
 
 

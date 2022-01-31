@@ -4,7 +4,8 @@ import wpilib.interfaces
 
 
 _driver = wpilib.XboxController(0)
-_manip = wpilib.XboxController(1)
+# _manip = wpilib.XboxController(1)
+_manip = wpilib.Joystick(1)
 
 
 def get_tank_left_speed() -> float:
@@ -26,14 +27,22 @@ def get_arcade_turn_speed() -> float:
 button_limelight_activate = JoystickButton(_driver, _driver.Button.kLeftBumper)
 
 
+def get_shooter_speed() -> float:
+    # return _manip.getLeftTriggerAxis()
+    return _manip.getRawAxis(1)
+
+
+# get_shooter = JoystickButton(_manip, _manip.Button.kA)
+get_shooter = JoystickButton(_manip, 1)
+
+
 @Button
 def get_shoot() -> bool:
     ...
 
 
-@Button
-def get_intake() -> bool:
-    return _driver.getBButton()
+# get_intake = JoystickButton(_manip, _manip.Button.kB)
+get_intake = JoystickButton(_manip, 2)
 
 
 @Button

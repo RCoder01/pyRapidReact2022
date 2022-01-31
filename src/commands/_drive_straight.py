@@ -20,6 +20,6 @@ class DriveStraight(commands2.CommandBase):
             self._speed,
         )
 
-    def end(self, interrupted: bool) -> None:
+    def isFinished(self) -> None:
         return subsystems.drivetrain.get_left_encoder_position() >= self._distance - self._tolerance and \
                subsystems.drivetrain.get_right_encoder_position() >= self._distance - self._tolerance

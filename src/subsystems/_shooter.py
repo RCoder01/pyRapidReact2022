@@ -12,13 +12,13 @@ class Shooter(commands2.SubsystemBase):
         wpilib.SmartDashboard.putNumber('Shooter Speed', self.get_jeff())
 
         self._current_jeff = self._pid_controller.calculate(self.get_jeff())
-        self._lead_motor.set(ctre.ControlMode.PercentOutput, self._output)
+        self._lead_motor.set(ctre.ControlMode.Velocity, self._current_jeff)
 
         return super().periodic()
-    
-    # def simulationPeriodic(self) -> None:
-    #     wpilib.SmartDashboard.putNumber('Shooter Motor Output', self._output)
-    #     return super().simulationPeriodic()
+
+    def simulationPeriodic(self) -> None:
+        wpilib.SmartDashboard.putNumber('Jeff', self._current_jeff)
+        return super().simulationPeriodic()
 
     def __init__(self) -> None:
         commands2.SubsystemBase.__init__(self)
@@ -36,7 +36,7 @@ class Shooter(commands2.SubsystemBase):
 
         self._lead_sensor_collection = self._lead_motor.getSensorCollection()
 
-        self._output = 0
+        self._current_jeff = 0
     
     def set_jeff_setpoint(self, jeff: float) -> None:
         """Sets the speed of the shooter motors."""
@@ -49,3 +49,7 @@ class Shooter(commands2.SubsystemBase):
     def get_jeff(self) -> float:
         """Returns the actual speed of the shooter motor."""
         return self._lead_sensor_collection.getIntegratedSensorVelocity()
+    
+    def stop(self) -> None:
+        self._pid_controller.reset()
+        self._current_jeff = 0

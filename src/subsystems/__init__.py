@@ -1,9 +1,9 @@
-from ._drivetrain import Drivetrain
-from ._limelight import Limelight
-from ._intake import Intake
-from ._shooter import Shooter
+from . import _drivetrain
+from . import _limelight
+from . import _intake
+from . import _shooter
 
-drivetrain = Drivetrain()
-limelight = Limelight()
-intake = Intake()
-shooter = Shooter()
+drivetrain = _drivetrain.Drivetrain
+limelight = _limelight.Limelight()
+intake = _intake.Intake()
+shooter = _shooter.Shooter()

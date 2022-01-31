@@ -23,7 +23,7 @@ class Drivetrain(ConstantsClass):
 
 
 class Intake(ConstantsClass):
-    IDs = 0,
+    IDs = 5,
     DEFAULT_INTAKE_SPEED = 1
 
 
@@ -41,10 +41,11 @@ class Limelight(ConstantsClass):
 
 
 class Shooter(ConstantsClass):
-    IDs = 0,
+    IDs = 6,
     DEFAULT_SHOOTER_SPEED = 0
+    MAX_VELOCITY_RPM = 5000
 
     class PID(ConstantsClass):
-        P = 0
-        I = 0
-        D = 0
+        P = 0.5
+        I = 0.5
+        D = 0.5

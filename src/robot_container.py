@@ -2,6 +2,7 @@ import commands2
 import wpilib
 
 import commands
+import constants
 import input
 from subsystems import drivetrain
 
@@ -36,6 +37,9 @@ class RobotContainer():
         input.get_intake \
             .whenPressed(commands.IntakeActivate()) \
             .whenReleased(commands.IntakeDeactivate())
+        
+        input.get_shooter \
+            .whenHeld(commands.TeleopShootSpeed(lambda: input.get_shooter_speed() * constants.Shooter.MAX_VELOCITY_RPM))
     
     def get_autonomous_command(self) -> commands2.Command:
         ...
