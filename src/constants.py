@@ -1,3 +1,4 @@
+import ctre
 from utils import (
     ConstantsClass
 )
@@ -19,7 +20,7 @@ class Drivetrain(ConstantsClass):
             I = 0
             D = 0
     
-    ENCODER_COUNTS_PER_FOOT = 0
+    ENCODER_COUNTS_PER_METER = 3000
 
 
 class Intake(ConstantsClass):

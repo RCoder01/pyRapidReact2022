@@ -1,16 +1,17 @@
 import commands2
 import wpilib
+import wpimath.trajectory
 
 import commands
 import constants
 import input
-from subsystems import drivetrain
+import subsystems
 
 
 class RobotContainer():
     def __init__(self):
         self.configure_bindings()
-        drivetrain.setDefaultCommand(commands.TeleopTankDrive(
+        subsystems.drivetrain.setDefaultCommand(commands.TeleopTankDrive(
             input.get_tank_left_speed,
             input.get_tank_right_speed,
         ))
@@ -42,4 +43,6 @@ class RobotContainer():
             .whenHeld(commands.TeleopShootSpeed(lambda: input.get_shooter_speed() * constants.Shooter.MAX_VELOCITY_RPM))
     
     def get_autonomous_command(self) -> commands2.Command:
-        ...
+        trajectory_generator = wpimath.trajectory.TrajectoryGenerator.generateTrajectory(
+            
+        )

@@ -24,14 +24,14 @@ Arcade/tank drive (2 stick)
 
 Intake/Exgest? (1+1 button)
 
+Climb (? buttons)
+
 ## Manip
 
-Velo/hood/limelight trim (<6? button / 3 axis)
+Velo/hood/limelight-turret trim (<6? button or <3 axis)
 
 Arm shooter (1 button)
 
 Shoot (1 button)
 
 Query ball count? (1 button)
-
-Hang (? buttons)

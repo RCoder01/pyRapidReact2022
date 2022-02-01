@@ -2,6 +2,10 @@ from __future__ import annotations
 import warnings
 import typing
 import math
+import ctre
+
+import wpilib
+import wpilib.interfaces
 
 import constants
 
@@ -206,3 +210,26 @@ class ConstantsClass(metaclass=ConstantsType):
 
     def __new__(cls: ConstantsClass) -> ConstantsClass:
         return cls
+
+
+class HeadedDefaultMotorGroup:
+    def __init__(self, ID_List: typing.Collection[int]) -> None:
+        self.motors = [ctre.WPI_TalonFX(ID) for ID in ID_List]
+        self.lead = self.motors[0]
+        for motor in self.motors[1:]:
+            motor.follow(self.lead)
+
+        self.lead_sensor_collection = self.lead.getSensorCollection()
+
+    def get_lead_encoder_position(self):
+        self.lead_sensor_collection.getIntegratedSensorPosition()
+    
+    def get_lead_encoder_velocity(self):
+        self.lead_sensor_collection.getIntegratedSensorVelocity()
+    
+    def reset_lead_encoder(self):
+        self.lead_sensor_collection.setIntegratedSensorPosition(0)
+    
+    def set_inverted(self, inverted: bool = True):
+        for motor in self.motors:
+            motor.setInverted(inverted)

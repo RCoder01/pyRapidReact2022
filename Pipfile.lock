@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "47540c53cff21ecd6ef15e453ef90aea47485b8df76ca595e79908ee7a126c32"
+            "sha256": "052a7d971e2fec9da9812864a794aea8ce604747d78457e7aa583a506353e7a0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -200,11 +200,11 @@
         },
         "pyfrc": {
             "hashes": [
-                "sha256:0e2e6dbad504f4afddfb8ec1794f1c345fd2f769e710ed4f6ec531cfe3b2e4df",
-                "sha256:b2d2f934946837492f7ec93fc3e57c2505faa29ac36c015638398a9e5466a56b"
+                "sha256:6a057bbb1b451515445bc9940f328c6263c7ca84ec3fe06ec6e9a9794970281e",
+                "sha256:dfeba17a1f599ebdb6a0df451141a0ff683257704026197f8748c859da79d85c"
             ],
             "markers": "platform_machine != 'armv7l'",
-            "version": "==2022.0.1"
+            "version": "==2022.0.2"
         },
         "pynacl": {
             "hashes": [
@@ -277,7 +277,9 @@
         "robotpy": {
             "extras": [
                 "commands2",
-                "ctre"
+                "ctre",
+                "navx",
+                "sim"
             ],
             "hashes": [
                 "sha256:13775465aa6b22b19816507e18cf68e2b3f0801b46473c5e2f99d120aebf76c2",
@@ -350,6 +352,27 @@
             "markers": "python_version >= '3.6'",
             "version": "==2022.2.1.1"
         },
+        "robotpy-halsim-ds-socket": {
+            "hashes": [
+                "sha256:138bef6ffe33541fea9c74fe19956a62c63aa8d82a25a9f4bc457dd25f16f765",
+                "sha256:1d1936d37a7e58b2e668e8c6bc2bd59240a4f51eebe8334699deb9acca4a39a6",
+                "sha256:200a88ceaa15ec5ee0388fb5d6b46b0cd47d11976c70d54d42bf43c1fa5943f1",
+                "sha256:2022d0b77daac80ee21796c8df9c4fa1d392c4157ebd238cb11defe101e75970",
+                "sha256:2911ee8227afc8d938b8ed1a75acb342e8543b172fd03c2c99e1af805084000f",
+                "sha256:317d9fa2c895b12835f8ffdb99480a00a7b191ed77382827dbe29f7651e53902",
+                "sha256:363f9ec7f93f9ead459125861e22f4db70649aa897fbde00bc78093c7d3fd4f1",
+                "sha256:6f243c02c7b4417333270b5fad95d53148b305d88d2df58da3080db127b1eb6f",
+                "sha256:7a2ecd499efc20fc87124da86a2c1827986fcb721bf601d3cb517c0756c295de",
+                "sha256:834128c5fbd58ae51e896362efce6e5c971be5e4b3bc33a77e3a92d01e41d3bd",
+                "sha256:9b69a7f64b0d2e916b0173d0b7b0cd6a9aa374cb4651c7aec07df1d7fae620fa",
+                "sha256:b9e32548ebbc6a5422c72e7b0453b0b7fb6f668da204f49f89ef8c50024f94ff",
+                "sha256:c0abdb2987dccda313ac313e0cfad803b71e9382a8622d7b384e06ed53bb84f6",
+                "sha256:cedf495ca9796fd48a0d830aca9a1af06ea7943047d5961e352eae684b793a52",
+                "sha256:e4d612162b12f765c5f57c0315e3ae976c9708520ce8fe35b486d833a2427277",
+                "sha256:e8786e278a14f3f32d24dc86ae376d2ac47736919aaa333aab7a5c9364bb2993"
+            ],
+            "version": "==2022.2.1.0"
+        },
         "robotpy-halsim-gui": {
             "hashes": [
                 "sha256:017b5ec92398424c155423203cc56152b3289916250bb99f8d48462b0f599c5c",
@@ -372,6 +395,27 @@
             "markers": "platform_machine != 'armv7l'",
             "version": "==2022.2.1.0"
         },
+        "robotpy-halsim-ws": {
+            "hashes": [
+                "sha256:2b46b217f5aea88d72b9dc387fd94a8b42be25365aa092d06d953afc5e9549ce",
+                "sha256:2e8483e260201bf938a0e3d80ff4940c89a1d1b37eb1bbe7ff61fd7f5164dc56",
+                "sha256:39454722aea67a23b63ee416c577bff1b95a6f2fa072da0420b99702469bd332",
+                "sha256:47a45d8a620c509ea353735898bac571790c0e4152598e13a3d4005cb90ea9ff",
+                "sha256:61516128d7498efc5ded024859534b44b5cf9824ba88499632ec8df7cc5397fd",
+                "sha256:6787e37d5f85a450dcb0737dbc602648f8b15bcab8a5a711308f7d20cb75358f",
+                "sha256:7d5074fbb009b18472323d74b2f322317ce27dac3afb23c6866ef1cc1e1f53c3",
+                "sha256:87cdbe8c59bb520cd74522e36afa3910b39ae5d9256437fad319155e08b75fa8",
+                "sha256:8fabd7b8c99d344983ab4b0d78c232404475f49310b2621d2a40c07621dbe974",
+                "sha256:9f91c9def1ece35c692dcfec1ea3e431db33fd1b1250626c818d5e409378d21b",
+                "sha256:c6cc2e12882c8f74e47fd6a28739ea1dbb6f96518bec5affe204b8c3a394046b",
+                "sha256:c73b9ebdaa773550e3aab2fcc4b81e8f4e527aeb16e097d1cef3d4a228f2bfa5",
+                "sha256:ca554e015ab7197b1ceb5fc2116bd1f69f2c11f7217c90cc2f469aa6f42b13db",
+                "sha256:ce29f3be1f2a48d02c696211a1d6edf754094377765342c4055d0778c6f80fcf",
+                "sha256:d31349333c3707645a89c3a300854b0847e844f1c582ccc382b3e828f6c325d6",
+                "sha256:df01dd3a28d943f83971d7a5629a45546bbae7a444173cbaca518b4cd10795af"
+            ],
+            "version": "==2022.2.1.0"
+        },
         "robotpy-installer": {
             "hashes": [
                 "sha256:4f126a85712637a83c301f9a8bcdf81c07d82900bd8551bf613f1e46a28e7cae",
@@ -379,6 +423,27 @@
             ],
             "markers": "platform_machine != 'armv7l'",
             "version": "==2022.0.2"
+        },
+        "robotpy-navx": {
+            "hashes": [
+                "sha256:028879490dc0c602443a36047caebf505142078ff6f572cf3270753fba167502",
+                "sha256:10469986023d5ae85ed53c6ed1fb82b0dc7199e094a6cea83229b94a7e27b775",
+                "sha256:10d65adc3cfa100badc82abd9f5aa50629394e7db29cd71b05e55e4a51bde7dc",
+                "sha256:1d1b8a973ba0c5008030352d7d4f03e80d5296a8e75cd85dd7b8e0a4d5d59586",
+                "sha256:1e30e23863562579d5f4f3cdd08ffbf20a7733a8a7f155b9e2591cae68237c97",
+                "sha256:30a589ca9cafe0981b92421969a748dedc4ee936ce3ed72561e5229e8878f95e",
+                "sha256:5e6f0bb9ea5a446e7f08103884ed6b98165f071df8238a1352dc33882c8f075b",
+                "sha256:5f055a727ba04c6fe5f4516ca6361a1890b5b4fbe736e0c3115593ea2406d36c",
+                "sha256:626ebd36895f4be295d80b0fcec1cd8e5f62d3d635d9816a169248b7513b86ac",
+                "sha256:66756bed1bb3346000d87fb57b19bd945d71cca1ea5b24b2b2e5961f092a7dcb",
+                "sha256:820fd7fe31b5425b99212210ef23d81e23d3a515bf4e0a3d30a5241708e0f803",
+                "sha256:824a77bacf9e80e941cab61b241c650d2844b06942c3b05ffa76ce6973d455b6",
+                "sha256:aaffc47f5adf1643209146f2e760c684efdd301f77c6d949ab75798412b20289",
+                "sha256:c4472e01810c136e54ceb9d4334758bcb7e4602f41386e93995c6a019467f4f6",
+                "sha256:f148a7a37cf8b35f89a69135c816e5b1774b5f223be521596ca40f072c2b9e67",
+                "sha256:f14a4235d5a66bb6f48af6682d8528265e5792b0fd2af7105d23c2baed6adbc3"
+            ],
+            "version": "==2022.0.1"
         },
         "robotpy-wpilib-utilities": {
             "hashes": [

@@ -3,6 +3,7 @@ import ctre
 import wpilib
 
 import constants
+import utils
 
 
 class Intake(commands2.SubsystemBase):
@@ -19,19 +20,14 @@ class Intake(commands2.SubsystemBase):
     def __init__(self) -> None:
         commands2.SubsystemBase.__init__(self)
 
-        self._motors = [ctre.WPI_TalonFX(ID) for ID in constants.Intake.IDs]
-        self._lead_motor = self._motors[0]
-        for motor in self._motors[1:]:
-            motor.follow(self._lead_motor)
-        
-        self._lead_motor_sensor_collection = self._lead_motor.getSensorCollection()
+        self._motors = utils.HeadedDefaultMotorGroup(constants.Intake.IDs)
         
         self._speed = 0
     
     def set_speed(self, speed: float) -> None:
         """Sets the speed of the intake motors."""
         self._speed = speed
-        self._lead_motor.set(ctre.ControlMode.PercentOutput, speed)
+        self._motors.lead.set(ctre.ControlMode.PercentOutput, speed)
     
     def get_intended_speed(self) -> float:
         """Returns the set speed of the intake motor."""
@@ -39,4 +35,4 @@ class Intake(commands2.SubsystemBase):
     
     def get_current_speed(self) -> float:
         """Returns the actual speed of the intake motor."""
-        return self._lead_motor_sensor_collection.getIntegratedSensorVelocity()
+        return self._motors.get_lead_encoder_velocity() or 0
