@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 robotpy = {extras = ["commands2", "ctre", "navx", "sim"], version = "*"}
+matplotlib = "*"
 
 [dev-packages]
 

@@ -2,10 +2,8 @@ from __future__ import annotations
 import warnings
 import typing
 import math
-import ctre
 
-import wpilib
-import wpilib.interfaces
+import ctre
 
 import constants
 
@@ -223,13 +221,13 @@ class HeadedDefaultMotorGroup:
 
     def get_lead_encoder_position(self):
         self.lead_sensor_collection.getIntegratedSensorPosition()
-    
+
     def get_lead_encoder_velocity(self):
         self.lead_sensor_collection.getIntegratedSensorVelocity()
-    
+
     def reset_lead_encoder(self):
         self.lead_sensor_collection.setIntegratedSensorPosition(0)
-    
+
     def set_inverted(self, inverted: bool = True):
         for motor in self.motors:
             motor.setInverted(inverted)
