@@ -71,5 +71,5 @@ class Shooter(ConstantsClass):
 
 
 class Misc(ConstantsClass):
-    SIMULATION_PERIOD_TIME_MS = 20
+    SIMULATION_PERIOD_MS = 20
     MAX_VOLTAGE = 12

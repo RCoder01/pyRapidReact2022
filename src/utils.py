@@ -5,8 +5,6 @@ import math
 
 import ctre
 
-import constants
-
 
 def deadzone(
         input,

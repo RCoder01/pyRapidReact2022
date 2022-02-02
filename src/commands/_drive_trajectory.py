@@ -25,9 +25,7 @@ class DriveTrajectory(commands2.RamseteCommand):
         trajectory_config.addConstraint(
             wpimath.trajectory.constraint.DifferentialDriveVoltageConstraint(
                 wpimath.controller.SimpleMotorFeedforwardMeters(
-                    constants.Drivetrain.Characterization.FeedForward.S,
-                    constants.Drivetrain.Characterization.FeedForward.V,
-                    constants.Drivetrain.Characterization.FeedForward.A,
+                    *constants.Drivetrain.Characterization.FeedForward
                 ),
                 drive_kinematics,
                 constants.Misc.MAX_VOLTAGE,
@@ -38,30 +36,23 @@ class DriveTrajectory(commands2.RamseteCommand):
 
         super().__init__(
             wpimath.trajectory.TrajectoryGenerator.generateTrajectory(
-                [], # TODO: Add waypoints
+                waypoints,
                 config=trajectory_config,
             ),
             subsystems.drivetrain.get_pose,
             wpimath.controller.RamseteController(
-                constants.Drivetrain.Characterization.Ramesete.B,
-                constants.Drivetrain.Characterization.Ramesete.ZETA,
+                *constants.Drivetrain.Characterization.Ramesete,
             ),
             wpimath.controller.SimpleMotorFeedforwardMeters(
-                constants.Drivetrain.Characterization.FeedForward.S,
-                constants.Drivetrain.Characterization.FeedForward.V,
-                constants.Drivetrain.Characterization.FeedForward.A,
+                *constants.Drivetrain.Characterization.FeedForward,
             ),
             drive_kinematics,
             subsystems.drivetrain.get_wheel_speeds,
             wpimath.controller.PIDController(
-                constants.Drivetrain.LeftMotor.PID.P,
-                constants.Drivetrain.LeftMotor.PID.I,
-                constants.Drivetrain.LeftMotor.PID.D,
+                *constants.Drivetrain.LeftMotor.PID,
             ),
             wpimath.controller.PIDController(
-                constants.Drivetrain.RightMotor.PID.P,
-                constants.Drivetrain.RightMotor.PID.I,
-                constants.Drivetrain.RightMotor.PID.D,
+                *constants.Drivetrain.RightMotor.PID,
             ),
             subsystems.drivetrain.set_speed,
             subsystems.drivetrain,

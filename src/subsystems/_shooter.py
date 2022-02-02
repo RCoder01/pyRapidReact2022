@@ -27,9 +27,7 @@ class Shooter(commands2.SubsystemBase):
         self._motors = utils.HeadedDefaultMotorGroup(constants.Shooter.IDs)
 
         self._pid_controller = wpimath.controller.PIDController(
-            constants.Shooter.PID.P,
-            constants.Shooter.PID.I,
-            constants.Shooter.PID.D,
+            *constants.Shooter.PID,
         )
 
         self._current_jeff = 0

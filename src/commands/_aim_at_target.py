@@ -15,9 +15,7 @@ class AimAtTarget(commands2.CommandBase):
         self.setName("AimAtTarget")
 
         self._controller = wpimath.controller.PIDController(
-            constants.Limelight.PID.P,
-            constants.Limelight.PID.I,
-            constants.Limelight.PID.D,
+            *constants.Limelight.PID
         )
         
         self._controller.setSetpoint(0)
