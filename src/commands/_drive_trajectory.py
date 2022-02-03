@@ -34,7 +34,8 @@ class DriveTrajectory(commands2.RamseteCommand):
 
         subsystems.drivetrain.reset_odometry()
 
-        super().__init__(
+        commands2.RamseteCommand.__init__(
+            self,
             wpimath.trajectory.TrajectoryGenerator.generateTrajectory(
                 waypoints,
                 config=trajectory_config,
@@ -57,3 +58,6 @@ class DriveTrajectory(commands2.RamseteCommand):
             subsystems.drivetrain.set_speed,
             subsystems.drivetrain,
         )
+
+        self.setName("DriveTrajectory")
+        self.addRequirements(subsystems.drivetrain)

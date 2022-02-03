@@ -1,3 +1,4 @@
+import typing
 import commands2
 import ctre
 import wpilib
@@ -17,17 +18,17 @@ class Intake(commands2.SubsystemBase):
     #     wpilib.SmartDashboard.putNumber('Intake Motor Output', self._speed)
     #     return super().simulationPeriodic()
     
-    def __init__(self) -> None:
+    def __init__(self, motor_IDs: typing.Collection[int]) -> None:
         commands2.SubsystemBase.__init__(self)
 
-        self._motors = utils.HeadedDefaultMotorGroup(constants.Intake.IDs)
+        self._motors = utils.HeadedDefaultMotorGroup(motor_IDs)
 
         self._speed = 0
 
     def set_speed(self, speed: float) -> None:
         """Sets the speed of the intake motors."""
         self._speed = speed
-        self._motors.lead.set(ctre.ControlMode.PercentOutput, speed)
+        self._motors.set_speed(speed)
 
     def get_intended_speed(self) -> float:
         """Returns the set speed of the intake motor."""

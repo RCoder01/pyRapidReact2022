@@ -17,12 +17,14 @@ class Limelight(commands2.SubsystemBase):
         )
         return super().periodic()
 
-    def __init__(self):
+    def __init__(self, pipeline: int, led_mode: int, mount_angle: float):
         commands2.SubsystemBase.__init__(self)
 
         self._table = NetworkTables.getTable('limelight')
-        self._table.getEntry('pipeline').setDouble(1)
-        self._table.getEntry('ledMode').setDouble(3)
+        self._table.getEntry('pipeline').setDouble(pipeline)
+        self._table.getEntry('ledMode').setDouble(led_mode)
+
+        self._MOUNT_ANGLE = mount_angle
 
     @property
     def tx(self):
@@ -52,9 +54,9 @@ class Limelight(commands2.SubsystemBase):
     @property
     def y(self):
         """The normalized vertical distance to the target."""
-        return math.sin(self.ty + constants.Limelight.MOUNT_ANGLE)
+        return math.sin(self.ty + self._MOUNT_ANGLE)
 
     @property
     def z(self):
         """The normalized forward distance to the target."""
-        return math.cos(self.ty + constants.Limelight.MOUNT_ANGLE)
+        return math.cos(self.ty + self._MOUNT_ANGLE)

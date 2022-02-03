@@ -1,5 +1,6 @@
 from re import S
 import ctre
+import wpilib
 from utils import (
     ConstantsClass
 )
@@ -21,10 +22,11 @@ class Drivetrain(ConstantsClass):
             I = 0 # Probably keep 0
             D = 0 # Probably keep 0
     
-    ENCODER_COUNTS_PER_ROTATION = 2048
     ENCODER_COUNTS_PER_METER = 3000
 
-    class Characterization(ConstantsClass):
+    GYRO_PORT = wpilib.SPI.Port # TODO: Find which port the gyro is on
+
+    class Characterization(ConstantsClass): # TODO: https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/characterizing-drive.html
 
         class FeedForward(ConstantsClass):
             S = 0
@@ -42,7 +44,7 @@ class Drivetrain(ConstantsClass):
 
 
 class Intake(ConstantsClass):
-    IDs = 5,
+    MOTOR_IDs = 5,
     DEFAULT_INTAKE_SPEED = 1
 
 
@@ -58,6 +60,9 @@ class Limelight(ConstantsClass):
 
     DEFAULT_ROTATION_SPEED = 0
 
+    PIPELINE = 1
+    LED_MODE = 3
+
 
 class Shooter(ConstantsClass):
     IDs = 6,
@@ -65,11 +70,34 @@ class Shooter(ConstantsClass):
     MAX_VELOCITY_RPM = 5000
 
     class PID(ConstantsClass):
-        P = 0.5
-        I = 0.5
-        D = 0.5
+        P = 0
+        I = 0
+        D = 0
+    
+    class Turret(ConstantsClass):
+        MOTOR_IDs = 7,
 
+        ENCODER_COUNTS_PER_ROTATION = 2048
+
+        class PID(ConstantsClass):
+            P = 0
+            I = 0
+            D = 0
+
+    class Hood(ConstantsClass):
+        MOTOR_IDs = 8,
+
+        class EncoderLimits(ConstantsClass):
+            MIN = 0
+            MAX = 2048
+
+        class PID(ConstantsClass):
+            P = 0
+            I = 0
+            D = 0
 
 class Misc(ConstantsClass):
     SIMULATION_PERIOD_MS = 20
     MAX_VOLTAGE = 12
+
+    ENCODER_COUNTS_PER_ROTATION = 2048

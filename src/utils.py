@@ -5,6 +5,8 @@ import math
 
 import ctre
 
+import constants
+
 
 def deadzone(
         input,
@@ -209,23 +211,70 @@ class ConstantsClass(metaclass=ConstantsType):
 
 
 class HeadedDefaultMotorGroup:
+    
+    ENCODER_COUNTS_PER_ROTATION = constants.Misc.ENCODER_COUNTS_PER_ROTATION
+
     def __init__(self, ID_List: typing.Collection[int]) -> None:
         self.motors = [ctre.WPI_TalonFX(ID) for ID in ID_List]
         self.lead = self.motors[0]
         for motor in self.motors[1:]:
             motor.follow(self.lead)
 
-        self.lead_sensor_collection = self.lead.getSensorCollection()
-
     def get_lead_encoder_position(self):
-        self.lead_sensor_collection.getIntegratedSensorPosition()
+        """Return the encoder position of the lead motor."""
+        self.lead.getSelectedSensorPosition()
 
     def get_lead_encoder_velocity(self):
-        self.lead_sensor_collection.getIntegratedSensorVelocity()
+        """Return the encoder velocity of the lead motor."""
+        self.lead.getSelectedSensorVelocity()
 
     def reset_lead_encoder(self):
-        self.lead_sensor_collection.setIntegratedSensorPosition(0)
+        """Reset the encoder of the lead motor."""
+        self.lead.setSelectedSensorPosition(0)
 
     def set_inverted(self, inverted: bool = True):
+        """Set the inversion of the motors.""" # TODO: Ensure implementation is accurate
         for motor in self.motors:
             motor.setInverted(inverted)
+
+    def set_speed(self, value: float):
+        """Set the speed of the motors, using the default configuration."""
+        self.lead.set(ctre.ControlMode.PercentOutput, value)
+
+    def set_velocity(self, target_velocity: float):
+        """Set the velocity of the motors, using the default configuration."""
+        self.lead.set(ctre.ControlMode.Velocity, target_velocity)
+
+
+class OdometricHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
+
+    def __init__(self, ID_List: typing.Collection[int], encoder_counts_per_meter):
+        super().__init__(ID_List)
+        self._ENCODER_COUNTS_PER_METER = encoder_counts_per_meter
+
+        self.reset_lead_encoder()
+
+        self._cum_encoder_ticks = 0
+
+        self._last_raw_encoder_ticks = 0
+
+        self._encoder_delta = 0
+
+    def reset_odometry(self):
+        self.reset_lead_encoder()
+
+        self._last_raw_encoder_ticks = 0
+
+    def periodic(self):
+        raw_encoder_ticks = self.get_lead_encoder_position()
+
+        self._encoder_delta = raw_encoder_ticks - self._last_raw_encoder_ticks
+
+        self._last_raw_encoder_ticks = raw_encoder_ticks
+        
+        self._encoder_delta += ((self.get_lead_encoder_velocity() > 0) + (self._encoder_delta < 0) - 1) * self.ENCODER_COUNTS_PER_ROTATION
+
+        self._cum_encoder_ticks += self._encoder_delta
+
+    def get_last_distance(self):
+        return self._encoder_delta / self._ENCODER_COUNTS_PER_METER

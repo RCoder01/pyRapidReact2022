@@ -13,7 +13,7 @@ class Shooter(commands2.SubsystemBase):
         wpilib.SmartDashboard.putNumber('Shooter Speed', self.get_jeff())
 
         self._current_jeff = self._pid_controller.calculate(self.get_jeff())
-        self._motors.lead.set(ctre.ControlMode.Velocity, self._current_jeff)
+        self._motors.set_velocity(self._current_jeff)
 
         return super().periodic()
 
