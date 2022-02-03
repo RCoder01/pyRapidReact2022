@@ -83,21 +83,26 @@ class Drivetrain(commands2.SubsystemBase):
         return self._right_motors.get_lead_encoder_velocity() or 0
 
     def get_wheel_speeds(self):
+        """Returns the robot's speed in a wpilib DifferentialDriveWheelSpeeds object."""
         return wpimath.kinematics.DifferentialDriveWheelSpeeds(
             self.get_left_encoder_speed(),
             self.get_right_encoder_speed(),
         )
 
     def get_gyro(self):
+        """Returns the gyro angle in a wpilib Rotation2d object."""
         return self._gyro.getRotation2d()
 
     def reset_gyro(self):
+        """Resets the gyro heading to zero."""
         self._gyro.reset()
 
     def get_rate(self):
+        """Returns the robot's turn rate."""
         return self._gyro.getRate()
 
     def _init_odometry(self):
+        """Initializes the odometry object and related math values."""
         self._odometry = wpimath.kinematics.DifferentialDriveOdometry(
             self._gyro.getRotation2d(),
         )
@@ -112,10 +117,16 @@ class Drivetrain(commands2.SubsystemBase):
         self._right_encoder_delta = 0
 
     def reset_odometry(self, pose: wpimath.geometry.Pose2d):
+        """Resets the odometry to the given pose."""
         self.reset_encoders()
         self._odometry.resetPosition(pose, self.get_gyro())
 
     def _update_odometry(self):
+        """
+        Updates the odometry object.
+
+        Intended to be called periodically.
+        """
         self._calculate_odometry()
 
         self._odometry.update(
@@ -125,6 +136,7 @@ class Drivetrain(commands2.SubsystemBase):
         )
 
     def _calculate_odometry(self):
+        """Performs calculations for odometry."""
         left_raw_encoder_ticks = self.get_left_encoder_position()
         right_raw_encoder_ticks = self.get_right_encoder_position()
 
@@ -137,31 +149,17 @@ class Drivetrain(commands2.SubsystemBase):
         self._left_encoder_delta += ((self.get_left_encoder_speed > 0) + (self._left_encoder_delta < 0) - 1) * constants.Drivetrain.ENCODER_COUNTS_PER_ROTATION
         self._right_encoder_delta += ((self.get_right_encoder_speed > 0) + (self._right_encoder_delta < 0) - 1) * constants.Drivetrain.ENCODER_COUNTS_PER_ROTATION
 
-        # Previous two lines are equivalent to:
-        '''
-        if self.get_left_encoder_speed() > 0:
-            if left_encoder_delta < 0:
-                left_encoder_delta += constants.Drivetrain.ENCODER_COUNTS_PER_ROTATION
-        elif self.get_left_encoder_speed() < 0:
-            if left_encoder_delta > 0:
-                left_encoder_delta -= constants.Drivetrain.ENCODER_COUNTS_PER_ROTATION
-        
-        if self.get_right_encoder_speed() > 0:
-            if right_encoder_delta < 0:
-                right_encoder_delta += constants.Drivetrain.ENCODER_COUNTS_PER_ROTATION
-        elif self.get_right_encoder_speed() < 0:
-            if right_encoder_delta > 0:
-                right_encoder_delta -= constants.Drivetrain.ENCODER_COUNTS_PER_ROTATION
-        '''
-
         self._left_cum_encoder_ticks += self._left_encoder_delta
         self._right_cum_encoder_ticks += self._right_encoder_delta
 
     def _get_last_left_distance(self):
+        """Returns the distance traveled by the left encoder in the last period."""
         return self._left_encoder_delta / constants.Drivetrain.ENCODER_COUNTS_PER_METER
 
     def _get_last_right_distance(self):
+        """Returns the distance traveled by the right encoder in the last period."""
         return self._right_encoder_delta / constants.Drivetrain.ENCODER_COUNTS_PER_METER
 
     def get_pose(self):
+        """Returns the robot's pose in a wpilib Pose2d object."""
         return self._odometry.getPose()

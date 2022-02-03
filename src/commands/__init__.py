@@ -1,3 +1,5 @@
+"""All of the robot's publicly accessible commands."""
+
 from ._aim_at_target import AimAtTarget
 from ._drive_straight import DriveStraight
 from ._teleop_tank_drive import TeleopTankDrive

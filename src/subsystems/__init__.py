@@ -1,3 +1,4 @@
+"""All of the robots publicly accessible subsystems."""
 from . import _drivetrain
 from . import _limelight
 from . import _intake

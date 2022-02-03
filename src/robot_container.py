@@ -21,7 +21,7 @@ class RobotContainer():
         def on_command_schedule(command: commands2.Command):
             self._active_command_string_list.append(command.getName())
             wpilib.SmartDashboard.putStringArray("Active Commands", self._active_command_string_list)
-        
+
         def on_command_finish(command: commands2.Command):
             try:
                 self._active_command_string_list.remove(command.getName())
@@ -29,7 +29,7 @@ class RobotContainer():
                 pass
             else:
                 wpilib.SmartDashboard.putStringArray("Active Commands", self._active_command_string_list)
-        
+
         commands2.CommandScheduler.getInstance().onCommandInitialize(on_command_schedule)
         commands2.CommandScheduler.getInstance().onCommandFinish(on_command_finish)
         commands2.CommandScheduler.getInstance().onCommandInterrupt(on_command_finish)
@@ -38,7 +38,7 @@ class RobotContainer():
         input.get_intake \
             .whenPressed(commands.IntakeActivate()) \
             .whenReleased(commands.IntakeDeactivate())
-        
+
         input.get_shooter \
             .whenHeld(commands.TeleopShootSpeed(lambda: input.get_shooter_speed() * constants.Shooter.MAX_VELOCITY_RPM))
     
