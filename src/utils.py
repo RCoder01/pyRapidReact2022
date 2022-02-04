@@ -212,7 +212,7 @@ class ConstantsClass(metaclass=ConstantsType):
 
 class HeadedDefaultMotorGroup:
     
-    ENCODER_COUNTS_PER_ROTATION = constants.Misc.ENCODER_COUNTS_PER_ROTATION
+    ENCODER_COUNTS_PER_ROTATION: int = constants.Misc.ENCODER_COUNTS_PER_ROTATION
 
     def __init__(self, ID_List: typing.Collection[int]) -> None:
         self.motors = [ctre.WPI_TalonFX(ID) for ID in ID_List]
@@ -222,11 +222,11 @@ class HeadedDefaultMotorGroup:
 
     def get_lead_encoder_position(self):
         """Return the encoder position of the lead motor."""
-        self.lead.getSelectedSensorPosition()
+        return self.lead.getSelectedSensorPosition() or 0
 
     def get_lead_encoder_velocity(self):
         """Return the encoder velocity of the lead motor."""
-        self.lead.getSelectedSensorVelocity()
+        return self.lead.getSelectedSensorVelocity() or 0
 
     def reset_lead_encoder(self):
         """Reset the encoder of the lead motor."""
@@ -248,9 +248,9 @@ class HeadedDefaultMotorGroup:
 
 class OdometricHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
 
-    def __init__(self, ID_List: typing.Collection[int], encoder_counts_per_meter):
+    def __init__(self, ID_List: typing.Collection[int], conversion_factor: float = 1):
         super().__init__(ID_List)
-        self._ENCODER_COUNTS_PER_METER = encoder_counts_per_meter
+        self._CONVERSION_FACTOR = conversion_factor
 
         self.reset_lead_encoder()
 
@@ -260,13 +260,34 @@ class OdometricHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
 
         self._encoder_delta = 0
 
-    def reset_odometry(self):
-        self.reset_lead_encoder()
-
+    def reset_lead_encoder(self):
+        """Reset the encoder of the lead motor."""
         self._last_raw_encoder_ticks = 0
 
+        super().reset_lead_encoder()
+
+    def reset_odometry(self):
+        """
+        Reset the cumulative and current encoder counts of the motors.
+
+        Will break any discontinuous motion.
+
+        :returns: The cumulative distance of the motors before being reset.
+        """
+        self.reset_lead_encoder()
+
+        cum = self._cum_encoder_ticks
+        self._cum_encoder_ticks = 0
+
+        return cum * self._CONVERSION_FACTOR
+
     def periodic(self):
-        raw_encoder_ticks = self.get_lead_encoder_position()
+        """
+        Update the cumulative encoder counts of the motors.
+
+        Must be called periodically.
+        """
+        raw_encoder_ticks: int = self.get_lead_encoder_position()
 
         self._encoder_delta = raw_encoder_ticks - self._last_raw_encoder_ticks
 
@@ -277,4 +298,9 @@ class OdometricHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
         self._cum_encoder_ticks += self._encoder_delta
 
     def get_last_distance(self):
-        return self._encoder_delta / self._ENCODER_COUNTS_PER_METER
+        """
+        Return the distance traveled since the last reset.
+        
+        Calculated by the encoder ticks.
+        """
+        return self._encoder_delta / self._CONVERSION_FACTOR

@@ -15,6 +15,8 @@ Drivetrain arcade drive command
 
 Auto commands
 
+Ensure to characterize the robot on carpet (fields are carpet)
+
 
 # Controller config
 
