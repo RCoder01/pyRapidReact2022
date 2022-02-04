@@ -211,7 +211,7 @@ class ConstantsClass(metaclass=ConstantsType):
 
 
 class HeadedDefaultMotorGroup:
-    
+
     ENCODER_COUNTS_PER_ROTATION: int = constants.Misc.ENCODER_COUNTS_PER_ROTATION
 
     def __init__(self, ID_List: typing.Collection[int]) -> None:
@@ -292,7 +292,7 @@ class OdometricHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
         self._encoder_delta = raw_encoder_ticks - self._last_raw_encoder_ticks
 
         self._last_raw_encoder_ticks = raw_encoder_ticks
-        
+
         self._encoder_delta += ((self.get_lead_encoder_velocity() > 0) + (self._encoder_delta < 0) - 1) * self.ENCODER_COUNTS_PER_ROTATION
 
         self._cum_encoder_ticks += self._encoder_delta

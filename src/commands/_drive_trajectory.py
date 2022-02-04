@@ -1,9 +1,10 @@
 import typing
 import commands2
 import wpilib
-import wpimath.geometry
 import wpimath.controller
+import wpimath.geometry
 import wpimath.kinematics
+import wpimath.spline
 import wpimath.trajectory
 import wpimath.trajectory.constraint
 
@@ -12,7 +13,20 @@ import subsystems
 
 
 class DriveTrajectory(commands2.RamseteCommand):
-    def __init__(self, waypoints: typing.Collection[wpimath.geometry.Pose2d]) -> None:
+    @typing.overload
+    def __init__(self, controlVectors: typing.List[wpimath.spline.Spline5.ControlVector], /) -> None:
+        pass
+    @typing.overload
+    def __init__(self, initial: wpimath.spline.Spline3.ControlVector, interiorWaypoints: typing.List[wpimath.geometry.Translation2d], end: wpimath.spline.Spline3.ControlVector, /) -> None:
+        pass
+    @typing.overload
+    def __init__(self, start: wpimath.geometry.Pose2d, interiorWaypoints: typing.List[wpimath.geometry.Translation2d], end: wpimath.geometry.Pose2d, /) -> None:
+        pass
+    @typing.overload
+    def __init__(self, waypoints: typing.List[wpimath.geometry._geometry.Pose2d], /) -> None:
+        pass
+
+    def __init__(self, *args) -> None:
         drive_kinematics = wpimath.kinematics.DifferentialDriveKinematics(
             constants.Drivetrain.Characterization.TRACK_WIDTH,
         )
@@ -37,7 +51,7 @@ class DriveTrajectory(commands2.RamseteCommand):
         commands2.RamseteCommand.__init__(
             self,
             wpimath.trajectory.TrajectoryGenerator.generateTrajectory(
-                waypoints,
+                *args,
                 config=trajectory_config,
             ),
             subsystems.drivetrain.get_pose,
