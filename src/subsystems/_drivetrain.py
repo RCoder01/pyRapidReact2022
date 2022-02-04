@@ -1,13 +1,11 @@
 import typing
 import commands2
-import ctre
 import navx
 import wpilib
 import wpilib.simulation
 import wpimath.geometry
 import wpimath.kinematics
 
-import constants
 import utils
 
 

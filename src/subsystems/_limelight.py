@@ -3,8 +3,6 @@ import commands2
 from networktables import NetworkTables
 from wpilib import SmartDashboard
 
-import constants
-
 
 class Limelight(commands2.SubsystemBase):
     """

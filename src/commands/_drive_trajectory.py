@@ -1,6 +1,5 @@
 import typing
 import commands2
-import wpilib
 import wpimath.controller
 import wpimath.geometry
 import wpimath.kinematics

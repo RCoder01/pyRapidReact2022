@@ -1,9 +1,7 @@
 import typing
 import commands2
-import ctre
 import wpilib
 
-import constants
 import utils
 
 

@@ -3,7 +3,6 @@ import commands2
 from wpilib import SmartDashboard
 
 import utils
-import constants
 
 
 class Turret(commands2.SubsystemBase):
@@ -14,8 +13,8 @@ class Turret(commands2.SubsystemBase):
     def __init__(self, motor_IDs: typing.Collection[int]):
         commands2.SubsystemBase.__init__(self)
 
-        self._motors = utils.HeadedDefaultMotorGroup(constants.Shooter.Turret.MOTOR_IDs)
-    
+        self._motors = utils.HeadedDefaultMotorGroup(motor_IDs)
+
     def set_speed(self, speed: float):
         self._motors.set_speed(speed)
 
