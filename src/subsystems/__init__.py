@@ -13,11 +13,7 @@ drivetrain = _drivetrain.Drivetrain(
     constants.Drivetrain.ENCODER_COUNTS_PER_METER,    
 )
 
-limelight = _limelight.Limelight(
-    constants.Limelight.PIPELINE,
-    constants.Limelight.LED_MODE,
-    constants.Limelight.MOUNT_ANGLE,
-)
+limelight = _limelight.Limelight()
 
 intake = _intake.Intake(
     constants.Intake.MOTOR_IDs,

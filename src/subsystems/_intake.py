@@ -11,7 +11,7 @@ class Intake(commands2.SubsystemBase):
         wpilib.SmartDashboard.putNumber('Intake Speed', self.get_current_speed())
 
         return super().periodic()
-    
+
     # def simulationPeriodic(self) -> None:
     #     wpilib.SmartDashboard.putNumber('Intake Motor Output', self._speed)
     #     return super().simulationPeriodic()

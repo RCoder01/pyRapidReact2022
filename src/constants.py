@@ -63,6 +63,8 @@ class Limelight(ConstantsClass):
     PIPELINE = 1
     LED_MODE = 3
 
+    X_TOLERANCE = 0.1
+
 
 class Shooter(ConstantsClass):
     IDs = 6,

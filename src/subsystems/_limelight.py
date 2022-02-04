@@ -3,6 +3,8 @@ import commands2
 from networktables import NetworkTables
 from wpilib import SmartDashboard
 
+import constants
+
 
 class Limelight(commands2.SubsystemBase):
     """
@@ -15,46 +17,53 @@ class Limelight(commands2.SubsystemBase):
         )
         return super().periodic()
 
-    def __init__(self, pipeline: int, led_mode: int, mount_angle: float):
+    def __init__(self):
         commands2.SubsystemBase.__init__(self)
 
         self._table = NetworkTables.getTable('limelight')
-        self._table.getEntry('pipeline').setDouble(pipeline)
-        self._table.getEntry('ledMode').setDouble(led_mode)
+        self._table.getEntry('pipeline').setDouble(constants.Limelight.PIPELINE)
+        self._table.getEntry('ledMode').setDouble(constants.Limelight.LED_MODE)
 
-        self._MOUNT_ANGLE = mount_angle
+        self._MOUNT_ANGLE = constants.Limelight.MOUNT_ANGLE
 
     @property
     def tx(self):
         """The horizontal offset from crosshair to target."""
-        return self._table.getNumber('tx', None) or 0
+        return self._table.getNumber('tx', 0)
 
     @property
     def ty(self):
         """The vertical offset from crosshair to target."""
-        return self._table.getNumber('ty', None) or 0
+        return self._table.getNumber('ty', 0)
 
     @property
     def ta(self):
         """The relative size (distance) of the target."""
-        return self._table.getNumber('ta', None) or 0
+        return self._table.getNumber('ta', 0)
 
     @property
     def tv(self):
         """The number of targets being tracked (0 or 1)."""
-        return self._table.getNumber('tv', None) or 0
-
-    @property
-    def x(self):
-        """The normalized horizontal distance to the target."""
-        return 0
+        return self._table.getNumber('tv', 0)
 
     @property
     def y(self):
-        """The normalized vertical distance to the target."""
+        """
+        The normalized vertical distance to the target.
+
+        Innacurate unless tx is 0
+        """
         return math.sin(self.ty + self._MOUNT_ANGLE)
 
     @property
     def z(self):
-        """The normalized forward distance to the target."""
+        """
+        The normalized forward distance to the target.
+
+        Innacurate unless tx is 0
+        """
         return math.cos(self.ty + self._MOUNT_ANGLE)
+
+    @property
+    def is_aligned(self):
+        return self.tv == 1 and math.fabs(self.tx) < constants.Limelight.X_TOLERANCE
