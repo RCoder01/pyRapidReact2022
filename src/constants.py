@@ -81,6 +81,8 @@ class Shooter(ConstantsClass):
 
         ENCODER_COUNTS_PER_ROTATION = 2048
 
+        CONTINUOUS_MAX_CUMULATIVE_ENCODER_COUNTS = 2048 * (140*4 / 10)
+
         class PID(ConstantsClass):
             P = 0
             I = 0

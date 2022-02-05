@@ -5,10 +5,20 @@ import utils
 
 
 class Hood(commands2.SubsystemBase):
-    def __init__(self, motor_IDs: typing.Collection[int]):
+    def periodic(self):
+        self._status = self._motors.periodic()
+
+    def __init__(self, motor_IDs: typing.Collection[int], max_encoder_counts: int):
         commands2.SubsystemBase.__init__(self)
 
-        self._motors = utils.HeadedDefaultMotorGroup(motor_IDs)
+        self._motors = utils.LimitedHeadedDefaultMotorGroup(motor_IDs, max_cumulative_encoder_counts=max_encoder_counts)
+        self._MAX_ENCODER_COUNTS = max_encoder_counts
 
-    def get_encoder_value(self):
-        return self._motors.get_lead_encoder_position()
+    def set_speed(self, speed: float):
+        if self._status is utils.LimitedHeadedDefaultMotorGroup.Status.WITHIN_BOUNDS:
+            self._motors.set_speed(speed)
+            return True
+        return False
+
+    def get_percent_extension(self):
+        return self._motors.get_cumulative_distance() / self._MAX_ENCODER_COUNTS

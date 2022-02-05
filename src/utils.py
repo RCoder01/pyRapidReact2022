@@ -1,4 +1,5 @@
 from __future__ import annotations
+import enum
 import warnings
 import typing
 import math
@@ -214,11 +215,14 @@ class HeadedDefaultMotorGroup:
 
     ENCODER_COUNTS_PER_ROTATION: int = constants.Misc.ENCODER_COUNTS_PER_ROTATION
 
-    def __init__(self, ID_List: typing.Collection[int]) -> None:
+    def __init__(self, ID_List: typing.Collection[int], encoder_counts_per_rotation: int = None) -> None:
         self.motors = [ctre.WPI_TalonFX(ID) for ID in ID_List]
         self.lead = self.motors[0]
         for motor in self.motors[1:]:
             motor.follow(self.lead)
+
+        if encoder_counts_per_rotation is not None:
+            self.ENCODER_COUNTS_PER_ROTATION = encoder_counts_per_rotation
 
     def get_lead_encoder_position(self):
         """Return the encoder position of the lead motor."""
@@ -254,10 +258,8 @@ class OdometricHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
 
         self.reset_lead_encoder()
 
-        self._cum_encoder_ticks = 0
-
+        self._cumulative_encoder_ticks = 0
         self._last_raw_encoder_ticks = 0
-
         self._encoder_delta = 0
 
     def reset_lead_encoder(self):
@@ -276,8 +278,8 @@ class OdometricHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
         """
         self.reset_lead_encoder()
 
-        cum = self._cum_encoder_ticks
-        self._cum_encoder_ticks = 0
+        cum = self._cumulative_encoder_ticks
+        self._cumulative_encoder_ticks = 0
 
         return cum * self._CONVERSION_FACTOR
 
@@ -295,12 +297,67 @@ class OdometricHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
 
         self._encoder_delta += ((self.get_lead_encoder_velocity() > 0) + (self._encoder_delta < 0) - 1) * self.ENCODER_COUNTS_PER_ROTATION
 
-        self._cum_encoder_ticks += self._encoder_delta
+        self._cumulative_encoder_ticks += self._encoder_delta
 
     def get_last_distance(self):
         """
         Return the distance traveled since the last reset.
-        
+
         Calculated by the encoder ticks.
         """
         return self._encoder_delta / self._CONVERSION_FACTOR
+    
+    def get_cumulative_distance(self):
+        return self._cumulative_encoder_ticks
+
+
+class ContinuousHeadedDefaultMotorGroup(OdometricHeadedDefaultMotorGroup):
+    def __init__(self, ID_List: typing.Collection[int], conversion_factor: float = 1, min_cumulative_encoder_counts: int = 0, max_cumulative_encoder_counts: int = 0):
+        super().__init__(ID_List, conversion_factor)
+
+        self._MIN_CUMULATIVE_ENCODER_COUNTS = min_cumulative_encoder_counts
+        self._MAX_CUMULATIVE_ENCODER_COUNTS = max_cumulative_encoder_counts
+
+        if min_cumulative_encoder_counts > max_cumulative_encoder_counts:
+            raise ValueError("min_cumulative_encoder_counts must be less than or equal to max_cumulative_encoder_counts")
+
+    def periodic(self):
+        super().periodic()
+
+        if self._cumulative_encoder_ticks < self._MIN_CUMULATIVE_ENCODER_COUNTS:
+            self._cumulative_encoder_ticks += (self._MAX_CUMULATIVE_ENCODER_COUNTS - self._MIN_CUMULATIVE_ENCODER_COUNTS)
+        
+        if self._cumulative_encoder_ticks > self._MAX_CUMULATIVE_ENCODER_COUNTS:
+            self._cumulative_encoder_ticks -= (self._MAX_CUMULATIVE_ENCODER_COUNTS - self._MIN_CUMULATIVE_ENCODER_COUNTS)
+
+
+class LimitedHeadedDefaultMotorGroup(OdometricHeadedDefaultMotorGroup):
+    class Status(enum.Enum):
+        AT_LOWER_LIMIT = -1
+        WITHIN_BOUNDS = 0
+        AT_UPPER_LIMIT = 1
+
+    def __init__(self, ID_List: typing.Collection[int], conversion_factor: float = 1, min_cumulative_encoder_counts: int = 0, max_cumulative_encoder_counts: int = 0):
+        super().__init__(ID_List, conversion_factor)
+
+        self._MIN_CUMULATIVE_ENCODER_COUNTS = min_cumulative_encoder_counts
+        self._MAX_CUMULATIVE_ENCODER_COUNTS = max_cumulative_encoder_counts
+
+        if min_cumulative_encoder_counts > max_cumulative_encoder_counts:
+            raise ValueError("min_cumulative_encoder_counts must be less than or equal to max_cumulative_encoder_counts")
+
+    def periodic(self):
+        super().periodic()
+
+        if self._cumulative_encoder_ticks <= self._MIN_CUMULATIVE_ENCODER_COUNTS:
+            self.set_speed(0)
+            self.lead.setNeutralMode(ctre.NeutralMode.Coast)
+            return self.Status.AT_LOWER_LIMIT
+
+        if self._cumulative_encoder_ticks > self._MAX_CUMULATIVE_ENCODER_COUNTS:
+            self.set_speed(0)
+            self.lead.setNeutralMode(ctre.NeutralMode.Coast)
+            return self.Status.AT_UPPER_LIMIT
+
+        self.lead.setNeutralMode(ctre.NeutralMode.Brake)
+        return self.Status.WITHIN_BOUNDS
