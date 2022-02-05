@@ -1,13 +1,11 @@
 from re import S
 import ctre
 import wpilib
-from utils import (
-    ConstantsClass
-)
+from utils import ConstantsClass
 
 class Drivetrain(ConstantsClass):
     class LeftMotor(ConstantsClass):
-        IDs = 13, 14, 15
+        IDs = 1, 2
 
         class PID(ConstantsClass):
             P = 0
@@ -15,7 +13,7 @@ class Drivetrain(ConstantsClass):
             D = 0 # Probably keep 0
     
     class RightMotor(ConstantsClass):
-        IDs = 1, 2, 20
+        IDs = 3, 4
 
         class PID(ConstantsClass):
             P = 0
@@ -99,6 +97,32 @@ class Shooter(ConstantsClass):
             P = 0
             I = 0
             D = 0
+    
+    class Josh(ConstantsClass):
+        class Child(ConstantsClass):
+            MOTOR_IDs = 9,
+
+            class PID(ConstantsClass):
+                P = 0
+                I = 0
+                D = 0
+
+        class Mo(ConstantsClass):
+            MOTOR_IDs = 10,
+
+            class PID(ConstantsClass):
+                P = 0
+                I = 0
+                D = 0
+
+        class Lester(ConstantsClass):
+            MOTOR_IDs = 11,
+
+            class PID(ConstantsClass):
+                P = 0
+                I = 0
+                D = 0
+
 
 class Misc(ConstantsClass):
     SIMULATION_PERIOD_MS = 20

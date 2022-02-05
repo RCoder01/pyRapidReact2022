@@ -1,6 +1,5 @@
 import commands2
 import wpilib
-import wpimath.controller
 
 import constants
 import utils
@@ -25,24 +24,11 @@ class Shooter(commands2.SubsystemBase):
 
         self._motors = utils.HeadedDefaultMotorGroup(constants.Shooter.IDs)
 
-        self._pid_controller = wpimath.controller.PIDController(
-            *constants.Shooter.PID,
-        )
-
         self._current_jeff = 0
-
-    def set_jeff_setpoint(self, jeff: float) -> None:
-        """Sets the speed of the shooter motors."""
-        self._pid_controller.setSetpoint(jeff)
-
-    def get_jeff_setpoint(self) -> float:
-        """Returns the set speed of the shooter motor."""
-        return self._pid_controller.getSetpoint()
 
     def get_jeff(self) -> float:
         """Returns the actual speed of the shooter motor."""
         return self._motors.get_lead_encoder_velocity() or 0
 
     def stop(self) -> None:
-        self._pid_controller.reset()
         self._current_jeff = 0

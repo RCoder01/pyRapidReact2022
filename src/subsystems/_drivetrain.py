@@ -65,8 +65,8 @@ class Drivetrain(commands2.SubsystemBase):
         self._intended_left_speed = left
         self._intended_right_speed = right
 
-        self._left_motors.set_speed(left)
-        self._right_motors.set_speed(right)
+        self._left_motors.set_output(left)
+        self._right_motors.set_output(right)
 
     def reset_encoders(self):
         """Zeroes the encoders."""

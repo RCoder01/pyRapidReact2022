@@ -22,7 +22,7 @@ class Limelight(commands2.SubsystemBase):
 
         self._table = NetworkTables.getTable('limelight')
         self._table.getEntry('pipeline').setDouble(constants.Limelight.PIPELINE)
-        self._table.getEntry('ledMode').setDouble(constants.Limelight.LED_MODE)
+        self._table.getEntry('ledMode').setDouble(0)
 
         self._MOUNT_ANGLE = constants.Limelight.MOUNT_ANGLE
 

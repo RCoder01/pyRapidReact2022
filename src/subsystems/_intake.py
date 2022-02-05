@@ -26,7 +26,7 @@ class Intake(commands2.SubsystemBase):
     def set_speed(self, speed: float) -> None:
         """Sets the speed of the intake motors."""
         self._speed = speed
-        self._motors.set_speed(speed)
+        self._motors.set_output(speed)
 
     def get_intended_speed(self) -> float:
         """Returns the set speed of the intake motor."""
