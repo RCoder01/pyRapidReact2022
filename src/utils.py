@@ -54,7 +54,7 @@ def deadzone(
         )
     if not(power >= 0):
         raise ValueError('Power must be greater than or equal to zero')
-    
+
     # Depedning on range, use a different output formula
     if input <= lower_maxzone:
         return -1
@@ -84,7 +84,7 @@ class NonwritableType(type):
     can be used
     """
     __slots__ = ()
-    
+
     def __setattr__(self, name: str, value) -> None:
         raise TypeError('Nonwritable attributes cannot be set')
 
@@ -107,27 +107,27 @@ class ConstantsType(NonwritableType):
 
         if 'keys' in clsdict:
             warnings.warn('Defining a keys attribute may cause issues with "**" unpacking syntax', UserWarning)
-        
+
         annotations = clsdict.get('__annotations__', {})
         for name, type_ in annotations.items():
             if name not in clsdict:
                 type_ = eval(type_)
 
                 err_text = f'{name} is only outlined in {clsname} as {type_!s} (not defined)'
-                
+
                 try:
                     annotation = annotation()
                 except TypeError:
                     pass
                 else:
                     err_text += f', replacing with default constructor value of {annotation!s}'
-                
+
                 warnings.warn(err_text, UserWarning)
-                
+
                 clsdict[name] = annotation
-        
+
         return super().__new__(mcls, clsname, bases, clsdict)
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> typing.Any:
         """Get item from key"""
@@ -139,7 +139,7 @@ class ConstantsType(NonwritableType):
     def __getitem__(self, name) -> typing.Any:
         if not isinstance(name, (str, tuple)):
             raise TypeError(f'Items must be of type str or tuple[str], not {type(name)}')
-        
+
         try:
             if name in self.__dict__:
                 return getattr(self, name)
@@ -154,18 +154,18 @@ class ConstantsType(NonwritableType):
                         obj = obj[item]
                     else:
                         obj = getattr(obj, item)
-        
+
         except AttributeError as e:
             raise KeyError(*e.args) from e
         except KeyError:
             raise
         else:
             return obj
-    
+
     # Taken practically directly from types.SimpleNamespace documentation page
     def __repr__(self) -> str:
         return f'{self.__name__}({", ".join([f"{k}={v!r}" for k, v in remove_dunder_attrs(self.__dict__).items()])})'
-    
+
     def keys(self) -> tuple:
         return tuple(k for k, _ in remove_dunder_attrs(self.__dict__).items())
 
@@ -174,7 +174,7 @@ class ConstantsType(NonwritableType):
 
     def items(self) -> tuple:
         return tuple((k, v) for k, v in remove_dunder_attrs(self.__dict__).items())
-    
+
     def __iter__(self) -> typing.Iterator[str]:
         return self.keys().__iter__()
 
