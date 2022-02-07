@@ -24,11 +24,21 @@ class HeadedDefaultMotorGroup:
 
     ENCODER_COUNTS_PER_ROTATION: int = constants.Misc.ENCODER_COUNTS_PER_ROTATION
 
-    def __init__(self, ID_List: typing.Collection[int], encoder_counts_per_rotation: int = None) -> None:
+    def __init__(self, ID_List: typing.Collection[int], encoder_counts_per_rotation: int = None, inversions: typing.Collection[bool] = None) -> None:
         self.motors = [ctre.WPI_TalonFX(ID) for ID in ID_List]
         self.lead = self.motors[0]
         for motor in self.motors[1:]:
             motor.follow(self.lead)
+
+        if inversions is None:
+            for motor in self.motors[1:]:
+                motor.setInverted(ctre.InvertType.FollowMaster)
+        else:
+            for motor, inverted in zip(self.motors, inversions):
+                if inverted:
+                    motor.setInverted(ctre.InvertType.FollowMaster)
+                else:
+                    motor.setInverted(ctre.InvertType.OpposeMaster)
 
         if encoder_counts_per_rotation is not None:
             self.ENCODER_COUNTS_PER_ROTATION = encoder_counts_per_rotation
@@ -45,17 +55,21 @@ class HeadedDefaultMotorGroup:
         """Reset the encoder of the lead motor."""
         self.lead.setSelectedSensorPosition(0)
 
-    def set_inverted(self, inverted: bool = True):
-        """Set the inversion of the motors.""" # TODO: Ensure implementation is accurate
-        for motor in self.motors:
-            motor.setInverted(inverted)
+    def invert_all(self, inverted: bool = True):
+        """Set the inversion of the motors."""
+        self.lead.setInverted(inverted)
 
-    def set_netural_mode(self, mode: ctre.NeutralMode):
-        """Set the neutral mode of the motors."""
-        self.lead.setNeutralMode(mode)
-        # Check if all need to be set
-        # for motor in self.motors:
-        #     motor.setNeutralMode(mode)
+    def set_netural_mode_coast(self):
+        """Set the motors so that tey coast when neutral."""
+        self.lead.setNeutralMode(ctre.NeutralMode.Coast)
+        for motor in self.motors:
+            motor.setNeutralMode(ctre.NeutralMode.Coast)
+
+    def set_netural_mode_brake(self):
+        """Set the motors so that they brake when neutral."""
+        self.lead.setNeutralMode(ctre.NeutralMode.Brake)
+        for motor in self.motors:
+            motor.setNeutralMode(ctre.NeutralMode.Brake)
 
     def set_output(self, value: float):
         """
@@ -161,15 +175,15 @@ class LimitedHeadedDefaultMotorGroup(OdometricHeadedDefaultMotorGroup):
 
         if self._cumulative_encoder.ticks <= self._MIN_CUMULATIVE_ENCODER_COUNTS:
             self.set_output(0)
-            self.set_netural_mode(ctre.NeutralMode.Coast)
+            self.set_netural_mode_coast(ctre.NeutralMode.Coast)
             return self.Status.AT_LOWER_LIMIT
 
         if self._cumulative_encoder.ticks > self._MAX_CUMULATIVE_ENCODER_COUNTS:
             self.set_output(0)
-            self.set_netural_mode(ctre.NeutralMode.Coast)
+            self.set_netural_mode_coast(ctre.NeutralMode.Coast)
             return self.Status.AT_UPPER_LIMIT
 
-        self.set_netural_mode(ctre.NeutralMode.Brake)
+        self.set_netural_mode_coast(ctre.NeutralMode.Brake)
         return self.Status.WITHIN_BOUNDS
     
     def get_percent_limit(self):

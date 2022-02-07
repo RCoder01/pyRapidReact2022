@@ -25,9 +25,9 @@ class Hood(commands2.SubsystemBase):
         return self._motors.get_percent_limit()
 
     def activate(self):
-        self._motors.set_netural_mode(ctre.NeutralMode.Brake)
+        self._motors.set_netural_mode_brake()
 
     def deactivate(self):
-        self._motors.set_netural_mode(ctre.NeutralMode.Coast)
+        self._motors.set_netural_mode_coast()
         self._motors.set_output(0)
         self._motors.reset_odometry()
