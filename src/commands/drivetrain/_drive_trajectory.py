@@ -72,5 +72,5 @@ class DriveTrajectory(commands2.RamseteCommand):
             subsystems.drivetrain,
         )
 
-        self.setName("DriveTrajectory")
+        self.setName("Drive Trajectory")
         self.addRequirements(subsystems.drivetrain)

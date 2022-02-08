@@ -7,4 +7,4 @@ class TurretToAngle(commands2.CommandBase):
 
     def __init__(self):
         commands2.CommandBase.__init__(self)
-        self.addRequirements(subsystems.turret)
+        self.addRequirements(subsystems.shooter.turret)

@@ -32,7 +32,9 @@ class Drivetrain(commands2.SubsystemBase):
             right_motor_IDs: typing.Collection[int],
             gyro_port: wpilib.SPI.Port,
             left_encoder_counts_per_meter: float,
-            right_encoder_counts_per_meter: float = None
+            right_encoder_counts_per_meter: float = None,
+            left_encoder_speed_to_real_speed: float = 1.0,
+            right_encoder_speed_to_real_speed: float = 1.0,
             ) -> None:
         commands2.SubsystemBase.__init__(self)
 
@@ -52,6 +54,9 @@ class Drivetrain(commands2.SubsystemBase):
         self._odometry = wpimath.kinematics.DifferentialDriveOdometry(
             self._gyro.getRotation2d(),
         )
+
+        self._left_encoder_speed_to_real_speed = left_encoder_speed_to_real_speed
+        self._right_encoder_speed_to_real_speed = right_encoder_speed_to_real_speed
 
     def _simulation_init(self):
         self._intended_left_speed = 0
@@ -92,8 +97,8 @@ class Drivetrain(commands2.SubsystemBase):
     def get_wheel_speeds(self):
         """Returns the robot's speed in a wpilib DifferentialDriveWheelSpeeds object."""
         return wpimath.kinematics.DifferentialDriveWheelSpeeds(
-            self.get_left_encoder_speed(),
-            self.get_right_encoder_speed(),
+            self.get_left_encoder_speed() * self._left_encoder_speed_to_real_speed,
+            self.get_right_encoder_speed() * self._right_encoder_speed_to_real_speed,
         )
 
     def get_gyro(self):

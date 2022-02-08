@@ -21,7 +21,7 @@ class Josh(commands2.SubsystemBase):
         self._motors.set_output(output)
 
     def set_neutral_coast(self):
-        self._motors.set_netural_mode(ctre.NeutralMode.Coast)
-    
+        self._motors.set_netural_mode_coast()
+
     def set_neutral_brake(self):
-        self._motors.set_netural_mode(ctre.NeutralMode.Brake)
+        self._motors.set_netural_mode_brake()

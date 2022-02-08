@@ -24,6 +24,8 @@ class Drivetrain(ConstantsClass):
 
     GYRO_PORT = wpilib.SPI.Port # TODO: Find which port the gyro is on
 
+    ENCODER_SPEED_TO_REAL_SPEED = 10 / ENCODER_COUNTS_PER_METER # Encoder speed given in encoder counts per 100 ms
+
     class Characterization(ConstantsClass): # TODO: https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/characterizing-drive.html
 
         class FeedForward(ConstantsClass):
@@ -73,13 +75,15 @@ class Shooter(ConstantsClass):
         P = 0
         I = 0
         D = 0
-    
+
     class Turret(ConstantsClass):
         MOTOR_IDs = 7,
 
         ENCODER_COUNTS_PER_ROTATION = 2048
 
-        CONTINUOUS_MAX_CUMULATIVE_ENCODER_COUNTS = 2048 * (140*4 / 10)
+        COVERAGE_AMOUNT = 1.00
+
+        CONTINUOUS_MAX_CUMULATIVE_ENCODER_COUNTS = 2048 * (140*4 / 10) * COVERAGE_AMOUNT
 
         class PID(ConstantsClass):
             P = 0

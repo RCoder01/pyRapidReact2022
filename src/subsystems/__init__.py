@@ -10,7 +10,10 @@ drivetrain = _drivetrain.Drivetrain(
     constants.Drivetrain.LeftMotor.IDs,
     constants.Drivetrain.RightMotor.IDs,
     constants.Drivetrain.GYRO_PORT,
-    constants.Drivetrain.ENCODER_COUNTS_PER_METER,    
+    constants.Drivetrain.ENCODER_COUNTS_PER_METER,
+    None,
+    constants.Drivetrain.ENCODER_SPEED_TO_REAL_SPEED,
+    constants.Drivetrain.ENCODER_SPEED_TO_REAL_SPEED,
 )
 
 limelight = _limelight.Limelight()
