@@ -1,3 +1,4 @@
+from multiprocessing import Pool
 from datetime import datetime
 import math
 
@@ -16,7 +17,7 @@ def made_goal(velocity_magnitude, angle, target_distance, target_height=2.64, ta
     t = 0
     yh = []
 
-    while not (v[1] < 0 and p[1] < target_height + target_height_tolerance): # and p[0] < target_distance + target_radius:
+    while not ((v[1] < 0 and p[1] < target_height + target_height_tolerance) or (p[1] >= 10 and p[0] > target_height + target_height_tolerance)):
         magv = math.sqrt(v[0]**2 + v[1]**2)
         theta = math.atan2(v[1], v[0])
         a = [-kd * magv**2 * math.cos(theta), -kd * magv**2 * math.sin(theta) - kg]
@@ -44,7 +45,8 @@ def iter(start, stop, inc):
 
 # print(made_goal(10, 30, 3))
 
-
+d = [3, 10]
+theta = (30, 90)
 dv = 0.1
 dtheta = 0.1
 dd = 0.05
@@ -70,3 +72,6 @@ for distance in iter(3, 10, dd):
 # plt.ylabel("Angle (degrees)")
 # plt.title("Ball trajectory")
 # plt.show()
+if __name__ == '__main__':
+    with Pool((d[1] - d[0]) / dd):
+        pass
