@@ -3,6 +3,7 @@ from multiprocessing import Pool
 from datetime import datetime
 import math
 import collections
+from typing import Iterator
 
 import numpy as np
 
@@ -21,6 +22,9 @@ class Vector2D:
     
     @magnitude.setter
     def magnitude(self, value: float) -> float:
+        if self.magnitude == 0:
+            self.x = value
+            return
         scale = value / self.magnitude
         self.x *= scale
         self.y *= scale
@@ -157,7 +161,7 @@ def made_goal(
         target_height: float = 2.64,
         target_radius: float = 0.675,
         target_height_tolerance: float = 0.1143
-        ) -> tuple[bool, float, tuple[Vector2D, Vector2D]]:
+        ) -> tuple[bool, bool | None, float, tuple[Vector2D, Vector2D]]:
     target_distance = Range(target_distance_center - target_radius, target_distance_center + target_radius)
     target_height = Range(target_height, target_height + target_height_tolerance)
     vel = Vector2D()
@@ -175,37 +179,35 @@ def made_goal(
         pos += vel * dt
         t += dt
         if pos.y > MAX_HEIGHT: # Ball exceeds height limit
-            return False, pos.y, (vel, pos)
+            return False, False, pos.y, (vel, pos)
         if vel.y < 0: # Ball is falling
             if pos.y < target_height \
-                    or pos.x > target_distance \
-                    or pos.x * 2 < target_distance: # Ball is below target height or is past goal or is not far enough
-                return False, y_max, (vel, pos)
+                    or pos.x * 2 < target_distance: # Ball is below target height or is not far enough
+                return False, False, y_max, (vel, pos)
+            elif pos.x > target_distance: # Ball is past target distance
+                return False, True, y_max, (vel, pos)
             
             elif pos.x == target_distance and pos.y == target_height: # Ball is in goal
-                return True, max(y_max), (vel, pos)
+                return True, None, max(y_max), (vel, pos)
         
         else:
-            y_max = vel.y
+            y_max = pos.y
             if pos.y < target_height \
                     and pos.x > target_distance.min: # Ball is below target height and is past goal
-                return False, y_max, (vel, pos)
+                return False, False, y_max, (vel, pos)
     
     raise Exception('t exceeded limit of 100 seconds')
 
 
 def iter(start, stop, inc):
-    while True:
-        if start >= stop:
-            return start
+    while start <= stop:
         yield start
         start += inc
 
-# print(made_goal(10, 30, 3))
 
-# d = Parameter(3, 10, 0.05)
-# theta = Parameter(30, 90, 0.1)
-# dv = 0.1
+d = Parameter(3, 10, 0.05)
+theta = Parameter(30, 90, 0.1)
+dv = 0.1
 # f = open("C:\\Users\\amumm\\Downloads\\data.txt", mode='w', encoding='UTF-8')
 # for distance in iter(*d):
 #     made_velocities = []
@@ -229,6 +231,38 @@ def iter(start, stop, inc):
 # plt.title("Ball trajectory")
 # plt.show()
 
+def list_iter(list_: list) -> Iterator:
+    for i in list_[:-1]:
+        yield i
+    return list_[-1]
+
+
+def multi_iter(*args: Iterator[float]) -> Iterator[tuple[float, ...]]:
+    if len(args) == 1:
+        for i in args[0]:
+            yield [i]
+    else:
+        list_ = list(multi_iter(*args[1:]))
+        for i in args[0]:
+            for j in list_:
+                yield [i] + j
+
+
+def single_run(d, theta):
+    made_triplets = []
+    # print(f'[{datetime.now()}]: testing distance={round(d, 3)}, angle={round(theta, 3)}')
+    vi = dv
+    
+    while not (result := made_goal(vi, theta, d))[1]:
+        print(vi)
+        vi += dv
+        if result[0]:
+            made_triplets.append((round(d, 3), round(theta, 3), round(vi, 3)))
+    
+    return made_triplets
+
 if __name__ == '__main__':
-    # with Pool((d[1] - d[0]) / dd):
-        pass
+    print(made_goal(9.5, 49.6, 3))
+    # with Pool(math.floor((d.stop - d.start) / d.inc)) as p:
+    #     pass
+    print(single_run(d.start, 49.6))
