@@ -2,7 +2,6 @@ from __future__ import annotations
 import typing
 import warnings
 
-
 class NonwritableType(type):
     """
     When as metaclass, prevents any attribute from being set or deleted\n
@@ -138,3 +137,7 @@ class ConstantsClass(metaclass=ConstantsType):
 
     def __new__(cls: ConstantsClass) -> ConstantsClass:
         return cls
+
+__all__ = [
+    'ConstantsClass',
+]

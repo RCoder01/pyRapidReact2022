@@ -2,7 +2,7 @@ import commands2
 import wpilib
 
 import constants
-import utils
+import utils.motor
 
 
 class Shooter(commands2.SubsystemBase):
@@ -22,7 +22,7 @@ class Shooter(commands2.SubsystemBase):
     def __init__(self) -> None:
         commands2.SubsystemBase.__init__(self)
 
-        self._motors = utils.HeadedDefaultMotorGroup(constants.Shooter.IDs)
+        self._motors = utils.motor.HeadedDefaultMotorGroup(constants.Shooter.IDs)
 
         self._current_jeff = 0
 

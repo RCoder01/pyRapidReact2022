@@ -5,7 +5,7 @@ import subsystems
 import constants
 
 
-class IntakeActivate(commands2.InstantCommand):
+class Activate(commands2.InstantCommand):
     """Activates the intake at a given/default speed."""
 
     def __init__(self, speed: float = constants.Intake.DEFAULT_INTAKE_SPEED):

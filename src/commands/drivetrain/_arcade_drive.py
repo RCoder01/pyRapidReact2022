@@ -6,7 +6,7 @@ import subsystems
 
 class ArcadeDrive(commands2.CommandBase):
     def __init__(self, forward_supplier, turning_supplier) -> None:
-        super().__init__(self)
+        commands2.CommandBase.__init__(self)
         self.addRequirements(subsystems.drivetrain)
         self.setName('Arcade Drive')
 

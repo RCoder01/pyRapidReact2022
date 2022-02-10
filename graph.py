@@ -5,10 +5,6 @@ import math
 import collections
 from typing import Any, Iterator
 
-import matplotlib.pyplot as plt
-import matplotlib
-import numpy as np
-
 
 Parameter = collections.namedtuple('Parameter', ['start', 'stop', 'inc'])
 
@@ -258,12 +254,16 @@ def angle_run(d):
     return made_triplets
 
 if __name__ == '__main__':
+    import matplotlib.pyplot as plt
+    import matplotlib
+    import numpy as np
+
     # print(made_goal(9.5, 49.6, 3))
 
-    with open("data3.txt", mode='a', encoding='UTF-8') as f:
-        with Pool() as p:
-            for triplet_set in p.starmap(single_run, multi_iter(iter(*d), iter(*theta))):
-                f.write(f'{triplet_set}\n')
+    # with open("data3.txt", mode='a', encoding='UTF-8') as f:
+    #     with Pool() as p:
+    #         for triplet_set in p.starmap(single_run, multi_iter(iter(*d), iter(*theta))):
+    #             f.write(f'{triplet_set}\n')
 
     # la = []
     # lv = []
@@ -271,14 +271,28 @@ if __name__ == '__main__':
     #     for d, t, v in single_run(4, angle):
     #         la.append(t)
     #         lv.append(v)
-    
-    # # Plot history on a graph
-    # with open("data2.txt", mode='r', encoding='UTF-8') as f:
-    #     data = f.readline()
-    #     velocities, angles = eval(data.split('\t')[1]), eval(data.split('\t')[2])
-    # plt.scatter(velocities, angles, color="red")
-    # plt.xlabel("Angle (degrees)")
-    # plt.ylabel("Velocity (m/s)")
-    # plt.title("Successfull shots for distance = 4")
-    # plt.savefig("d=4.png")
-    # plt.show()
+
+    # Plot history on a graph
+    distances, velocities, angles = [], [], []
+    with open("data.txt", mode='r', encoding='UTF-8') as f:
+        for line in f:
+            d, v, a = line.split('\t')
+            print(d)
+            d, v, a = [eval(i) for i in [d, v, a]]
+            assert len(v) == len(a)
+            d = [d for _ in range(len(v))]
+            distances += d
+            velocities += v
+            angles += a
+    print(len(distances), len(velocities), len(angles))
+
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+
+    ax.scatter(distances, velocities, angles) # , color="red"
+    ax.set_xlabel("Distance (m)")
+    ax.set_zlabel("Angle (degrees)")
+    ax.set_ylabel("Velocity (m/s)")
+    plt.title("Successfull shots for distance = 4")
+    plt.savefig("3d.png")
+    plt.show()

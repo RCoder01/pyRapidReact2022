@@ -25,3 +25,7 @@ def clamp(value=None, min=-float('inf'), max=float('inf')):
         return _Clamp(min, max)
 
     return builtins.max(min, builtins.min(max, value))
+
+__all__ = [
+    'clamp',
+]

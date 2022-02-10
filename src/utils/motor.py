@@ -59,13 +59,13 @@ class HeadedDefaultMotorGroup:
         """Set the inversion of the motors."""
         self.lead.setInverted(inverted)
 
-    def set_netural_mode_coast(self):
+    def set_neutral_mode_coast(self):
         """Set the motors so that tey coast when neutral."""
         self.lead.setNeutralMode(ctre.NeutralMode.Coast)
         for motor in self.motors:
             motor.setNeutralMode(ctre.NeutralMode.Coast)
 
-    def set_netural_mode_brake(self):
+    def set_neutral_mode_brake(self):
         """Set the motors so that they brake when neutral."""
         self.lead.setNeutralMode(ctre.NeutralMode.Brake)
         for motor in self.motors:
@@ -90,9 +90,9 @@ class OdometricHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
         super().__init__(ID_List)
         self._CONVERSION_FACTOR = conversion_factor
 
-        self.reset_lead_encoder()
-
         self._cumulative_encoder = CumulativeEncoder(self.ENCODER_COUNTS_PER_ROTATION)
+
+        self.reset_lead_encoder()
 
     def reset_lead_encoder(self):
         """Reset the encoder of the lead motor."""
@@ -148,11 +148,11 @@ class ContinuousHeadedDefaultMotorGroup(OdometricHeadedDefaultMotorGroup):
     def periodic(self):
         super().periodic()
 
-        if self._cumulative_encoder_ticks < self._MIN_CUMULATIVE_ENCODER_COUNTS:
-            self._cumulative_encoder_ticks += (self._MAX_CUMULATIVE_ENCODER_COUNTS - self._MIN_CUMULATIVE_ENCODER_COUNTS)
+        if self._cumulative_encoder.ticks < self._MIN_CUMULATIVE_ENCODER_COUNTS:
+            self._cumulative_encoder.ticks += (self._MAX_CUMULATIVE_ENCODER_COUNTS - self._MIN_CUMULATIVE_ENCODER_COUNTS)
         
-        if self._cumulative_encoder_ticks > self._MAX_CUMULATIVE_ENCODER_COUNTS:
-            self._cumulative_encoder_ticks -= (self._MAX_CUMULATIVE_ENCODER_COUNTS - self._MIN_CUMULATIVE_ENCODER_COUNTS)
+        if self._cumulative_encoder.ticks > self._MAX_CUMULATIVE_ENCODER_COUNTS:
+            self._cumulative_encoder.ticks -= (self._MAX_CUMULATIVE_ENCODER_COUNTS - self._MIN_CUMULATIVE_ENCODER_COUNTS)
 
 
 class LimitedHeadedDefaultMotorGroup(OdometricHeadedDefaultMotorGroup):
@@ -175,16 +175,24 @@ class LimitedHeadedDefaultMotorGroup(OdometricHeadedDefaultMotorGroup):
 
         if self._cumulative_encoder.ticks <= self._MIN_CUMULATIVE_ENCODER_COUNTS:
             self.set_output(0)
-            self.set_netural_mode_coast(ctre.NeutralMode.Coast)
+            self.set_neutral_mode_coast()
             return self.Status.AT_LOWER_LIMIT
 
         if self._cumulative_encoder.ticks > self._MAX_CUMULATIVE_ENCODER_COUNTS:
             self.set_output(0)
-            self.set_netural_mode_coast(ctre.NeutralMode.Coast)
+            self.set_neutral_mode_coast()
             return self.Status.AT_UPPER_LIMIT
 
-        self.set_netural_mode_coast(ctre.NeutralMode.Brake)
+        self.set_neutral_mode_brake()
         return self.Status.WITHIN_BOUNDS
     
     def get_percent_limit(self):
         return (self._cumulative_encoder.ticks - self._MIN_CUMULATIVE_ENCODER_COUNTS) / (self._MAX_CUMULATIVE_ENCODER_COUNTS - self._MIN_CUMULATIVE_ENCODER_COUNTS)
+
+__all__ = [
+    'CumulativeEncoder',
+    'HeadedDefaultMotorGroup',
+    'OdometricHeadedDefaultMotorGroup',
+    'ContinuousHeadedDefaultMotorGroup',
+    'LimitedHeadedDefaultMotorGroup',
+]

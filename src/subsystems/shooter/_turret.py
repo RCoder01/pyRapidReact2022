@@ -2,7 +2,7 @@ import typing
 import commands2
 from wpilib import SmartDashboard
 
-import utils
+import utils.motor
 
 
 class Turret(commands2.SubsystemBase):
@@ -15,7 +15,7 @@ class Turret(commands2.SubsystemBase):
         commands2.SubsystemBase.__init__(self)
 
         self._TOTAL_CUMULATIVE_ENCODER_COUNTS = total_cumulative_encoder_counts
-        self._motors = utils.LimitedHeadedDefaultMotorGroup(
+        self._motors = utils.motor.LimitedHeadedDefaultMotorGroup(
             motor_IDs,
             min_cumulative_encoder_counts=0,
             max_cumulative_encoder_counts=total_cumulative_encoder_counts,

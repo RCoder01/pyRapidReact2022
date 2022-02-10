@@ -2,7 +2,7 @@ import typing
 import commands2
 import wpilib
 
-import utils
+import utils.motor
 
 
 class Intake(commands2.SubsystemBase):
@@ -19,7 +19,7 @@ class Intake(commands2.SubsystemBase):
     def __init__(self, motor_IDs: typing.Collection[int]) -> None:
         commands2.SubsystemBase.__init__(self)
 
-        self._motors = utils.HeadedDefaultMotorGroup(motor_IDs)
+        self._motors = utils.motor.HeadedDefaultMotorGroup(motor_IDs)
 
         self._speed = 0
 

@@ -1,7 +1,5 @@
-from re import S
-import ctre
 import wpilib
-from utils import ConstantsClass
+from utils.constants import ConstantsClass
 
 class Drivetrain(ConstantsClass):
     class LeftMotor(ConstantsClass):
@@ -11,7 +9,7 @@ class Drivetrain(ConstantsClass):
             P = 0
             I = 0 # Probably keep 0 (https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/creating-following-trajectory.html)
             D = 0 # Probably keep 0
-    
+
     class RightMotor(ConstantsClass):
         IDs = 3, 4
 
@@ -22,7 +20,7 @@ class Drivetrain(ConstantsClass):
     
     ENCODER_COUNTS_PER_METER = 3000
 
-    GYRO_PORT = wpilib.SPI.Port # TODO: Find which port the gyro is on
+    GYRO_PORT = wpilib.SPI.Port.kMXP # TODO: Find which port the gyro is on
 
     ENCODER_SPEED_TO_REAL_SPEED = 10 / ENCODER_COUNTS_PER_METER # Encoder speed given in encoder counts per 100 ms
 
@@ -90,6 +88,12 @@ class Shooter(ConstantsClass):
             I = 0
             D = 0
 
+        class FeedForward(ConstantsClass):
+            S = 0
+            V = 0
+            A = 0
+            H = 0
+
     class Hood(ConstantsClass):
         MOTOR_IDs = 8,
 
@@ -103,13 +107,6 @@ class Shooter(ConstantsClass):
             D = 0
     
     class Josh(ConstantsClass):
-        class Child(ConstantsClass):
-            MOTOR_IDs = 9,
-
-            class PID(ConstantsClass):
-                P = 0
-                I = 0
-                D = 0
 
         class Mo(ConstantsClass):
             MOTOR_IDs = 10,

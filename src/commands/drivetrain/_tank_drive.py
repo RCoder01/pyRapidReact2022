@@ -6,7 +6,7 @@ import subsystems
 
 class TankDrive(commands2.CommandBase):
     def __init__(self, left_supplier, right_supplier) -> None:
-        super().__init__(self)
+        commands2.CommandBase.__init__(self)
         self.addRequirements(subsystems.drivetrain)
         self.setName('Tank Drive')
 

@@ -6,7 +6,7 @@ import wpilib.simulation
 import wpimath.geometry
 import wpimath.kinematics
 
-import utils
+import utils.motor
 
 
 class Drivetrain(commands2.SubsystemBase):
@@ -21,8 +21,8 @@ class Drivetrain(commands2.SubsystemBase):
         return super().periodic()
 
     def simulationPeriodic(self) -> None:
-        self._left_sim_collection.setIntegratedSensorVelocity(self._intended_left_speed)
-        self._right_sim_collection.setIntegratedSensorVelocity(self._intended_right_speed)
+        # self._left_sim_collection.setIntegratedSensorVelocity(self._intended_left_speed)
+        # self._right_sim_collection.setIntegratedSensorVelocity(self._intended_right_speed)
 
         return super().simulationPeriodic()
 
@@ -38,8 +38,8 @@ class Drivetrain(commands2.SubsystemBase):
             ) -> None:
         commands2.SubsystemBase.__init__(self)
 
-        self._left_motors = utils.OdometricHeadedDefaultMotorGroup(left_motor_IDs, left_encoder_counts_per_meter)
-        self._right_motors = utils.OdometricHeadedDefaultMotorGroup(right_motor_IDs, right_encoder_counts_per_meter or left_encoder_counts_per_meter)
+        self._left_motors = utils.motor.OdometricHeadedDefaultMotorGroup(left_motor_IDs, left_encoder_counts_per_meter)
+        self._right_motors = utils.motor.OdometricHeadedDefaultMotorGroup(right_motor_IDs, right_encoder_counts_per_meter or left_encoder_counts_per_meter)
         # self._right_motors.set_inverted() # TODO
 
         self.reset_encoders()
