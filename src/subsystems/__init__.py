@@ -2,9 +2,9 @@
 import constants
 
 from . import _drivetrain
-from . import _limelight
+# from . import _limelight
 from . import _intake
-from . import shooter
+# from . import shooter
 
 drivetrain = _drivetrain.Drivetrain(
     constants.Drivetrain.LeftMotor.IDs,
@@ -16,7 +16,7 @@ drivetrain = _drivetrain.Drivetrain(
     constants.Drivetrain.ENCODER_SPEED_TO_REAL_SPEED,
 )
 
-limelight = _limelight.Limelight()
+# limelight = _limelight.Limelight()
 
 intake = _intake.Intake(
     constants.Intake.MOTOR_IDs,

@@ -3,7 +3,7 @@ from utils.constants import ConstantsClass
 
 class Drivetrain(ConstantsClass):
     class LeftMotor(ConstantsClass):
-        IDs = 1, 2
+        IDs = 0, 2
 
         class PID(ConstantsClass):
             P = 0
@@ -11,7 +11,7 @@ class Drivetrain(ConstantsClass):
             D = 0 # Probably keep 0
 
     class RightMotor(ConstantsClass):
-        IDs = 3, 4
+        IDs = 1, 3
 
         class PID(ConstantsClass):
             P = 0

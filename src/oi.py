@@ -1,6 +1,7 @@
 import wpilib
 from commands2.button import Button, JoystickButton
 import wpilib.interfaces
+import utils.controls
 
 
 _driver = wpilib.XboxController(0)
@@ -10,12 +11,12 @@ _manip = wpilib.Joystick(1)
 
 
 def get_tank_left_speed() -> float:
-    return -_driver.getLeftY()
+    return utils.controls.deadzone(-_driver.getLeftY())
     # return _driver.getRawAxis(0)
 
 
 def get_tank_right_speed() -> float:
-    return -_driver.getRightY()
+    return utils.controls.deadzone(-_driver.getRightY())
     # return _driver.getRawAxis(2)
 
 

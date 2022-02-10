@@ -158,18 +158,22 @@ class TankDrive(commands2.CommandBase):
 
 class Robot(commands2.TimedCommandRobot):
     def robotInit(self) -> None:
-        self.controller = wpilib.XboxController(0)
+        # self.controller = wpilib.XboxController(0)
         return super().robotInit()
     
     def teleopInit(self) -> None:
-        drivetrain.setDefaultCommand(TankDrive(
-            (lambda: deadzone(self.controller.getLeftY()) * -1),
-            (lambda: deadzone(self.controller.getRightY())
-        )))
+        # drivetrain.setDefaultCommand(TankDrive(
+        #     (lambda: deadzone(self.controller.getLeftY()) * -1),
+        #     (lambda: deadzone(self.controller.getRightY())
+        # )))
+        self.m = [ctre.WPI_TalonFX(i) for i in [1, 2, 3, 4]]
+        for m in self.m:
+            m.set(0.1)
         return super().teleopInit()
 
     def teleopPeriodic(self) -> None:
-        return super().teleopPeriodic()
+        # return super().teleopPeriodic()
+        pass
 
 if __name__ == '__main__':
     wpilib.run(Robot)
