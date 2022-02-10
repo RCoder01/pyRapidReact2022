@@ -4,7 +4,7 @@ import wpimath.trajectory
 
 import commands
 import constants
-import input
+import oi
 import subsystems
 
 
@@ -32,7 +32,7 @@ class RobotContainer():
         commands2.CommandScheduler.getInstance().onCommandInterrupt(on_command_finish)
 
     def configure_bindings(self) -> None:
-        input.get_intake \
+        oi.get_intake \
             .whenPressed(commands.intake.Activate()) \
             .whenReleased(commands.intake.Deactivate())
 
@@ -41,8 +41,8 @@ class RobotContainer():
 
     def configure_default_commands(self) -> None:
         subsystems.drivetrain.setDefaultCommand(commands.drivetrain.TankDrive(
-            input.get_tank_left_speed,
-            input.get_tank_right_speed,
+            oi.get_tank_left_speed,
+            oi.get_tank_right_speed,
         ))
 
     def get_autonomous_command(self) -> commands2.Command:

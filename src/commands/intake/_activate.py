@@ -14,12 +14,9 @@ class Activate(commands2.InstantCommand):
         self.setName("ActivateIntake")
 
         self._speed = speed
-    
-    def execute(self):
+
+    def initialize(self) -> None:
         subsystems.intake.set_speed(self._speed)
         wpilib.SmartDashboard.putBoolean("Intake Active", True)
 
         super().execute()
-    
-    def isFinished(self) -> bool:
-        return True

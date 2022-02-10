@@ -20,7 +20,7 @@ class Drivetrain(ConstantsClass):
     
     ENCODER_COUNTS_PER_METER = 3000
 
-    GYRO_PORT = wpilib.SPI.Port.kMXP # TODO: Find which port the gyro is on
+    GYRO_PORT = wpilib.SPI.Port.kOnboardCS0 # TODO: Find which port the gyro is on
 
     ENCODER_SPEED_TO_REAL_SPEED = 10 / ENCODER_COUNTS_PER_METER # Encoder speed given in encoder counts per 100 ms
 
@@ -43,7 +43,7 @@ class Drivetrain(ConstantsClass):
 
 class Intake(ConstantsClass):
     MOTOR_IDs = 5,
-    DEFAULT_INTAKE_SPEED = 1
+    DEFAULT_INTAKE_SPEED = 0.1
 
 
 class Limelight(ConstantsClass):

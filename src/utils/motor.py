@@ -86,8 +86,14 @@ class HeadedDefaultMotorGroup:
 
 class OdometricHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
 
-    def __init__(self, ID_List: typing.Collection[int], conversion_factor: float = 1):
-        super().__init__(ID_List)
+    def __init__(
+            self,
+            ID_List: typing.Collection[int],
+            encoder_counts_per_rotation: int = None,
+            inversions: typing.Collection[bool] = None,
+            conversion_factor: float = 1
+            ) -> None:
+        super().__init__(ID_List, encoder_counts_per_rotation, inversions)
         self._CONVERSION_FACTOR = conversion_factor
 
         self._cumulative_encoder = CumulativeEncoder(self.ENCODER_COUNTS_PER_ROTATION)
@@ -135,40 +141,28 @@ class OdometricHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
         return self._cumulative_encoder.ticks
 
 
-class ContinuousHeadedDefaultMotorGroup(OdometricHeadedDefaultMotorGroup):
-    def __init__(self, ID_List: typing.Collection[int], conversion_factor: float = 1, min_cumulative_encoder_counts: int = 0, max_cumulative_encoder_counts: int = 0):
-        super().__init__(ID_List, conversion_factor)
-
-        self._MIN_CUMULATIVE_ENCODER_COUNTS = min_cumulative_encoder_counts
-        self._MAX_CUMULATIVE_ENCODER_COUNTS = max_cumulative_encoder_counts
-
-        if min_cumulative_encoder_counts > max_cumulative_encoder_counts:
-            raise ValueError("min_cumulative_encoder_counts must be less than or equal to max_cumulative_encoder_counts")
-
-    def periodic(self):
-        super().periodic()
-
-        if self._cumulative_encoder.ticks < self._MIN_CUMULATIVE_ENCODER_COUNTS:
-            self._cumulative_encoder.ticks += (self._MAX_CUMULATIVE_ENCODER_COUNTS - self._MIN_CUMULATIVE_ENCODER_COUNTS)
-        
-        if self._cumulative_encoder.ticks > self._MAX_CUMULATIVE_ENCODER_COUNTS:
-            self._cumulative_encoder.ticks -= (self._MAX_CUMULATIVE_ENCODER_COUNTS - self._MIN_CUMULATIVE_ENCODER_COUNTS)
-
-
 class LimitedHeadedDefaultMotorGroup(OdometricHeadedDefaultMotorGroup):
     class Status(enum.Enum):
         AT_LOWER_LIMIT = -1
         WITHIN_BOUNDS = 0
         AT_UPPER_LIMIT = 1
 
-    def __init__(self, ID_List: typing.Collection[int], conversion_factor: float = 1, min_cumulative_encoder_counts: int = 0, max_cumulative_encoder_counts: int = 0):
-        super().__init__(ID_List, conversion_factor)
+    def __init__(
+            self,
+            ID_List: typing.Collection[int],
+            encoder_counts_per_rotation: int = None,
+            inversions: typing.Collection[bool] = None,
+            conversion_factor: float = 1,
+            min_cumulative_encoder_counts: int = 0,
+            max_cumulative_encoder_counts: int = 0,
+            ) -> None:
+        super().__init__(ID_List, encoder_counts_per_rotation, inversions, conversion_factor)
 
         self._MIN_CUMULATIVE_ENCODER_COUNTS = min_cumulative_encoder_counts
         self._MAX_CUMULATIVE_ENCODER_COUNTS = max_cumulative_encoder_counts
 
-        if min_cumulative_encoder_counts >= max_cumulative_encoder_counts:
-            raise ValueError("min_cumulative_encoder_counts must be less than max_cumulative_encoder_counts")
+        if min_cumulative_encoder_counts > max_cumulative_encoder_counts:
+            raise ValueError("min_cumulative_encoder_counts must be less than or equal to max_cumulative_encoder_counts")
 
     def periodic(self):
         super().periodic()
@@ -188,6 +182,18 @@ class LimitedHeadedDefaultMotorGroup(OdometricHeadedDefaultMotorGroup):
     
     def get_percent_limit(self):
         return (self._cumulative_encoder.ticks - self._MIN_CUMULATIVE_ENCODER_COUNTS) / (self._MAX_CUMULATIVE_ENCODER_COUNTS - self._MIN_CUMULATIVE_ENCODER_COUNTS)
+
+
+class ContinuousHeadedDefaultMotorGroup(LimitedHeadedDefaultMotorGroup):
+
+    def periodic(self):
+        super(LimitedHeadedDefaultMotorGroup, self).periodic()
+
+        if self._cumulative_encoder.ticks < self._MIN_CUMULATIVE_ENCODER_COUNTS:
+            self._cumulative_encoder.ticks += (self._MAX_CUMULATIVE_ENCODER_COUNTS - self._MIN_CUMULATIVE_ENCODER_COUNTS)
+        
+        if self._cumulative_encoder.ticks > self._MAX_CUMULATIVE_ENCODER_COUNTS:
+            self._cumulative_encoder.ticks -= (self._MAX_CUMULATIVE_ENCODER_COUNTS - self._MIN_CUMULATIVE_ENCODER_COUNTS)
 
 __all__ = [
     'CumulativeEncoder',
