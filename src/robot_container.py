@@ -46,7 +46,6 @@ class RobotContainer():
         ))
 
     def get_autonomous_command(self) -> commands2.Command:
-        # trajectory_generator = wpimath.trajectory.TrajectoryGenerator.generateTrajectory(
+        trajectory_generator = wpimath.trajectory.TrajectoryGenerator.generateTrajectory(
             
-        # )
-        ...
+        )

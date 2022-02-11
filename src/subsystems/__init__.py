@@ -2,9 +2,9 @@
 import constants
 
 from . import _drivetrain
-# from . import _limelight
+from . import _limelight
 from . import _intake
-# from . import shooter
+from . import shooter
 
 drivetrain = _drivetrain.Drivetrain(
     constants.Drivetrain.LeftMotor.IDs,

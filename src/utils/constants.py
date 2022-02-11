@@ -137,7 +137,3 @@ class ConstantsClass(metaclass=ConstantsType):
 
     def __new__(cls: ConstantsClass) -> ConstantsClass:
         return cls
-
-__all__ = [
-    'ConstantsClass',
-]

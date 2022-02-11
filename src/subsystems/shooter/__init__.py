@@ -1,5 +1,3 @@
-import commands2
-
 import constants
 
 from . import _turret

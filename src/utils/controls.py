@@ -64,7 +64,3 @@ def deadzone(
         )
     if higher_maxzone <= input:
         return 1
-
-__all__ = [
-    'deadzone',
-]
