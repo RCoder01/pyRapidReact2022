@@ -33,8 +33,8 @@ class RobotContainer():
 
     def configure_bindings(self) -> None:
         oi.get_intake \
-            .whenPressed(commands.intake.Activate()) \
-            .whenReleased(commands.intake.Deactivate())
+            .whenPressed(commands.intake.SetActivate()) \
+            .whenReleased(commands.intake.SetDeactivate())
 
         # input.get_shooter \
         #     .whenHeld() # TODO
