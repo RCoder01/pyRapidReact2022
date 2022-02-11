@@ -4,21 +4,13 @@ import wpilib.drive
 import subsystems
 
 
-class TankDrive(commands2.CommandBase):
+class TankDrive(commands2.RunCommand):
     def __init__(self, left_supplier, right_supplier) -> None:
-        commands2.CommandBase.__init__(self)
+        run_function = lambda: subsystems.drivetrain.set_speed(left_supplier(), right_supplier())
+
+        commands2.RunCommand.__init__(self, run_function)
         self.addRequirements(subsystems.drivetrain)
         self.setName('Tank Drive')
-
-        self._left_supplier = left_supplier
-        self._right_supplier = right_supplier
-
-    def execute(self) -> None:
-        subsystems.drivetrain.set_speed(self._left_supplier(), self._right_supplier())
-        return super().execute()
-
-    def isFinished(self) -> bool:
-        return False
 
     def end(self, interrupted: bool) -> None:
         subsystems.drivetrain.set_speed(0, 0)
