@@ -1,4 +1,5 @@
 import commands2
+import commands2.button
 import wpilib
 import wpimath.trajectory
 
@@ -32,25 +33,25 @@ class RobotContainer():
         commands2.CommandScheduler.getInstance().onCommandInterrupt(on_command_finish)
 
     def configure_bindings(self) -> None:
-        oi.get_intake \
-            .whenPressed(commands.intake.SetActivate()) \
-            .whenReleased(commands.intake.SetDeactivate())
+        oi.Intake.activate \
+            .whenPressed(commands.intake.SetActive()) \
+            .whenReleased(commands.intake.SetInactive())
 
-        oi.turret_manual_control \
+        oi.Turret.manual_control \
             .whenHeld(commands.shooter.TurretManualControl())
 
-        # input.get_shooter \
-        #     .whenHeld() # TODO
+        # oi. \
+        #     .whenHeld(commands.feeder.SetActive(
+        #         -constants.Feeder.TopMotors.DEFAULT_SPEED,
+        #         -constants.Feeder.BottomMotors.DEFAULT_SPEED
+        #     ))
 
     def configure_default_commands(self) -> None:
-        # subsystems.drivetrain.setDefaultCommand(commands.drivetrain.TankDrive(
-        #     oi.get_tank_left_speed,
-        #     oi.get_tank_right_speed,
-        # ))
         subsystems.drivetrain.setDefaultCommand(commands.drivetrain.ArcadeDrive(
-            oi.get_arcade_forward_speed,
-            oi.get_arcade_turn_speed,
+            oi.Drivetrain.ArcadeDrive.get_forward_speed,
+            oi.Drivetrain.ArcadeDrive.get_turn_speed,
         ))
+        subsystems.feeder.setDefaultCommand(commands.feeder.Monitor())
 
     def get_autonomous_command(self) -> commands2.Command:
         trajectory_generator = wpimath.trajectory.TrajectoryGenerator.generateTrajectory(

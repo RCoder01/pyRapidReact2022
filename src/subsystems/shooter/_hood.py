@@ -19,6 +19,7 @@ class Hood(commands2.SubsystemBase):
             max_cumulative_encoder_counts=max_encoder_counts
         )
 
+        self._status = utils.motor.LimitedHeadedDefaultMotorGroup.Status.WITHIN_BOUNDS
         self.set_speed(0)
 
     def set_speed(self, speed: float):

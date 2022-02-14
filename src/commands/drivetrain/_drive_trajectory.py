@@ -63,10 +63,10 @@ class DriveTrajectory(commands2.RamseteCommand):
             drive_kinematics,
             subsystems.drivetrain.get_wheel_speeds,
             wpimath.controller.PIDController(
-                *constants.Drivetrain.LeftMotor.PID,
+                *constants.Drivetrain.LeftMotors.PID,
             ),
             wpimath.controller.PIDController(
-                *constants.Drivetrain.RightMotor.PID,
+                *constants.Drivetrain.RightMotors.PID,
             ),
             subsystems.drivetrain.set_speed,
             subsystems.drivetrain,

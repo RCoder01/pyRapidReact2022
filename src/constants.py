@@ -2,7 +2,7 @@ import wpilib
 from utils.constants import ConstantsClass
 
 class Drivetrain(ConstantsClass):
-    class LeftMotor(ConstantsClass):
+    class LeftMotors(ConstantsClass):
         IDs = 0, 2
 
         class PID(ConstantsClass):
@@ -10,7 +10,7 @@ class Drivetrain(ConstantsClass):
             I = 0 # Probably keep 0 (https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/creating-following-trajectory.html)
             D = 0 # Probably keep 0
 
-    class RightMotor(ConstantsClass):
+    class RightMotors(ConstantsClass):
         IDs = 1, 3
 
         class PID(ConstantsClass):
@@ -41,9 +41,25 @@ class Drivetrain(ConstantsClass):
             ZETA = 0
 
 
+class Feeder(ConstantsClass):
+    class TopMotors(ConstantsClass):
+        IDs = 5,
+        DEFAULT_SPEED = 0.5
+        DEFAULT_EXGEST_SPEED = -DEFAULT_SPEED
+
+    class BottomMotors(ConstantsClass):
+        IDs = 6,
+        DEFAULT_SPEED = 0.5
+        DEFAULT_EXGEST_SPEED = -DEFAULT_SPEED
+    
+    IN_SENSOR_IDs = 0, 1
+    OUT_SENSOR_IDs = 2, 3
+
+
 class Intake(ConstantsClass):
     MOTOR_IDs = 4,
     DEFAULT_INTAKE_SPEED = 0.1
+    DEFAULT_EXGEST_SPEED = -DEFAULT_INTAKE_SPEED
 
 
 class Limelight(ConstantsClass):
@@ -56,8 +72,6 @@ class Limelight(ConstantsClass):
 
     Ka = 0
 
-    DEFAULT_ROTATION_SPEED = 0
-
     PIPELINE = 1
     LED_MODE = 3
 
@@ -65,9 +79,6 @@ class Limelight(ConstantsClass):
 
 
 class Shooter(ConstantsClass):
-    IDs = 6,
-    DEFAULT_SHOOTER_SPEED = 0
-    MAX_VELOCITY_RPM = 5000
 
     class PID(ConstantsClass):
         P = 0
@@ -82,6 +93,8 @@ class Shooter(ConstantsClass):
         COVERAGE_AMOUNT = 1.00
 
         CONTINUOUS_MAX_CUMULATIVE_ENCODER_COUNTS = 2048 * (140*4 / 10) * COVERAGE_AMOUNT
+
+        ANGLE_RANGE_DEGREES = 270
 
         class PID(ConstantsClass):
             P = 0
@@ -109,7 +122,7 @@ class Shooter(ConstantsClass):
     class Josh(ConstantsClass):
 
         class Mo(ConstantsClass):
-            MOTOR_IDs = 10,
+            MOTOR_IDs = 9,
 
             class PID(ConstantsClass):
                 P = 0
@@ -117,7 +130,7 @@ class Shooter(ConstantsClass):
                 D = 0
 
         class Lester(ConstantsClass):
-            MOTOR_IDs = 11,
+            MOTOR_IDs = 10,
 
             class PID(ConstantsClass):
                 P = 0
@@ -130,3 +143,5 @@ class Misc(ConstantsClass):
     MAX_VOLTAGE = 12
 
     ENCODER_COUNTS_PER_ROTATION = 2048
+
+    MAX_VELOCITY_RPM = 5000

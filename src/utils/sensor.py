@@ -3,7 +3,7 @@ import enum
 import wpilib
 
 
-class DoubleDigitialInput(wpilib.Sendable):
+class DoubleDigitialInput:
     class Error(enum.Enum):
         AGREE = 0
         DISAGREE = 1

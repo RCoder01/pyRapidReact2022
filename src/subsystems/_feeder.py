@@ -17,16 +17,16 @@ class Feeder(commands2.SubsystemBase):
 
     def __init__(
             self,
-            in_sensor_IDs: tuple[int, int],
-            out_sensor_ID: tuple[int, int],
             bottom_motor_IDs: typing.Collection[float],
             top_motor_IDs: typing.Collection[float],
+            in_sensor_IDs: tuple[int, int],
+            out_sensor_ID: tuple[int, int],
             ) -> None:
         commands2.SubsystemBase.__init__(self)
         self.setName('Feeder')
 
-        self._in_sensor = utils.sensor.DoubleDigitialInput(*in_sensor_IDs)
-        self._out_sensor = utils.sensor.DoubleDigitialInput(*out_sensor_ID)
+        self._in_sensor = utils.sensor.DoubleDigitialInput(*in_sensor_IDs, False, True)
+        self._out_sensor = utils.sensor.DoubleDigitialInput(*out_sensor_ID, False, True)
 
         self._bottom_motor_group = utils.motor.HeadedDefaultMotorGroup(bottom_motor_IDs)
         self._top_motor_group = utils.motor.HeadedDefaultMotorGroup(top_motor_IDs)

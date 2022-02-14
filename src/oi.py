@@ -10,49 +10,36 @@ _manip = wpilib.XboxController(1)
 # _manip = wpilib.Joystick(1)
 
 
-def get_tank_left_speed() -> float:
-    return utils.controls.deadzone(-_driver.getLeftY())
+class Drivetrain:
+    class TankDrive:
+        def get_left_speed() -> float:
+            return utils.controls.deadzone(-_driver.getLeftY())
+
+        def get_right_speed() -> float:
+            return utils.controls.deadzone(-_driver.getRightY())
+    
+    class ArcadeDrive:
+        def get_forward_speed() -> float:
+            if _driver.getLeftTriggerAxis() > 0:
+                return _driver.getLeftTriggerAxis()
+            return -_driver.getRightTriggerAxis()
+
+        def get_turn_speed() -> float:
+            return _driver.getLeftX()
 
 
-def get_tank_right_speed() -> float:
-    return utils.controls.deadzone(-_driver.getRightY())
+class Limelight:
+    activate = JoystickButton(_driver, _driver.Button.kLeftBumper)
+    # activate = JoystickButton(_driver, 0)
 
 
-def get_arcade_forward_speed() -> float:
-    if _driver.getLeftTriggerAxis() > 0:
-        return _driver.getLeftTriggerAxis()
-    return -_driver.getRightTriggerAxis()
+class Turret:
+    manual_control = JoystickButton(_manip, _manip.Button.kA)
 
 
-def get_arcade_turn_speed() -> float:
-    return _driver.getLeftX()
+class Intake:
+    activate = JoystickButton(_driver, _driver.Button.kB)
+    # activate = JoystickButton(_manip, 2)
 
 
-button_limelight_activate = JoystickButton(_driver, _driver.Button.kLeftBumper)
-# button_limelight_activate = JoystickButton(_driver, 0)
-
-
-turret_manual_control = JoystickButton(_manip, _manip.Button.kA)
-
-
-# get_shooter = JoystickButton(_manip, _manip.Button.kA)
-get_shooter = JoystickButton(_manip, 1)
-
-
-@Button
-def get_shoot() -> bool:
-    ...
-
-
-get_intake = JoystickButton(_driver, _driver.Button.kB)
-# get_intake = JoystickButton(_manip, 2)
-
-
-@Button
-def get_elevate() -> bool:
-    ...
-
-
-@Button
-def get_climb() -> bool:
-    ...
+exgest = JoystickButton(_manip, _manip.Button.kX)

@@ -1,2 +1,2 @@
-from ._set_activate import SetActivate
-from ._set_deactivate import SetDeactivate
+from ._set_active import SetActive
+from ._set_inactive import SetInactive

@@ -8,11 +8,10 @@ class SetInactive(commands2.InstantCommand):
 
     def __init__(self) -> None:
         commands2.InstantCommand.__init__(self)
-        self.addRequirements(subsystems.intake)
-        self.setName("Set Intake Inactive")
+        self.addRequirements(subsystems.feeder)
+        self.setName("Set Feeder Inactive")
 
     def initialize(self) -> None:
-        subsystems.intake.set_speed(0)
-        subsystems.intake.set_active(False)
+        subsystems.feeder.set_speeds(0)
 
         super().execute()
