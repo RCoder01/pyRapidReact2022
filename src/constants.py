@@ -42,7 +42,7 @@ class Drivetrain(ConstantsClass):
 
 
 class Intake(ConstantsClass):
-    MOTOR_IDs = 5,
+    MOTOR_IDs = 4,
     DEFAULT_INTAKE_SPEED = 0.1
 
 

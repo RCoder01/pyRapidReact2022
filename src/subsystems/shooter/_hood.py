@@ -13,7 +13,13 @@ class Hood(commands2.SubsystemBase):
     def __init__(self, motor_IDs: typing.Collection[int], /, min_encoder_counts: int, max_encoder_counts: int):
         commands2.SubsystemBase.__init__(self)
 
-        self._motors = utils.motor.LimitedHeadedDefaultMotorGroup(motor_IDs, min_cumulative_encoder_counts=min_encoder_counts, max_cumulative_encoder_counts=max_encoder_counts)
+        self._motors = utils.motor.LimitedHeadedDefaultMotorGroup(
+            motor_IDs,
+            min_cumulative_encoder_counts=min_encoder_counts,
+            max_cumulative_encoder_counts=max_encoder_counts
+        )
+
+        self.set_speed(0)
 
     def set_speed(self, speed: float):
         if self._status is utils.motor.LimitedHeadedDefaultMotorGroup.Status.WITHIN_BOUNDS:

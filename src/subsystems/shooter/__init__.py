@@ -13,9 +13,9 @@ hood = _hood.Hood(
     min_encoder_counts=constants.Shooter.Hood.EncoderLimits.MIN,
     max_encoder_counts=constants.Shooter.Hood.EncoderLimits.MAX,
 )
-mo = _josh.Josh(
+lester = _josh.Josh(
     constants.Shooter.Josh.Mo.MOTOR_IDs,
 )
-lester = _josh.Josh(
+mo = _josh.Josh(
     constants.Shooter.Josh.Lester.MOTOR_IDs,
 )

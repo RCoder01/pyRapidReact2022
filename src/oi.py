@@ -6,35 +6,33 @@ import utils.controls
 
 _driver = wpilib.XboxController(0)
 # _driver = wpilib.Joystick(0)
-# _manip = wpilib.XboxController(1)
-_manip = wpilib.Joystick(1)
+_manip = wpilib.XboxController(1)
+# _manip = wpilib.Joystick(1)
 
 
 def get_tank_left_speed() -> float:
     return utils.controls.deadzone(-_driver.getLeftY())
-    # return _driver.getRawAxis(0)
 
 
 def get_tank_right_speed() -> float:
     return utils.controls.deadzone(-_driver.getRightY())
-    # return _driver.getRawAxis(2)
 
 
 def get_arcade_forward_speed() -> float:
-    return _driver.getLeftY()
+    if _driver.getLeftTriggerAxis() > 0:
+        return _driver.getLeftTriggerAxis()
+    return -_driver.getRightTriggerAxis()
 
 
 def get_arcade_turn_speed() -> float:
-    return _driver.getRightX()
+    return _driver.getLeftX()
 
 
 button_limelight_activate = JoystickButton(_driver, _driver.Button.kLeftBumper)
 # button_limelight_activate = JoystickButton(_driver, 0)
 
 
-def get_shooter_speed() -> float:
-    # return _manip.getLeftTriggerAxis()
-    return _manip.getRawAxis(1)
+turret_manual_control = JoystickButton(_manip, _manip.Button.kA)
 
 
 # get_shooter = JoystickButton(_manip, _manip.Button.kA)

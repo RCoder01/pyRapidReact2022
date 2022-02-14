@@ -1,7 +1,9 @@
 import commands2
+from wpilib import SmartDashboard
 import wpilib.drive
 
 import subsystems
+import utils.controls
 
 
 class ArcadeDrive(commands2.CommandBase):
@@ -14,7 +16,7 @@ class ArcadeDrive(commands2.CommandBase):
         self._turning_supplier = turning_supplier
 
     def execute(self) -> None:
-        speeds = wpilib.drive.DifferentialDrive.arcadeDriveIK(self._forward_supplier(), self._turning_supplier(), False)
+        speeds = wpilib.drive.DifferentialDrive.arcadeDriveIK(utils.controls.deadzone(self._forward_supplier()), utils.controls.deadzone(self._turning_supplier()), False)
 
         subsystems.drivetrain.set_speed(speeds.left, speeds.right)
         return super().execute()

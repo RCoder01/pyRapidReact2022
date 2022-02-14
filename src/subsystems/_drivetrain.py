@@ -51,8 +51,13 @@ class Drivetrain(commands2.SubsystemBase):
 
         self._simulation_init()
 
+        initial_x = wpilib.SmartDashboard.getNumber('Initial X', 0)
+        initial_y = wpilib.SmartDashboard.getNumber('Initial Y', 1.5)
+        initial_heading = wpilib.SmartDashboard.getNumber('Initial Heading', 0)
+
         self._odometry = wpimath.kinematics.DifferentialDriveOdometry(
             self._gyro.getRotation2d(),
+            wpimath.geometry.Pose2d(initial_x, initial_y, initial_heading),
         )
 
         self._left_encoder_speed_to_real_speed = left_encoder_speed_to_real_speed

@@ -46,10 +46,14 @@ class HeadedDefaultMotorGroup:
     def get_lead_encoder_position(self):
         """Return the encoder position of the lead motor."""
         return self.lead.getSelectedSensorPosition() or 0
-
+    
     def get_lead_encoder_velocity(self):
         """Return the encoder velocity of the lead motor."""
         return self.lead.getSelectedSensorVelocity() or 0
+
+    def get_lead_encoder_velocity_rpm(self):
+        """Return the encoder velocity of the lead motor."""
+        return self.get_lead_encoder_velocity() * 10 * 60 / self.ENCODER_COUNTS_PER_ROTATION or 0
 
     def reset_lead_encoder(self):
         """Reset the encoder of the lead motor."""
@@ -179,7 +183,7 @@ class LimitedHeadedDefaultMotorGroup(OdometricHeadedDefaultMotorGroup):
 
         self.set_neutral_mode_brake()
         return self.Status.WITHIN_BOUNDS
-    
+
     def get_percent_limit(self):
         return (self._cumulative_encoder.ticks - self._MIN_CUMULATIVE_ENCODER_COUNTS) / (self._MAX_CUMULATIVE_ENCODER_COUNTS - self._MIN_CUMULATIVE_ENCODER_COUNTS)
 

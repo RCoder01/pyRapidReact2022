@@ -2,6 +2,7 @@
 import constants
 
 from . import _drivetrain
+from . import _feeder
 from . import _limelight
 from . import _intake
 from . import shooter
@@ -16,8 +17,15 @@ drivetrain = _drivetrain.Drivetrain(
     constants.Drivetrain.ENCODER_SPEED_TO_REAL_SPEED,
 )
 
-# limelight = _limelight.Limelight()
+limelight = _limelight.Limelight()
 
 intake = _intake.Intake(
     constants.Intake.MOTOR_IDs,
+)
+
+feeder = _feeder.Feeder(
+    constants.Feeder.IN_SENSOR_IDs,
+    constants.Feeder.OUT_SENSOR_IDs,
+    constants.Feeder.BOTTOM_MOTOR_IDs,
+    constants.Feeder.TOP_MOTOR_IDs,
 )

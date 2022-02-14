@@ -14,6 +14,8 @@ class Josh(commands2.SubsystemBase):
 
         self._motors = utils.motor.HeadedDefaultMotorGroup(motor_ids)
 
+        self.set_output(0)
+
     def get_jeff(self):
         return self._motors.get_lead_encoder_velocity() or 0
 

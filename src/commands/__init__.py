@@ -9,4 +9,4 @@
 
 from . import drivetrain
 from . import intake
-# from . import shooter
+from . import shooter

@@ -36,13 +36,20 @@ class RobotContainer():
             .whenPressed(commands.intake.SetActivate()) \
             .whenReleased(commands.intake.SetDeactivate())
 
+        oi.turret_manual_control \
+            .whenHeld(commands.shooter.TurretManualControl())
+
         # input.get_shooter \
         #     .whenHeld() # TODO
 
     def configure_default_commands(self) -> None:
-        subsystems.drivetrain.setDefaultCommand(commands.drivetrain.TankDrive(
-            oi.get_tank_left_speed,
-            oi.get_tank_right_speed,
+        # subsystems.drivetrain.setDefaultCommand(commands.drivetrain.TankDrive(
+        #     oi.get_tank_left_speed,
+        #     oi.get_tank_right_speed,
+        # ))
+        subsystems.drivetrain.setDefaultCommand(commands.drivetrain.ArcadeDrive(
+            oi.get_arcade_forward_speed,
+            oi.get_arcade_turn_speed,
         ))
 
     def get_autonomous_command(self) -> commands2.Command:

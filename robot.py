@@ -134,8 +134,8 @@ def deadzone(
 class Drivetrain(commands2.SubsystemBase):
     def __init__(self) -> None:
         commands2.SubsystemBase.__init__(self)
-        self.left_motors = HeadedDefaultMotorGroup([1, 3])
-        self.right_motors = HeadedDefaultMotorGroup([2, 4])
+        self.left_motors = HeadedDefaultMotorGroup([0, 2])
+        self.right_motors = HeadedDefaultMotorGroup([1, 3])
         self.left_motors.invert_all()
     
     def set_speeds(self, left: float, right: float):
@@ -166,9 +166,9 @@ class Robot(commands2.TimedCommandRobot):
         #     (lambda: deadzone(self.controller.getLeftY()) * -1),
         #     (lambda: deadzone(self.controller.getRightY())
         # )))
-        self.m = [ctre.WPI_TalonFX(i) for i in [1, 2, 3, 4]]
+        self.m = [ctre.WPI_TalonFX(i) for i in [0, 1, 2, 3, 4]]
         for m in self.m:
-            m.set(0.1)
+            m.set(-0.1)
         return super().teleopInit()
 
     def teleopPeriodic(self) -> None:
