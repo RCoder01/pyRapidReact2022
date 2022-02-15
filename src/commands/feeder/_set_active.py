@@ -22,4 +22,4 @@ class SetActive(commands2.InstantCommand):
     def initialize(self) -> None:
         subsystems.feeder.set_speeds(self._top_speed, self._bottom_speed)
 
-        super().execute()
+        super().initialize()

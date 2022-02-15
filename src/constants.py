@@ -145,3 +145,9 @@ class Misc(ConstantsClass):
     ENCODER_COUNTS_PER_ROTATION = 2048
 
     MAX_VELOCITY_RPM = 5000
+
+    class BallCounting(ConstantsClass):
+        IN_DEBOUNCE_TIME = 0.1
+        OUT_DEBOUNCE_TIME = 0.1
+
+        MAX_CAPACITY = 2

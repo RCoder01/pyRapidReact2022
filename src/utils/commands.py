@@ -2,13 +2,13 @@ import commands2
 
 
 class RepeatCommand(commands2.CommandBase):
-    def __init__(self, command: commands2.Command = None) -> None:
+    def __init__(self, command: commands2.Command) -> None:
         commands2.CommandBase.__init__(self)
         if command:
             self.addRequirements(command.getRequirements())
             self.setName(command.getName())
 
-        self._command = command or self
+        self._command = command
 
     def initialize(self) -> None:
         return self._command.initialize()

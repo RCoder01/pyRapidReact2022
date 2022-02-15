@@ -1,33 +1,20 @@
 import commands2
 
-from commands.feeder._set_active import SetActive
+from commands.feeder._elevate_ball import ElevateBall
 from commands.feeder._set_inactive import SetInactive
 import subsystems
 import utils.commands
 
 
-@utils.commands.RepeatCommand
-class Monitor(commands2.CommandBase):
+class Monitor(utils.commands.RepeatCommand):
     def __init__(self) -> None:
-        commands2.CommandBase.__init__(self)
+        super().__init__(
+            self,
+            commands2.ConditionalCommand(
+                ElevateBall(),
+                SetInactive(),
+                subsystems.feeder.get_in_sensor
+            )
+        )
         self.addRequirements(subsystems.feeder)
         self.setName("Feeder Monitor")
-
-        self._activate = SetActive().initialize
-        self._deactivate = SetInactive().initialize
-
-    def initialize(self) -> None:
-        self._deactivate()
-
-    def execute(self) -> None:
-        if subsystems.feeder.get_out_sensor():
-            self._deactivate()
-        elif subsystems.feeder.get_in_sensor():
-            self._activate()
-
-    def isFinished(self) -> bool:
-        return False
-
-    def end(self, interrupted: bool) -> None:
-        self._deactivate()
-        return super().end(interrupted)

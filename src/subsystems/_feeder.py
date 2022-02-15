@@ -37,6 +37,10 @@ class Feeder(commands2.SubsystemBase):
         """Set the speed of the feeder motors."""
         self._bottom_motor_group.set_output(bottom_speed)
         self._top_motor_group.set_output(top_speed or bottom_speed)
+    
+    def get_avg_current_speed(self):
+        """Return the current speed of the feeder motors."""
+        return (self._bottom_motor_group.get_lead_encoder_velocity() + self._top_motor_group.get_lead_encoder_velocity()) / 2
 
     def get_in_sensor(self, strict: bool = False):
         """Return whether the first feeder sensor is active."""
