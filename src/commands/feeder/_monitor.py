@@ -9,7 +9,6 @@ import utils.commands
 class Monitor(utils.commands.RepeatCommand):
     def __init__(self) -> None:
         super().__init__(
-            self,
             commands2.ConditionalCommand(
                 ElevateBall(),
                 SetInactive(),

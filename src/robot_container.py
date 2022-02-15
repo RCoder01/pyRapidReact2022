@@ -46,21 +46,7 @@ class RobotContainer():
             .whenHeld(commands.shooter.TurretManualControl(oi.Turret.turret_speed))
 
         oi.exgest \
-            .whenPressed(
-                commands2.ParallelCommandGroup(
-                    commands.intake.SetActive(constants.Intake.DEFAULT_EXGEST_SPEED),
-                    commands.feeder.SetActive(
-                        constants.Feeder.TopMotors.DEFAULT_EXGEST_SPEED,
-                        constants.Feeder.BottomMotors.DEFAULT_EXGEST_SPEED
-                    ),
-                )
-            ) \
-            .whenReleased(
-                commands2.ParallelCommandGroup(
-                    commands.intake.SetInactive(),
-                    commands.feeder.SetInactive(),
-                )
-            )
+            .whenHeld(commands.Exgest())
 
     def configure_default_commands(self) -> None:
         subsystems.drivetrain.setDefaultCommand(commands.drivetrain.ArcadeDrive(
