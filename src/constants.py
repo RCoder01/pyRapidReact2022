@@ -101,6 +101,10 @@ class Shooter(ConstantsClass):
             I = 0
             D = 0
 
+            class SetpointTolerance(ConstantsClass):
+                POSITION = 0
+                VELOCITY = 0
+
         class FeedForward(ConstantsClass):
             S = 0
             V = 0

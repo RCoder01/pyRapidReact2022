@@ -73,12 +73,12 @@ class RobotContainer():
                 # If entering feeder
                 capacity = constants.Misc.BallCounting.MAX_CAPACITY
                 if ball_count_num >= capacity:
-                    warnings.warn(f"Feeder capacity exceeded: Setting balls to {ball_count_num}, which is greater than {capacity = }")
+                    warnings.warn(f"Feeder capacity exceeded: Setting balls to {ball_count_num}, which is greater than {capacity = }", RuntimeWarning)
                 add_ball_count(1)
             else:
                 # If exiting feeder
                 if ball_count_num <= 0:
-                    warnings.warn(f"Feeder empty and decreasing: Keeping balls at 0")
+                    warnings.warn(f"Feeder empty and decreasing: Keeping balls at 0", RuntimeWarning)
                 else:
                     add_ball_count(-1)
 

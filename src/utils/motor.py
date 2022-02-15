@@ -172,16 +172,16 @@ class LimitedHeadedDefaultMotorGroup(OdometricHeadedDefaultMotorGroup):
         super().periodic()
 
         if self._cumulative_encoder.ticks <= self._MIN_CUMULATIVE_ENCODER_COUNTS:
-            self.set_output(0)
-            self.set_neutral_mode_coast()
+            # self.set_output(0)
+            # self.set_neutral_mode_coast()
             return self.Status.AT_LOWER_LIMIT
 
         if self._cumulative_encoder.ticks > self._MAX_CUMULATIVE_ENCODER_COUNTS:
-            self.set_output(0)
-            self.set_neutral_mode_coast()
+            # self.set_output(0)
+            # self.set_neutral_mode_coast()
             return self.Status.AT_UPPER_LIMIT
 
-        self.set_neutral_mode_brake()
+        # self.set_neutral_mode_brake()
         return self.Status.WITHIN_BOUNDS
 
     def get_percent_limit(self):

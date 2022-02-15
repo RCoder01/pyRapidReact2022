@@ -6,6 +6,7 @@ import wpilib
 
 import utils.motor
 import utils.sensor
+import utils.warnings
 
 
 class Feeder(commands2.SubsystemBase):
@@ -45,11 +46,11 @@ class Feeder(commands2.SubsystemBase):
     def get_in_sensor(self, strict: bool = False):
         """Return whether the first feeder sensor is active."""
         if self._in_sensor.get_error_state():
-            warnings.warn('Feeder in sensor disagreement')
+            warnings.warn('Feeder in sensor disagreement', utils.warnings.LikelyHardwareError)
         return self._in_sensor.get_strict() if strict else self._in_sensor.get_leniant()
 
     def get_out_sensor(self, strict: bool = False):
         """Return whether the second feeder sensor is active."""
         if self._out_sensor.get_error_state():
-            warnings.warn('Feeder out sensor disagreement')
+            warnings.warn('Feeder out sensor disagreement', utils.warnings.LikelyHardwareError)
         return self._out_sensor.get_strict() if strict else self._out_sensor.get_leniant()
