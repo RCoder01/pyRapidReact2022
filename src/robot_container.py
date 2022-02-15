@@ -43,13 +43,24 @@ class RobotContainer():
             .whenReleased(commands.intake.SetInactive())
 
         oi.Turret.manual_control \
-            .whenHeld(commands.shooter.TurretManualControl())
+            .whenHeld(commands.shooter.TurretManualControl(oi.Turret.turret_speed))
 
-        # oi. \
-        #     .whenHeld(commands.feeder.SetActive(
-        #         -constants.Feeder.TopMotors.DEFAULT_SPEED,
-        #         -constants.Feeder.BottomMotors.DEFAULT_SPEED
-        #     ))
+        oi.exgest \
+            .whenPressed(
+                commands2.ParallelCommandGroup(
+                    commands.intake.SetActive(constants.Intake.DEFAULT_EXGEST_SPEED),
+                    commands.feeder.SetActive(
+                        constants.Feeder.TopMotors.DEFAULT_EXGEST_SPEED,
+                        constants.Feeder.BottomMotors.DEFAULT_EXGEST_SPEED
+                    ),
+                )
+            ) \
+            .whenReleased(
+                commands2.ParallelCommandGroup(
+                    commands.intake.SetInactive(),
+                    commands.feeder.SetInactive(),
+                )
+            )
 
     def configure_default_commands(self) -> None:
         subsystems.drivetrain.setDefaultCommand(commands.drivetrain.ArcadeDrive(
