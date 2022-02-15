@@ -87,6 +87,7 @@ class Shooter(ConstantsClass):
 
     class Turret(ConstantsClass):
         MOTOR_IDs = 7,
+        SENSOR_IDs = None, None
 
         ENCODER_COUNTS_PER_ROTATION = 2048
 

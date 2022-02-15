@@ -31,7 +31,7 @@ class Turret(commands2.SubsystemBase):
             min_cumulative_encoder_counts=0,
             max_cumulative_encoder_counts=total_cumulative_encoder_counts,
         )
-        self._limit_switch = utils.sensor.DoubleDigitialInput(sensor_IDs)
+        self._limit_switch = utils.sensor.DoubleDigitialInput(*sensor_IDs, False, True)
 
         self.set_speed(0)
 

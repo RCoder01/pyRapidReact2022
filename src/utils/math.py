@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import math
-
 import wpimath.geometry
 
 class HeadingFeedForward:
@@ -16,5 +14,9 @@ class HeadingFeedForward:
             - robot_position.rotation().degrees() \
             * self._kP
         )
+    
+    def calculate(self, robot_position: wpimath.geometry.Pose2d) -> float:
+        """Extrapolate past and current robot positions to calculate natural change in field-relative angle."""
+        return self(robot_position)
 
 # TODO: Add vector3D
