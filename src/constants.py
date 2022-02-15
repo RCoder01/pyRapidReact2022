@@ -51,9 +51,9 @@ class Feeder(ConstantsClass):
         IDs = 6,
         DEFAULT_SPEED = 0.5
         DEFAULT_EXGEST_SPEED = -DEFAULT_SPEED
-    
-    IN_SENSOR_IDs = 0, 1
-    OUT_SENSOR_IDs = 2, 3
+
+    IN_SENSOR_IDs = None, None
+    OUT_SENSOR_IDs = None, None
 
 
 class Intake(ConstantsClass):

@@ -1,3 +1,4 @@
+import typing
 import commands2
 from wpilib import SmartDashboard
 import wpilib.drive
@@ -7,7 +8,7 @@ import utils.controls
 
 
 class ArcadeDrive(commands2.CommandBase):
-    def __init__(self, forward_supplier, turning_supplier) -> None:
+    def __init__(self, forward_supplier: typing.Callable[[], float], turning_supplier: typing.Callable[[], float]) -> None:
         commands2.CommandBase.__init__(self)
         self.addRequirements(subsystems.drivetrain)
         self.setName('Arcade Drive')

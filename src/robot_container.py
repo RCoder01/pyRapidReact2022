@@ -63,21 +63,24 @@ class RobotContainer():
     def init_ball_counting(self) -> None:
         wpilib.SmartDashboard.putNumber("Stored Balls", 0)
         ball_count = wpilib.SmartDashboard.getEntry("Stored Balls")
+        def add_ball_count(num: int):
+            ball_count.setDouble(ball_count.getDouble(0) + num)
 
         def passed_sensor(is_in: bool):
             nonlocal ball_count
+            ball_count_num = ball_count.getDouble(0)
             if (subsystems.feeder.get_avg_current_speed() > 0) ^ (not is_in):
                 # If entering feeder
                 capacity = constants.Misc.BallCounting.MAX_CAPACITY
-                if ball_count >= capacity:
-                    warnings.warn(f"Feeder capacity exceeded: Setting balls to {ball_count}, which is greater than {capacity = }")
-                ball_count += 1
+                if ball_count_num >= capacity:
+                    warnings.warn(f"Feeder capacity exceeded: Setting balls to {ball_count_num}, which is greater than {capacity = }")
+                add_ball_count(1)
             else:
                 # If exiting feeder
-                if ball_count <= 0:
+                if ball_count_num <= 0:
                     warnings.warn(f"Feeder empty and decreasing: Keeping balls at 0")
                 else:
-                    ball_count -= 1
+                    add_ball_count(-1)
 
         in_sensor_debouncer = wpimath.filter.Debouncer(constants.Misc.BallCounting.IN_DEBOUNCE_TIME)
         out_sensor_debouncer = wpimath.filter.Debouncer(constants.Misc.BallCounting.OUT_DEBOUNCE_TIME)

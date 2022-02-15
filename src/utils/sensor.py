@@ -9,17 +9,19 @@ class DoubleDigitialInput:
         DISAGREE = 1
 
     def __init__(self, sensor_1_ID: int, sensor_2_ID: int, sensor_1_inverted: bool, sensor_2_inverted: bool):
-        self._sensor_1 = wpilib.DigitalInput(sensor_1_ID)
-        self._sensor_2 = wpilib.DigitalInput(sensor_2_ID)
+        self._sensor_1 = wpilib.DigitalInput(sensor_1_ID) if sensor_1_ID is not None else None
+        self._sensor_2 = wpilib.DigitalInput(sensor_2_ID) if sensor_2_ID is not None else None
         self._sensor_1_inverted = bool(sensor_1_inverted)
         self._sensor_2_inverted = bool(sensor_2_inverted)
 
     @property
     def sensor1_active(self):
+        if self._sensor_1 is None: return None
         return self._sensor_1.get() ^ self._sensor_1_inverted
 
     @property
     def sensor2_active(self):
+        if self._sensor_2 is None: return None
         return self._sensor_2.get() ^ self._sensor_2_inverted
 
     def get_leniant(self):
@@ -29,4 +31,4 @@ class DoubleDigitialInput:
         return self.sensor1_active and self.sensor2_active
 
     def get_error_state(self):
-        return self.Error(self.get_leniant() and not self.get_strict())
+        return self.Error(int(bool(self.get_leniant() and not self.get_strict())))

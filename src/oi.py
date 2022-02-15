@@ -24,8 +24,7 @@ class Drivetrain:
                 return _driver.getLeftTriggerAxis()
             return -_driver.getRightTriggerAxis()
 
-        def get_turn_speed() -> float:
-            return _driver.getLeftX()
+        get_turn_speed = _driver.getLeftX
 
 
 class Limelight:
