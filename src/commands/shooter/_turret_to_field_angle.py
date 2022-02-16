@@ -1,18 +1,24 @@
-import math
+import typing
 import warnings
 
 import wpimath.geometry
+
+import utils.math
+
 import constants
 import subsystems
-import utils.math
+
 from ._turret_to_robot_angle import TurretToRobotAngle
 
 
 class TurretToFieldAngle(TurretToRobotAngle):
     class SetpointOverrideWarning(RuntimeWarning): pass
 
-    def __init__(self, angle: float = 0) -> None:
-        super().__init__(angle)
+    def __init__(self, angle: wpimath.geometry.Rotation2d = wpimath.geometry.Rotation2d()) -> None:
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore', category=TurretToFieldAngle.SetpointOverrideWarning)
+            super().__init__(angle)
+
         self.setName('Turret To Field Angle')
 
         self._pose_supplier = subsystems.drivetrain.get_pose
@@ -21,18 +27,14 @@ class TurretToFieldAngle(TurretToRobotAngle):
             self._pose_supplier()
         )
 
+        self._field_relative_angle = angle
+
     @property
     def _setpoint(self):
-        if subsystems.limelight.tv:
-            return subsystems.shooter.turret.get_angle() + subsystems.limelight.tx
-        else:
-            pose = self._pose_supplier()
-            translation = pose.translation()
-            hub_angle = wpimath.geometry.Rotation2d(-translation.x, -translation.y)
-            return (pose.rotation() - hub_angle).degrees()
+        return (self._pose_supplier().rotation() - self._field_relative_angle).degrees()
 
     @_setpoint.setter
-    def _setpoint(self, value):
+    def _setpoint(self, value: typing.Any):
         warnings.warn("Cannot set TurretToFieldAngle's setpoint", TurretToFieldAngle.SetpointOverrideWarning)
 
     def calculate_output(self) -> float:

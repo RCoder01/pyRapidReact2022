@@ -21,8 +21,11 @@ class Limelight(commands2.SubsystemBase):
         commands2.SubsystemBase.__init__(self)
 
         self._table = NetworkTables.getTable('limelight')
-        self._table.getEntry('pipeline').setDouble(constants.Limelight.PIPELINE)
-        self._table.getEntry('ledMode').setDouble(0)
+        self._pipeline_entry = self._table.getEntry('pipeline')
+        self._ledmode_entry = self._table.getEntry('ledMode')
+
+        self._pipeline_entry.setDouble(constants.Limelight.PIPELINE)
+        self._ledmode_entry.setDouble(0)
 
         self._MOUNT_ANGLE = constants.Limelight.MOUNT_ANGLE
 
@@ -67,3 +70,6 @@ class Limelight(commands2.SubsystemBase):
     @property
     def is_aligned(self):
         return self.tv == 1 and math.fabs(self.tx) < constants.Limelight.X_TOLERANCE
+
+    def set_led_mode(self, mode: int):
+        self._ledmode_entry.setDouble(mode)

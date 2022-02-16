@@ -1,8 +1,10 @@
 import typing
+
 import commands2
 
-import subsystems
 import utils.controls
+
+import subsystems
 
 
 class TurretManualControl(commands2.CommandBase):

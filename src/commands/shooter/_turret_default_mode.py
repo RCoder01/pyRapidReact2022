@@ -1,15 +1,14 @@
-from __future__ import annotations
 import math
-
 import typing
 
 import commands2
 import wpimath.controller
 import wpimath.geometry
 
+import utils.math
+
 import constants
 import subsystems
-import utils.math
 
 
 class TurretDefaultMode(commands2.CommandBase):

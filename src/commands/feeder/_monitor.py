@@ -1,9 +1,10 @@
 import commands2
 
+import utils.commands
+
 from commands.feeder._elevate_ball import ElevateBall
 from commands.feeder._set_inactive import SetInactive
 import subsystems
-import utils.commands
 
 
 class Monitor(utils.commands.RepeatCommand):
