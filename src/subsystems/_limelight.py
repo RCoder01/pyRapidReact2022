@@ -71,5 +71,10 @@ class Limelight(commands2.SubsystemBase):
     def is_aligned(self):
         return self.tv == 1 and math.fabs(self.tx) < constants.Limelight.X_TOLERANCE
 
-    def set_led_mode(self, mode: int):
+    @property
+    def led_mode(self):
+        self._ledmode_entry.getDouble(0)
+
+    @property
+    def led_mode(self, mode: int):
         self._ledmode_entry.setDouble(mode)

@@ -14,6 +14,8 @@ class ToHub(ToFieldAngle):
         with warnings.catch_warnings():
             warnings.simplefilter('ignore', category=ToHub.FieldRelativeAngleOverride)
             super().__init__(wpimath.geometry.Rotation2d(0))
+    
+        self.setName('Turret To Hub')
 
     @property
     def _field_relative_angle(self):

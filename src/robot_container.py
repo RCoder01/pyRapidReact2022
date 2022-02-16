@@ -43,7 +43,7 @@ class RobotContainer():
             .whenReleased(commands.intake.SetInactive())
 
         oi.Turret.manual_control \
-            .whenHeld(commands.shooter.TurretManualControl(oi.Turret.turret_speed))
+            .whenHeld(commands.shooter.turret.ManualControl(oi.Turret.turret_speed))
 
         oi.exgest \
             .whenHeld(commands.Exgest())
