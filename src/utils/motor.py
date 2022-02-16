@@ -12,12 +12,19 @@ class CumulativeEncoder:
         self.delta = 0
         self.last_raw_ticks = 0
         self.ENCODER_COUNTS_PER_ROTATION = encoder_counts_per_rotation
-    
-    def update(self, raw_ticks: int, velocity_positive: bool) -> None:
+
+    def update(self, raw_ticks: int, velocity_positive: bool | int | float) -> None:
+        if isinstance(velocity_positive, (int, float)):
+            velocity_positive = velocity_positive >= 0
         self.delta = raw_ticks - self.last_raw_ticks
         self.last_raw_ticks = raw_ticks
-        self.delta += ((velocity_positive) + (self.delta < 0) - 1) * self.ENCODER_COUNTS_PER_ROTATION
+        self.delta += (velocity_positive + (self.delta < 0) - 1) * self.ENCODER_COUNTS_PER_ROTATION
         self.ticks += self.delta
+
+    def reset(self) -> int:
+        cum = self.ticks
+        self.ticks = 0
+        return cum
 
 
 class HeadedDefaultMotorGroup:
@@ -120,10 +127,7 @@ class OdometricHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
         """
         self.reset_lead_encoder()
 
-        cum = self._cumulative_encoder.ticks
-        self._cumulative_encoder.ticks = 0
-
-        return cum * self._CONVERSION_FACTOR
+        return self._cumulative_encoder.reset() * self._CONVERSION_FACTOR
 
     def periodic(self):
         """
@@ -131,6 +135,7 @@ class OdometricHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
 
         Must be called periodically.
         """
+
         self._cumulative_encoder.update(self.get_lead_encoder_position(), self.get_lead_encoder_velocity())\
 
     def get_last_distance(self):

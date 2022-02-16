@@ -1,6 +1,7 @@
 import warnings
 import commands2
 import commands2.button
+import ctre
 import wpilib
 import wpimath.filter
 import wpimath.trajectory
@@ -35,25 +36,42 @@ class RobotContainer():
 
         self.configure_bindings()
         self.configure_default_commands()
-        self.init_ball_counting()
+        # self.init_ball_counting()
+
+        from commands.shooter.__shooter_power import ShooterPower
+        _mo_command = ShooterPower(subsystems.shooter.mo, 'mo')
+        _lester_command = ShooterPower(subsystems.shooter.lester, 'lester')
+        subsystems.shooter.mo.setDefaultCommand(_mo_command)
+        subsystems.shooter.lester.setDefaultCommand(_lester_command)
+        def reset_molester():
+            wpilib.SmartDashboard.putNumber("Shooter Power mo", 0)
+            wpilib.SmartDashboard.putNumber("Shooter Power lester", 0)
+
+        commands2.button.JoystickButton(wpilib.XboxController(0), wpilib.XboxController.Button.kX) \
+            .whenPressed(reset_molester)
+        
+        # self._hood_motor = ctre.TalonFX(-1)
+        # self._hood_motor.setNeutralMode(ctre.NeutralMode.Brake)
 
     def configure_bindings(self) -> None:
-        oi.Intake.activate \
-            .whenPressed(commands.intake.SetActive()) \
-            .whenReleased(commands.intake.SetInactive())
+        # oi.Intake.activate \
+        #     .whenPressed(commands.intake.SetActive()) \
+        #     .whenReleased(commands.intake.SetInactive())
 
-        oi.Turret.manual_control \
-            .whenHeld(commands.shooter.TurretManualControl(oi.Turret.turret_speed))
+        # oi.Turret.manual_control \
+        #     .whenHeld(commands.shooter.TurretManualControl(oi.Turret.turret_speed))
 
-        oi.exgest \
-            .whenHeld(commands.Exgest())
+        # oi.exgest \
+        #     .whenHeld(commands.Exgest())
+        pass
 
     def configure_default_commands(self) -> None:
-        subsystems.drivetrain.setDefaultCommand(commands.drivetrain.ArcadeDrive(
-            oi.Drivetrain.ArcadeDrive.get_forward_speed,
-            oi.Drivetrain.ArcadeDrive.get_turn_speed,
-        ))
-        subsystems.feeder.setDefaultCommand(commands.feeder.Monitor())
+        # subsystems.drivetrain.setDefaultCommand(commands.drivetrain.ArcadeDrive(
+        #     oi.Drivetrain.ArcadeDrive.get_forward_speed,
+        #     oi.Drivetrain.ArcadeDrive.get_turn_speed,
+        # ))
+        # subsystems.feeder.setDefaultCommand(commands.feeder.Monitor())
+        pass
 
     def get_autonomous_command(self) -> commands2.Command:
         trajectory_generator = wpimath.trajectory.TrajectoryGenerator.generateTrajectory(
