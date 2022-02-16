@@ -166,9 +166,9 @@ class Robot(commands2.TimedCommandRobot):
         #     (lambda: deadzone(self.controller.getLeftY()) * -1),
         #     (lambda: deadzone(self.controller.getRightY())
         # )))
-        self.m = [ctre.WPI_TalonFX(i) for i in [1,3]]
-        self.m[0].setVoltage(0.1 * 12)
-        self.m[1].setVoltage(-0.1 * 12)
+        self.m = [ctre.WPI_TalonFX(i) for i in [0, 1, 2, 3, 4]]
+        for m in self.m:
+            m.set(-0.1)
         return super().teleopInit()
 
     def teleopPeriodic(self) -> None:

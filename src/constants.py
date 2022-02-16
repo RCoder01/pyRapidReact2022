@@ -3,7 +3,7 @@ from utils.constants import ConstantsClass
 
 class Drivetrain(ConstantsClass):
     class LeftMotors(ConstantsClass):
-        IDs = -1,
+        IDs = 0, 2
 
         class PID(ConstantsClass):
             P = 0
@@ -11,7 +11,7 @@ class Drivetrain(ConstantsClass):
             D = 0 # Probably keep 0
 
     class RightMotors(ConstantsClass):
-        IDs = -1,
+        IDs = 1, 3
 
         class PID(ConstantsClass):
             P = 0
@@ -43,12 +43,12 @@ class Drivetrain(ConstantsClass):
 
 class Feeder(ConstantsClass):
     class TopMotors(ConstantsClass):
-        IDs = -1,
+        IDs = 5,
         DEFAULT_SPEED = 0.5
         DEFAULT_EXGEST_SPEED = -DEFAULT_SPEED
 
     class BottomMotors(ConstantsClass):
-        IDs = -1,
+        IDs = 6,
         DEFAULT_SPEED = 0.5
         DEFAULT_EXGEST_SPEED = -DEFAULT_SPEED
 
@@ -57,7 +57,7 @@ class Feeder(ConstantsClass):
 
 
 class Intake(ConstantsClass):
-    MOTOR_IDs = -1,
+    MOTOR_IDs = 4,
     DEFAULT_INTAKE_SPEED = 0.1
     DEFAULT_EXGEST_SPEED = -DEFAULT_INTAKE_SPEED
 
@@ -86,7 +86,7 @@ class Shooter(ConstantsClass):
         D = 0
 
     class Turret(ConstantsClass):
-        MOTOR_IDs = -1,
+        MOTOR_IDs = 7,
         SENSOR_IDs = None, None
 
         ENCODER_COUNTS_PER_ROTATION = 2048
@@ -113,7 +113,7 @@ class Shooter(ConstantsClass):
             H = 0
 
     class Hood(ConstantsClass):
-        MOTOR_IDs = -1,
+        MOTOR_IDs = 8,
 
         class EncoderLimits(ConstantsClass):
             MIN = 0
@@ -123,11 +123,11 @@ class Shooter(ConstantsClass):
             P = 0
             I = 0
             D = 0
-
+    
     class Josh(ConstantsClass):
 
         class Mo(ConstantsClass):
-            MOTOR_IDs = 1,
+            MOTOR_IDs = 9,
 
             class PID(ConstantsClass):
                 P = 0
@@ -135,7 +135,7 @@ class Shooter(ConstantsClass):
                 D = 0
 
         class Lester(ConstantsClass):
-            MOTOR_IDs = 3,
+            MOTOR_IDs = 10,
 
             class PID(ConstantsClass):
                 P = 0

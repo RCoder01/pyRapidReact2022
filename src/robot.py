@@ -24,8 +24,6 @@ class Robot(commands2.TimedCommandRobot):
             self._auton_command.cancel()
 
     def teleopPeriodic(self) -> None:
-        # wpilib.SmartDashboard.putNumber('Shooter Power mo', wpilib.XboxController(0).getRightY())
-        # wpilib.SmartDashboard.putNumber('Shooter Power lester', wpilib.XboxController(0).getRightX())
         pass
 
 if __name__ == '__main__':
