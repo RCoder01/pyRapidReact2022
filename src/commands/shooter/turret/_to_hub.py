@@ -4,15 +4,15 @@ import wpimath.geometry
 
 import subsystems
 
-from ._turret_to_field_angle import TurretToFieldAngle
+from ._to_field_angle import ToFieldAngle
 
 
-class TurretToHub(TurretToFieldAngle):
+class ToHub(ToFieldAngle):
     class FieldRelativeAngleOverride(RuntimeWarning): pass
 
     def __init__(self):
         with warnings.catch_warnings():
-            warnings.simplefilter('ignore', category=TurretToHub.FieldRelativeAngleOverride)
+            warnings.simplefilter('ignore', category=ToHub.FieldRelativeAngleOverride)
             super().__init__(wpimath.geometry.Rotation2d(0))
 
     @property
@@ -23,4 +23,4 @@ class TurretToHub(TurretToFieldAngle):
 
     @_field_relative_angle.setter
     def _field_relative_angle(self, value):
-        warnings.warn("Cannot set TurretToHub's field relative angle", TurretToHub.FieldRelativeAngleOverride)
+        warnings.warn("Cannot set TurretToHub's field relative angle", ToHub.FieldRelativeAngleOverride)

@@ -7,7 +7,7 @@ import utils.controls
 import subsystems
 
 
-class TurretManualControl(commands2.CommandBase):
+class ManualControl(commands2.CommandBase):
     def __init__(self, power_supplier: typing.Callable[[], float]) -> None:
         commands2.CommandBase.__init__(self)
         self.setName('Turret Manual Control')

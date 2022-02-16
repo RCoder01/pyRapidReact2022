@@ -11,7 +11,7 @@ import constants
 import subsystems
 
 
-class TurretDefaultMode(commands2.CommandBase):
+class DefaultMode(commands2.CommandBase):
     def __init__(self) -> None:
         commands2.CommandBase.__init__()
         self.addRequirements(subsystems.shooter.turret)

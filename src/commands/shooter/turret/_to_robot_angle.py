@@ -5,14 +5,17 @@ import constants
 import subsystems
 
 
-class TurretToRobotAngle(commands2.CommandBase):
+class ToRobotAngle(commands2.CommandBase):
     def __init__(self, angle: float) -> None:
         commands2.CommandBase.__init__(self)
         self.addRequirements(subsystems.shooter.turret)
         self.setName('Turret To Robot Angle')
 
-        ff_constants = constants.Shooter.Turret.FeedForward
-        self._motor_feed_forward = wpimath.controller.SimpleMotorFeedforwardMeters(ff_constants.S, ff_constants.V, ff_constants.A)
+        self._motor_feed_forward = wpimath.controller.SimpleMotorFeedforwardMeters(
+            constants.Shooter.Turret.FeedForward.S,
+            constants.Shooter.Turret.FeedForward.V,
+            constants.Shooter.Turret.FeedForward.A,
+        )
 
         self._PID_controller = wpimath.controller.PIDController(*constants.Shooter.Turret.PID)
         self._PID_controller.setTolerance(*constants.Shooter.Turret.PID.SetpointTolerance)
