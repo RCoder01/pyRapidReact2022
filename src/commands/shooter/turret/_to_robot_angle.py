@@ -17,7 +17,11 @@ class ToRobotAngle(commands2.CommandBase):
             constants.Shooter.Turret.FeedForward.A,
         )
 
-        self._PID_controller = wpimath.controller.PIDController(*constants.Shooter.Turret.PID)
+        self._PID_controller = wpimath.controller.PIDController(
+            constants.Shooter.Turret.PID.P,
+            constants.Shooter.Turret.PID.I,
+            constants.Shooter.Turret.PID.D,
+        )
         self._PID_controller.setTolerance(*constants.Shooter.Turret.PID.SetpointTolerance)
 
         self._setpoint = angle

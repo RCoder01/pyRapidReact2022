@@ -12,11 +12,11 @@ from ._to_robot_angle import ToRobotAngle
 
 
 class ToFieldAngle(ToRobotAngle):
-    class SetpointOverrideWarning(RuntimeWarning): pass
+    class SetpointOverrideWarning(utils.warnings.SetpointOverrideWarning): pass
 
     def __init__(self, angle: wpimath.geometry.Rotation2d = wpimath.geometry.Rotation2d()) -> None:
         with warnings.catch_warnings():
-            warnings.simplefilter('ignore', category=ToFieldAngle.SetpointOverrideWarning)
+            warnings.simplefilter('ignore', category=self.SetpointOverrideWarning)
             super().__init__(angle)
 
         self.setName('Turret To Field Angle')
@@ -36,7 +36,7 @@ class ToFieldAngle(ToRobotAngle):
 
     @_setpoint.setter
     def _setpoint(self, value: typing.Any):
-        warnings.warn("Cannot set TurretToFieldAngle's setpoint", ToFieldAngle.SetpointOverrideWarning)
+        warnings.warn("TurretToFieldAngle's setpoint is read-only", self.SetpointOverrideWarning)
 
     def calculate_output(self) -> float:
         return super().calculate_output() + self._heading_feed_forward(self._pose_supplier())

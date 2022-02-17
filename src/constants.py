@@ -136,6 +136,15 @@ class Shooter(ConstantsClass):
                 I = 0
                 D = 0
 
+                class SetpointTolerance(ConstantsClass):
+                    POSITION = 0
+                    VELOCITY = 0
+
+            class FeedForward(ConstantsClass):
+                S = 0
+                V = 0
+                A = 0
+
         class Lester(ConstantsClass):
             MOTOR_IDs = 9,
 
@@ -143,6 +152,15 @@ class Shooter(ConstantsClass):
                 P = 0
                 I = 0
                 D = 0
+
+                class SetpointTolerance(ConstantsClass):
+                    POSITION = 0
+                    VELOCITY = 0
+
+            class FeedForward(ConstantsClass):
+                S = 0
+                V = 0
+                A = 0
 
 
 class Misc(ConstantsClass):

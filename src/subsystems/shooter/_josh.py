@@ -17,7 +17,7 @@ class Josh(commands2.SubsystemBase):
 
         self.set_output(0)
 
-    def get_jeff(self):
+    def get_jeff(self) -> float:
         return self._motors.get_lead_encoder_velocity() or 0
 
     def set_output(self, output: float):

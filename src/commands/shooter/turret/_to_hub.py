@@ -2,17 +2,19 @@ import warnings
 
 import wpimath.geometry
 
+import utils.warnings
+
 import subsystems
 
 from ._to_field_angle import ToFieldAngle
 
 
 class ToHub(ToFieldAngle):
-    class FieldRelativeAngleOverride(RuntimeWarning): pass
+    class FieldRelativeAngleOverride(utils.warnings.SetpointOverrideWarning): pass
 
     def __init__(self):
         with warnings.catch_warnings():
-            warnings.simplefilter('ignore', category=ToHub.FieldRelativeAngleOverride)
+            warnings.simplefilter('ignore', category=self.FieldRelativeAngleOverride)
             super().__init__(wpimath.geometry.Rotation2d(0))
     
         self.setName('Turret To Hub')
@@ -25,4 +27,4 @@ class ToHub(ToFieldAngle):
 
     @_field_relative_angle.setter
     def _field_relative_angle(self, value):
-        warnings.warn("Cannot set TurretToHub's field relative angle", ToHub.FieldRelativeAngleOverride)
+        warnings.warn("Field relative angle setpoint is read-only", self.FieldRelativeAngleOverride)

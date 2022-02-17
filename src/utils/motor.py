@@ -170,6 +170,8 @@ class LimitedHeadedDefaultMotorGroup(OdometricHeadedDefaultMotorGroup):
         self._MIN_CUMULATIVE_ENCODER_COUNTS = min_cumulative_encoder_counts
         self._MAX_CUMULATIVE_ENCODER_COUNTS = max_cumulative_encoder_counts
 
+        self.status = self.Status.WITHIN_BOUNDS
+
         if min_cumulative_encoder_counts > max_cumulative_encoder_counts:
             raise ValueError("min_cumulative_encoder_counts must be less than or equal to max_cumulative_encoder_counts")
 
@@ -177,17 +179,20 @@ class LimitedHeadedDefaultMotorGroup(OdometricHeadedDefaultMotorGroup):
         super().periodic()
 
         if self._cumulative_encoder.ticks <= self._MIN_CUMULATIVE_ENCODER_COUNTS:
-            # self.set_output(0)
-            # self.set_neutral_mode_coast()
-            return self.Status.AT_LOWER_LIMIT
+            self.status = self.Status.AT_LOWER_LIMIT
 
         if self._cumulative_encoder.ticks > self._MAX_CUMULATIVE_ENCODER_COUNTS:
-            # self.set_output(0)
-            # self.set_neutral_mode_coast()
-            return self.Status.AT_UPPER_LIMIT
+            self.status = self.Status.AT_UPPER_LIMIT
 
-        # self.set_neutral_mode_brake()
-        return self.Status.WITHIN_BOUNDS
+        self.status = self.Status.WITHIN_BOUNDS
+        return self.status
+
+    def set_output(self, value: float):
+        if self.status == self.Status.AT_LOWER_LIMIT and value < 0:
+            return
+        if self.status == self.Status.AT_UPPER_LIMIT and value > 0:
+            return
+        return super().set_output(value)
 
     def get_percent_limit(self):
         return (self._cumulative_encoder.ticks - self._MIN_CUMULATIVE_ENCODER_COUNTS) / (self._MAX_CUMULATIVE_ENCODER_COUNTS - self._MIN_CUMULATIVE_ENCODER_COUNTS)
