@@ -43,7 +43,7 @@ class Turret(commands2.SubsystemBase):
         return self._motors.get_cumulative_distance()
 
     def get_angle(self):
-        return self._motors.get_percent_limit() * self._ANGLE_RANGE
+        return (self._motors.get_percent_limit() * self._ANGLE_RANGE) - self._ANGLE_RANGE / 2
 
     def get_angular_velocity(self):
         return self._motors.get_lead_encoder_velocity() \
