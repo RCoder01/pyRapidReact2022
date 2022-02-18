@@ -8,7 +8,7 @@ import subsystems
 from ._set_variable_speed import SetVariableSpeed
 
 
-class SetLesterSpeed(SetVariableSpeed):
+class SetLesterVariableSpeed(SetVariableSpeed):
     def __init__(self, speed_supplier: typing.Callable[[], float]) -> None:
         super().__init__(
             subsystems.shooter.mo,

@@ -42,5 +42,9 @@ class Intake:
     activate = JoystickButton(_driver, _driver.Button.kB)
     # activate = JoystickButton(_manip, 2)
 
+class Feeder:
+    manual_override_activate = JoystickButton(_driver, _driver.Button.kX)
+    manual_reverse_activate = JoystickButton(_driver, _driver.Button.kLeftBumper)
 
-exgest = JoystickButton(_manip, _manip.Button.kX)
+
+exgest = JoystickButton(_driver, _driver.Button.kY)

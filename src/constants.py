@@ -45,13 +45,13 @@ class Drivetrain(ConstantsClass):
 
 class Feeder(ConstantsClass):
     class TopMotors(ConstantsClass):
-        IDs = 4,
-        DEFAULT_SPEED = 0.5
+        IDs = 0,
+        DEFAULT_SPEED = -0.5
         DEFAULT_EXGEST_SPEED = -DEFAULT_SPEED
 
     class BottomMotors(ConstantsClass):
         IDs = 5,
-        DEFAULT_SPEED = 0.5
+        DEFAULT_SPEED = -0.5
         DEFAULT_EXGEST_SPEED = -DEFAULT_SPEED
 
     IN_SENSOR_IDs = None, None
@@ -59,8 +59,8 @@ class Feeder(ConstantsClass):
 
 
 class Intake(ConstantsClass):
-    MOTOR_IDs = 6,
-    DEFAULT_INTAKE_SPEED = 0.1
+    MOTOR_IDs = 4,
+    DEFAULT_INTAKE_SPEED = 0.3
     DEFAULT_EXGEST_SPEED = -DEFAULT_INTAKE_SPEED
 
 

@@ -42,18 +42,26 @@ class RobotContainer():
             .whenPressed(commands.intake.SetActive()) \
             .whenReleased(commands.intake.SetInactive())
 
-        oi.Turret.manual_control \
-            .whenHeld(commands.shooter.turret.ManualControl(oi.Turret.turret_speed))
+        # oi.Turret.manual_control \
+        #     .whenHeld(commands.shooter.turret.ManualControl(oi.Turret.turret_speed))
 
         oi.exgest \
             .whenHeld(commands.Exgest())
 
+        oi.Feeder.manual_override_activate \
+            .whenPressed(commands.feeder.SetActive()) \
+            .whenReleased(commands.feeder.SetInactive())
+        oi.Feeder.manual_reverse_activate \
+            .whenPressed(commands.feeder.SetActive(constants.Feeder.TopMotors.DEFAULT_EXGEST_SPEED, constants.Feeder.BottomMotors.DEFAULT_EXGEST_SPEED)) \
+            .whenReleased(commands.feeder.SetInactive())
+
     def configure_default_commands(self) -> None:
-        subsystems.drivetrain.setDefaultCommand(commands.drivetrain.ArcadeDrive(
-            oi.Drivetrain.ArcadeDrive.get_forward_speed,
-            oi.Drivetrain.ArcadeDrive.get_turn_speed,
-        ))
-        subsystems.feeder.setDefaultCommand(commands.feeder.Monitor())
+        # subsystems.drivetrain.setDefaultCommand(commands.drivetrain.ArcadeDrive(
+        #     oi.Drivetrain.ArcadeDrive.get_forward_speed,
+        #     oi.Drivetrain.ArcadeDrive.get_turn_speed,
+        # ))
+        # subsystems.feeder.setDefaultCommand(commands.feeder.Monitor())
+        pass
 
     def get_autonomous_command(self) -> commands2.Command:
         trajectory_generator = wpimath.trajectory.TrajectoryGenerator.generateTrajectory(
