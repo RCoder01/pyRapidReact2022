@@ -42,11 +42,13 @@ class RobotContainer():
             .whenPressed(commands.intake.SetActive()) \
             .whenReleased(commands.intake.SetInactive())
 
-        oi.Turret.manual_control \
-            .whenHeld(commands.shooter.turret.ManualControl(oi.Turret.turret_speed))
+        # oi.Turret.manual_control \
+            # .whenHeld(commands.shooter.turret.ManualControl(oi.Turret.turret_speed))
 
         oi.exgest \
             .whenHeld(commands.Exgest())
+
+        # self.pd = wpilib.PowerDistribution()
 
     def configure_default_commands(self) -> None:
         subsystems.drivetrain.setDefaultCommand(commands.drivetrain.ArcadeDrive(

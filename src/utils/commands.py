@@ -4,9 +4,9 @@ import commands2
 class RepeatCommand(commands2.CommandBase):
     def __init__(self, command: commands2.Command) -> None:
         commands2.CommandBase.__init__(self)
-        if command:
-            self.addRequirements(command.getRequirements())
-            self.setName(command.getName())
+
+        self.addRequirements(command.getRequirements())
+        self.setName(command.getName())
 
         self._command = command
 

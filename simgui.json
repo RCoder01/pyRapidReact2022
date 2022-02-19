@@ -2,38 +2,36 @@
   "HALProvider": {
     "Other Devices": {
       "Talon FX[0]": {
-        "header": {
-          "open": true
-        }
+        "name": "TOP FEEDER"
       },
       "Talon FX[10]": {
         "header": {
-          "open": true
+          "open": false
         }
       },
       "Talon FX[11]": {
         "header": {
-          "open": true
+          "open": false
         }
       },
       "Talon FX[13]": {
         "header": {
-          "open": true
+          "open": false
         }
       },
       "Talon FX[13]/Integrated Sensor": {
         "header": {
-          "open": true
+          "open": false
         }
       },
       "Talon FX[14]": {
         "header": {
-          "open": true
+          "open": false
         }
       },
       "Talon FX[15]": {
         "header": {
-          "open": true
+          "open": false
         }
       },
       "Talon FX[1]": {
@@ -43,13 +41,14 @@
       },
       "Talon FX[20]": {
         "header": {
-          "open": true
+          "open": false
         }
       },
       "Talon FX[2]": {
         "header": {
           "open": true
-        }
+        },
+        "name": "DT L 1"
       },
       "Talon FX[3]": {
         "header": {
@@ -59,36 +58,30 @@
       "Talon FX[4]": {
         "header": {
           "open": true
-        }
+        },
+        "name": "Intake"
       },
       "Talon FX[5]": {
         "header": {
           "open": true
-        }
+        },
+        "name": "BOTTOM FEEDER"
       },
       "Talon FX[6]": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon FX[6]/Integrated Sensor": {
-        "header": {
-          "open": true
-        }
+        "name": "DT L 2"
       },
       "Talon FX[7]": {
         "header": {
           "open": true
-        }
+        },
+        "name": "DT R 1"
       },
       "Talon FX[8]": {
-        "header": {
-          "open": true
-        }
+        "name": "DT R 2"
       },
       "Talon FX[9]": {
         "header": {
-          "open": true
+          "open": false
         }
       }
     },
@@ -113,14 +106,8 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/LiveWindow/Ungrouped/DigitalInput[0]": "Digital Input",
-      "/LiveWindow/Ungrouped/DigitalInput[1]": "Digital Input",
-      "/LiveWindow/Ungrouped/DigitalInput[2]": "Digital Input",
-      "/LiveWindow/Ungrouped/DigitalInput[3]": "Digital Input",
       "/LiveWindow/Ungrouped/Feeder": "Subsystem",
-      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/LiveWindow/Ungrouped/class frc2::SubsystemBase": "Subsystem",
-      "/LiveWindow/Ungrouped/navX-Sensor[0]": "Gyro",
       "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro"
     }
   },

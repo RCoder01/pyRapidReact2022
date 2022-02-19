@@ -7,7 +7,7 @@ import utils.controls
 
 _driver = wpilib.XboxController(0)
 # _driver = wpilib.Joystick(0)
-_manip = wpilib.XboxController(1)
+_manip = wpilib.XboxController(0)
 # _manip = wpilib.Joystick(1)
 
 
@@ -18,7 +18,7 @@ class Drivetrain:
 
         def get_right_speed() -> float:
             return utils.controls.deadzone(-_driver.getRightY())
-    
+
     class ArcadeDrive:
         def get_forward_speed() -> float:
             if _driver.getLeftTriggerAxis() > 0:
@@ -39,8 +39,12 @@ class Turret:
 
 
 class Intake:
-    activate = JoystickButton(_driver, _driver.Button.kB)
+    activate = JoystickButton(_manip, _manip.Button.kB)
     # activate = JoystickButton(_manip, 2)
+
+
+class Feeder:
+    manual_activate = JoystickButton(_manip, _manip.Button.kA)
 
 
 exgest = JoystickButton(_manip, _manip.Button.kX)

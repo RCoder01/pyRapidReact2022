@@ -16,5 +16,5 @@ class Monitor(utils.commands.RepeatCommand):
                 subsystems.feeder.get_in_sensor
             )
         )
-        self.addRequirements(subsystems.feeder)
+        # self.addRequirements(subsystems.feeder)
         self.setName("Feeder Monitor")

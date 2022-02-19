@@ -10,7 +10,6 @@ from . import shooter
 drivetrain = _drivetrain.Drivetrain(
     constants.Drivetrain.LeftMotors.IDs,
     constants.Drivetrain.RightMotors.IDs,
-    constants.Drivetrain.GYRO_PORT,
     constants.Drivetrain.ENCODER_COUNTS_PER_METER,
     None,
     constants.Drivetrain.ENCODER_SPEED_TO_REAL_SPEED,

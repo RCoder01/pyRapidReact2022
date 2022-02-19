@@ -3,6 +3,7 @@ from wpilib import SmartDashboard
 
 import commands
 import constants
+import subsystems
 
 
 class Exgest(commands2.ParallelCommandGroup):
@@ -17,10 +18,16 @@ class Exgest(commands2.ParallelCommandGroup):
         )
         self.setName("Exgest")
 
+        self._set_intake_inactive_command = commands.intake.SetInactive()
+        self._set_feeder_inactive_command = commands.feeder.SetInactive()
+
     def isFinished(self) -> bool:
-        return SmartDashboard.getNumber("Stored Balls", 1) <= 0
+        return False # SmartDashboard.getNumber("Stored Balls", 1) <= 0
 
     def end(self, interrupted: bool) -> None:
-        commands.intake.SetInactive().schedule()
-        commands.feeder.SetInactive().schedule()
+        commands2.InstantCommand(lambda: subsystems.intake._motors.set_output(0)).schedule()
+        commands2.InstantCommand(lambda: (subsystems.feeder._bottom_motor_group.set_output(0), subsystems.feeder._top_motor_group.set_output(0))).schedule()
+
+        # self._set_intake_inactive_command.schedule()
+        # self._set_feeder_inactive_command.schedule()
         super().end(interrupted)

@@ -91,13 +91,9 @@
   ],
   "robotJoysticks": [
     {
-      "name": "Driver",
-      "useGamepad": true
-    },
-    {
       "guid": "78696e70757401000000000000000000",
-      "name": "Manip",
       "useGamepad": true
     }
-  ]
+  ],
+  "useEnableDisableHotkeys": true
 }

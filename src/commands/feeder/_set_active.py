@@ -1,4 +1,5 @@
 import commands2
+import wpilib
 
 import constants
 import subsystems
@@ -21,5 +22,6 @@ class SetActive(commands2.InstantCommand):
 
     def initialize(self) -> None:
         subsystems.feeder.set_speeds(self._top_speed, self._bottom_speed)
+        wpilib.SmartDashboard.putBoolean("Feeder Active", True)
 
         super().initialize()

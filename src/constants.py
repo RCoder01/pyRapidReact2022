@@ -5,7 +5,7 @@ from utils.constants import ConstantsClass
 
 class Drivetrain(ConstantsClass):
     class LeftMotors(ConstantsClass):
-        IDs = 0, 1
+        IDs = 2, 6
 
         class PID(ConstantsClass):
             P = 0
@@ -13,7 +13,7 @@ class Drivetrain(ConstantsClass):
             D = 0 # Probably keep 0
 
     class RightMotors(ConstantsClass):
-        IDs = 2, 3
+        IDs = 7, 8
 
         class PID(ConstantsClass):
             P = 0
@@ -21,8 +21,6 @@ class Drivetrain(ConstantsClass):
             D = 0 # Probably keep 0
     
     ENCODER_COUNTS_PER_METER = 3000
-
-    GYRO_PORT = wpilib.SPI.Port.kOnboardCS0 # TODO: Find which port the gyro is on
 
     ENCODER_SPEED_TO_REAL_SPEED = 10 / ENCODER_COUNTS_PER_METER # Encoder speed given in encoder counts per 100 ms
 
@@ -88,7 +86,7 @@ class Shooter(ConstantsClass):
         D = 0
 
     class Turret(ConstantsClass):
-        MOTOR_IDs = 7,
+        MOTOR_IDs = -1,
         SENSOR_IDs = None, None
 
         ENCODER_COUNTS_PER_ROTATION = 2048
@@ -115,7 +113,7 @@ class Shooter(ConstantsClass):
             H = 0
 
     class Hood(ConstantsClass):
-        MOTOR_IDs = 8,
+        MOTOR_IDs = -2,
 
         class EncoderLimits(ConstantsClass):
             MIN = 0
@@ -129,7 +127,7 @@ class Shooter(ConstantsClass):
     class Josh(ConstantsClass):
 
         class Mo(ConstantsClass):
-            MOTOR_IDs = 8,
+            MOTOR_IDs = 3,
 
             class PID(ConstantsClass):
                 P = 0
@@ -146,7 +144,7 @@ class Shooter(ConstantsClass):
                 A = 0
 
         class Lester(ConstantsClass):
-            MOTOR_IDs = 9,
+            MOTOR_IDs = 1,
 
             class PID(ConstantsClass):
                 P = 0

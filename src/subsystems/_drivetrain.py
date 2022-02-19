@@ -31,7 +31,6 @@ class Drivetrain(commands2.SubsystemBase):
             self,
             left_motor_IDs: typing.Collection[int],
             right_motor_IDs: typing.Collection[int],
-            gyro_port: wpilib.SPI.Port,
             left_encoder_counts_per_meter: float,
             right_encoder_counts_per_meter: float = None,
             left_encoder_speed_to_real_speed: float = 1.0,
@@ -41,11 +40,11 @@ class Drivetrain(commands2.SubsystemBase):
 
         self._left_motors = utils.motor.OdometricHeadedDefaultMotorGroup(left_motor_IDs, left_encoder_counts_per_meter)
         self._right_motors = utils.motor.OdometricHeadedDefaultMotorGroup(right_motor_IDs, right_encoder_counts_per_meter or left_encoder_counts_per_meter)
-        # self._right_motors.set_inverted() # TODO
+        self._right_motors.invert_all()
 
         self.reset_encoders()
 
-        self._gyro = navx.AHRS(gyro_port)
+        self._gyro = navx.AHRS(wpilib.SPI.Port.kMXP)
 
         # TODO: Give this 1 sec delay or something
         self.reset_gyro()

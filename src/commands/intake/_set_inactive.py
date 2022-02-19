@@ -1,7 +1,6 @@
 import commands2
 import wpilib
 
-import constants
 import subsystems
 
 

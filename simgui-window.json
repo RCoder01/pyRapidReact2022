@@ -13,13 +13,8 @@
   "Window": {
     "###/FMSInfo": {
       "Collapsed": "0",
-      "Pos": "260,62",
+      "Pos": "60,60",
       "Size": "202,194"
-    },
-    "###/LiveWindow/Ungrouped/class frc2::SubsystemBase": {
-      "Collapsed": "0",
-      "Pos": "261,61",
-      "Size": "209,98"
     },
     "###FMS": {
       "Collapsed": "0",
@@ -29,12 +24,7 @@
     "###Joysticks": {
       "Collapsed": "0",
       "Pos": "293,549",
-      "Size": "976,82"
-    },
-    "###Keyboard 0 Settings": {
-      "Collapsed": "0",
-      "Pos": "10,50",
-      "Size": "300,560"
+      "Size": "976,278"
     },
     "###NetworkTables": {
       "Collapsed": "0",
@@ -46,14 +36,9 @@
       "Pos": "1279,25",
       "Size": "312,868"
     },
-    "###Plot <0>": {
-      "Collapsed": "0",
-      "Pos": "459,130",
-      "Size": "700,400"
-    },
     "###RoboRIO": {
       "Collapsed": "1",
-      "Pos": "111,28",
+      "Pos": "122,19",
       "Size": "114,357"
     },
     "###System Joysticks": {
