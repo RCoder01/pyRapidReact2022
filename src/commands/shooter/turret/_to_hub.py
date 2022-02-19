@@ -21,9 +21,11 @@ class ToHub(ToFieldAngle):
 
     @property
     def _field_relative_angle(self):
+        pose = self._pose_supplier()
         if subsystems.limelight.tv:
-            self._field_relative_angle_ = self._pose_supplier().rotation().degrees() - subsystems.limelight.tx
-        return self._field_relative_angle_
+            return pose.rotation().degrees() - (subsystems.limelight.tx + subsystems.shooter.turret.get_angle())
+        translation = pose.translation()
+        return wpimath.geometry.Rotation2d(-translation.x, -translation.y).degrees()
 
     @_field_relative_angle.setter
     def _field_relative_angle(self, value):
