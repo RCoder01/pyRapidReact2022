@@ -131,48 +131,66 @@ def deadzone(
         return 1
 
 
-class Drivetrain(commands2.SubsystemBase):
-    def __init__(self) -> None:
-        commands2.SubsystemBase.__init__(self)
-        self.left_motors = HeadedDefaultMotorGroup([0, 2])
-        self.right_motors = HeadedDefaultMotorGroup([1, 3])
-        self.left_motors.invert_all()
+# class Drivetrain(commands2.SubsystemBase):
+#     def __init__(self) -> None:
+#         commands2.SubsystemBase.__init__(self)
+#         self.left_motors = HeadedDefaultMotorGroup([0, 2])
+#         self.right_motors = HeadedDefaultMotorGroup([1, 3])
+#         self.left_motors.invert_all()
     
-    def set_speeds(self, left: float, right: float):
-        self.left_motors.set_output(left)
-        self.right_motors.set_output(right)
+#     def set_speeds(self, left: float, right: float):
+#         self.left_motors.set_output(left)
+#         self.right_motors.set_output(right)
 
-drivetrain = Drivetrain()
+# drivetrain = Drivetrain()
 
-class TankDrive(commands2.CommandBase):
-    def __init__(self, left_power_supplier, right_power_supplier) -> None:
-        commands2.CommandBase.__init__(self)
-        self.addRequirements(drivetrain)
-        self.setName('Tank Drive')
-        self._left_power_supplier = left_power_supplier
-        self._right_power_supplier = right_power_supplier
+# class TankDrive(commands2.CommandBase):
+#     def __init__(self, left_power_supplier, right_power_supplier) -> None:
+#         commands2.CommandBase.__init__(self)
+#         self.addRequirements(drivetrain)
+#         self.setName('Tank Drive')
+#         self._left_power_supplier = left_power_supplier
+#         self._right_power_supplier = right_power_supplier
 
-    def execute(self) -> None:
-        drivetrain.set_speeds(self._left_power_supplier(), self._right_power_supplier())
-        return super().execute()
+#     def execute(self) -> None:
+#         drivetrain.set_speeds(self._left_power_supplier(), self._right_power_supplier())
+#         return super().execute()
+
+import commands2.button
+
+class Subsystem(commands2.SubsystemBase):
+    pass
+subsystem = Subsystem()
+
+class Command(commands2.InstantCommand):
+    def __init__(self) -> None:
+        commands2.InstantCommand.__init__(self)
+        self.addRequirements(subsystem)
+        self.setName('CommandA')
+        print('CommandA init')
+    def end(self, interrupted) -> None:
+        print('CommandA end')
+
+class Command2(commands2.CommandBase):
+    def __init__(self) -> None:
+        super().__init__()
+        self.addRequirements(subsystem)
+        self.setName('CommandB')
+        print('CommandB init')
+    def end(self, interrupted: bool) -> None:
+        print('CommandB end')
+        self.andThen(Command())
 
 class Robot(commands2.TimedCommandRobot):
     def robotInit(self) -> None:
-        # self.controller = wpilib.XboxController(0)
+        self.controller = wpilib.XboxController(0)
         return super().robotInit()
     
     def teleopInit(self) -> None:
-        # drivetrain.setDefaultCommand(TankDrive(
-        #     (lambda: deadzone(self.controller.getLeftY()) * -1),
-        #     (lambda: deadzone(self.controller.getRightY())
-        # )))
-        self.m = [ctre.WPI_TalonFX(i) for i in [0, 1, 2, 3, 4]]
-        for m in self.m:
-            m.set(-0.1)
+        commands2.button.JoystickButton(self.controller, self.controller.Button.kA).whileHeld(Command2())
         return super().teleopInit()
 
     def teleopPeriodic(self) -> None:
-        # return super().teleopPeriodic()
         pass
 
 if __name__ == '__main__':

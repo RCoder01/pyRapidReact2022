@@ -27,3 +27,11 @@ class RepeatCommand(commands2.CommandBase):
 
     def end(self, interrupted: bool) -> None:
         return self._command.end(interrupted)
+
+
+def set_name(command: commands2.Command, name: str):
+    if isinstance(command, commands2.CommandBase):
+        command.setName(name)
+    else:
+        command.getName = lambda: name
+    return command

@@ -5,13 +5,11 @@ import subsystems
 import constants
 
 
-class SetActive(commands2.InstantCommand):
-    """Activates the intake at a given/default speed."""
-
+class Active(commands2.CommandBase):
     def __init__(self, speed: float = constants.Intake.DEFAULT_INTAKE_SPEED):
-        commands2.InstantCommand.__init__(self)
+        commands2.CommandBase.__init__(self)
         self.addRequirements(subsystems.intake)
-        self.setName("Set Intake Active")
+        self.setName("Intake Active")
 
         self._speed = speed
 
@@ -19,4 +17,7 @@ class SetActive(commands2.InstantCommand):
         subsystems.intake.set_speed(self._speed)
         wpilib.SmartDashboard.putBoolean("Intake Active", True)
 
-        super().execute()
+    def end(self, interrupted: bool) -> None:
+        subsystems.intake.set_speed(0)
+        wpilib.SmartDashboard.putBoolean("Intake Active", False)
+        super().end(interrupted)

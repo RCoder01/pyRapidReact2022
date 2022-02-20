@@ -9,8 +9,12 @@ class DoubleDigitialInput:
         DISAGREE = 1
 
     def __init__(self, sensor_1_ID: int, sensor_2_ID: int, sensor_1_inverted: bool, sensor_2_inverted: bool):
-        self._sensor_1 = wpilib.DigitalInput(sensor_1_ID) if sensor_1_ID is not None else None
-        self._sensor_2 = wpilib.DigitalInput(sensor_2_ID) if sensor_2_ID is not None else None
+        if not wpilib.RobotBase.isSimulation:
+            self._sensor_1 = wpilib.DigitalInput(sensor_1_ID)
+            self._sensor_2 = wpilib.DigitalInput(sensor_2_ID)
+        else:
+            self._sensor_1 = None
+            self._sensor_2 = None
         self._sensor_1_inverted = bool(sensor_1_inverted)
         self._sensor_2_inverted = bool(sensor_2_inverted)
 

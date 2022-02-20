@@ -2,7 +2,10 @@
   "HALProvider": {
     "Other Devices": {
       "Talon FX[0]": {
-        "name": "TOP FEEDER"
+        "header": {
+          "open": true
+        },
+        "name": "Feeder"
       },
       "Talon FX[10]": {
         "header": {
@@ -62,10 +65,7 @@
         "name": "Intake"
       },
       "Talon FX[5]": {
-        "header": {
-          "open": true
-        },
-        "name": "BOTTOM FEEDER"
+        "name": "Belt"
       },
       "Talon FX[6]": {
         "name": "DT L 2"
@@ -106,6 +106,7 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/LiveWindow/Ungrouped/Belt": "Subsystem",
       "/LiveWindow/Ungrouped/Feeder": "Subsystem",
       "/LiveWindow/Ungrouped/class frc2::SubsystemBase": "Subsystem",
       "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro"

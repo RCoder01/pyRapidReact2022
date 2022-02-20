@@ -41,19 +41,16 @@ class Drivetrain(ConstantsClass):
             ZETA = 0
 
 
-class Feeder(ConstantsClass):
-    class TopMotors(ConstantsClass):
-        IDs = 0,
-        DEFAULT_SPEED = -0.5
-        DEFAULT_EXGEST_SPEED = -DEFAULT_SPEED
+class Belt(ConstantsClass):
+    MOTOR_IDs = 0,
+    DEFAULT_SPEED = -0.5
+    DEFAULT_EXGEST_SPEED = -DEFAULT_SPEED
 
-    class BottomMotors(ConstantsClass):
-        IDs = 5,
-        DEFAULT_SPEED = -0.5
-        DEFAULT_EXGEST_SPEED = -DEFAULT_SPEED
+    STAGING_RUN_TIME = 0.5
 
-    IN_SENSOR_IDs = None, None
-    OUT_SENSOR_IDs = None, None
+    IN_SENSOR_IDs = 3, 2
+    OUT_SENSOR_IDs = 1, 0
+    IN_SENSOR_DEBOUNCE_TIME = 0.5
 
 
 class Intake(ConstantsClass):
@@ -84,6 +81,10 @@ class Shooter(ConstantsClass):
         P = 0
         I = 0
         D = 0
+    
+    class Feeder(ConstantsClass):
+        MOTOR_IDs = 5,
+        DEFAULT_SPEED = -0.5
 
     class Turret(ConstantsClass):
         MOTOR_IDs = -1,
@@ -93,7 +94,7 @@ class Shooter(ConstantsClass):
 
         COVERAGE_AMOUNT = 1.00
 
-        CONTINUOUS_MAX_CUMULATIVE_ENCODER_COUNTS = 2048 * (140*4 / 10) * COVERAGE_AMOUNT
+        CONTINUOUS_MAX_CUMULATIVE_ENCODER_COUNTS = int(2048 * (140*4 / 10) * COVERAGE_AMOUNT // 1)
 
         ANGLE_RANGE_DEGREES = 270
 
@@ -174,3 +175,5 @@ class Misc(ConstantsClass):
         OUT_DEBOUNCE_TIME = 0.1
 
         MAX_CAPACITY = 2
+
+    EXGEST_TIMEOUT = 5

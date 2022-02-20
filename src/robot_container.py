@@ -6,6 +6,7 @@ import wpimath.filter
 import wpimath.trajectory
 
 import commands
+
 import constants
 import oi
 import subsystems
@@ -39,29 +40,31 @@ class RobotContainer():
 
     def configure_bindings(self) -> None:
         oi.Intake.activate \
-            .whenPressed(commands.intake.SetActive()) \
-            .whenReleased(commands.intake.SetInactive())
+            .whileHeld(commands.intake.Active())
 
-        # oi.Turret.manual_control \
-            # .whenHeld(commands.shooter.turret.ManualControl(oi.Turret.turret_speed))
+        oi.Feeder.manual_activate \
+            .whileHeld(commands.belt.Active())
+
+        oi.Turret.manual_control \
+            .whenHeld(commands.shooter.turret.ManualControl(oi.Turret.turret_speed))
 
         oi.exgest \
             .whenHeld(commands.Exgest())
 
-        # self.pd = wpilib.PowerDistribution()
+        self.pd = wpilib.PowerDistribution()
 
     def configure_default_commands(self) -> None:
         subsystems.drivetrain.setDefaultCommand(commands.drivetrain.ArcadeDrive(
             oi.Drivetrain.ArcadeDrive.get_forward_speed,
             oi.Drivetrain.ArcadeDrive.get_turn_speed,
         ))
-        subsystems.feeder.setDefaultCommand(commands.feeder.Monitor())
+        subsystems.belt.setDefaultCommand(commands.belt.Monitor())
 
     def get_autonomous_command(self) -> commands2.Command:
         trajectory_generator = wpimath.trajectory.TrajectoryGenerator.generateTrajectory(
-            
+
         )
-    
+
     def init_ball_counting(self) -> None:
         wpilib.SmartDashboard.putNumber("Stored Balls", 0)
         ball_count = wpilib.SmartDashboard.getEntry("Stored Balls")
@@ -71,22 +74,22 @@ class RobotContainer():
         def passed_sensor(is_in: bool):
             nonlocal ball_count
             ball_count_num = ball_count.getDouble(0)
-            if (subsystems.feeder.get_avg_current_speed() > 0) ^ (not is_in):
-                # If entering feeder
+            if (subsystems.belt.get_current_speed() > 0) ^ (not is_in):
+                # If entering belt
                 capacity = constants.Misc.BallCounting.MAX_CAPACITY
                 if ball_count_num >= capacity:
-                    warnings.warn(f"Feeder capacity exceeded: Setting balls to {ball_count_num}, which is greater than {capacity = }", RuntimeWarning)
+                    warnings.warn(f"Belt capacity exceeded: Setting balls to {ball_count_num}, which is greater than {capacity = }", RuntimeWarning)
                 add_ball_count(1)
             else:
-                # If exiting feeder
+                # If exiting belt
                 if ball_count_num <= 0:
-                    warnings.warn(f"Feeder empty and decreasing: Keeping balls at 0", RuntimeWarning)
+                    warnings.warn(f"Belt empty and decreasing: Keeping balls at 0", RuntimeWarning)
                 else:
                     add_ball_count(-1)
 
         in_sensor_debouncer = wpimath.filter.Debouncer(constants.Misc.BallCounting.IN_DEBOUNCE_TIME)
         out_sensor_debouncer = wpimath.filter.Debouncer(constants.Misc.BallCounting.OUT_DEBOUNCE_TIME)
-        commands2.button.Button(lambda: in_sensor_debouncer.calculate(subsystems.feeder.get_in_sensor())) \
+        commands2.button.Button(lambda: in_sensor_debouncer.calculate(subsystems.belt.get_in_sensor())) \
             .whenPressed(passed_sensor(True))
-        commands2.button.Button(lambda: out_sensor_debouncer.calculate(subsystems.feeder.get_out_sensor())) \
+        commands2.button.Button(lambda: out_sensor_debouncer.calculate(subsystems.belt.get_out_sensor())) \
             .whenPressed(passed_sensor(False))

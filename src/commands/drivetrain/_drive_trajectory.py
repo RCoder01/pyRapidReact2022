@@ -1,5 +1,6 @@
 import typing
 import commands2
+import wpilib
 import wpimath.controller
 import wpimath.geometry
 import wpimath.kinematics
@@ -45,6 +46,9 @@ class DriveTrajectory(commands2.RamseteCommand):
             )
         )
 
+        left_PID_controller = wpimath.controller.PIDController(*constants.Drivetrain.LeftMotors.PID)
+        right_PID_controller = wpimath.controller.PIDController(*constants.Drivetrain.RightMotors.PID)
+
         subsystems.drivetrain.reset_odometry()
 
         commands2.RamseteCommand.__init__(
@@ -62,15 +66,14 @@ class DriveTrajectory(commands2.RamseteCommand):
             ),
             drive_kinematics,
             subsystems.drivetrain.get_wheel_speeds,
-            wpimath.controller.PIDController(
-                *constants.Drivetrain.LeftMotors.PID,
-            ),
-            wpimath.controller.PIDController(
-                *constants.Drivetrain.RightMotors.PID,
-            ),
+            left_PID_controller,
+            right_PID_controller,
             subsystems.drivetrain.set_speed,
             subsystems.drivetrain,
         )
 
         self.setName("Drive Trajectory")
         self.addRequirements(subsystems.drivetrain)
+
+        wpilib.SmartDashboard.putData("Left PID Controller", left_PID_controller)
+        wpilib.SmartDashboard.putData("Right PID Controller", right_PID_controller)

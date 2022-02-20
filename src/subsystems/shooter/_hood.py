@@ -9,7 +9,6 @@ import utils.motor
 class Hood(commands2.SubsystemBase):
     def periodic(self):
         self._status = self._motors.periodic()
-        # TODO: Sim stuff
 
     def __init__(self, motor_IDs: typing.Collection[int], /, min_encoder_counts: int, max_encoder_counts: int):
         commands2.SubsystemBase.__init__(self)

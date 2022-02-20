@@ -44,7 +44,7 @@ class Intake:
 
 
 class Feeder:
-    manual_activate = JoystickButton(_manip, _manip.Button.kA)
+    manual_activate = JoystickButton(_manip, _manip.Button.kY)
 
 
 exgest = JoystickButton(_manip, _manip.Button.kX)

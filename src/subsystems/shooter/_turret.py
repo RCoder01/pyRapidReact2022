@@ -19,8 +19,6 @@ class Turret(commands2.SubsystemBase):
         if self.get_limit_switch():
             self._motors.reset_odometry()
 
-        # TODO: Sim stuff
-
     def __init__(self, motor_IDs: typing.Collection[int], sensor_IDs: typing.Collection[int], total_cumulative_encoder_counts: int, angle_range_degrees: float = 1):
         commands2.SubsystemBase.__init__(self)
 

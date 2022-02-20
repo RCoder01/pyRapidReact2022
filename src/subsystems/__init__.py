@@ -2,7 +2,7 @@
 import constants
 
 from . import _drivetrain
-from . import _feeder
+from . import _belt
 from . import _limelight
 from . import _intake
 from . import shooter
@@ -22,9 +22,8 @@ intake = _intake.Intake(
     constants.Intake.MOTOR_IDs,
 )
 
-feeder = _feeder.Feeder(
-    constants.Feeder.TopMotors.IDs,
-    constants.Feeder.BottomMotors.IDs,
-    constants.Feeder.IN_SENSOR_IDs,
-    constants.Feeder.OUT_SENSOR_IDs,
+belt = _belt.Belt(
+    constants.Belt.MOTOR_IDs,
+    constants.Belt.IN_SENSOR_IDs,
+    constants.Belt.OUT_SENSOR_IDs,
 )
