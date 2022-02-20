@@ -5,7 +5,7 @@
         "header": {
           "open": true
         },
-        "name": "Feeder"
+        "name": "Belt"
       },
       "Talon FX[10]": {
         "header": {
@@ -40,7 +40,8 @@
       "Talon FX[1]": {
         "header": {
           "open": true
-        }
+        },
+        "name": "Mo"
       },
       "Talon FX[20]": {
         "header": {
@@ -56,7 +57,8 @@
       "Talon FX[3]": {
         "header": {
           "open": true
-        }
+        },
+        "name": "Lester"
       },
       "Talon FX[4]": {
         "header": {
@@ -65,7 +67,10 @@
         "name": "Intake"
       },
       "Talon FX[5]": {
-        "name": "Belt"
+        "header": {
+          "open": true
+        },
+        "name": "Feeder"
       },
       "Talon FX[6]": {
         "name": "DT L 2"

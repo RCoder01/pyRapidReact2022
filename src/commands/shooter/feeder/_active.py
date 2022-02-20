@@ -15,3 +15,7 @@ class Active(commands2.CommandBase):
     def initialize(self) -> None:
         subsystems.shooter.feeder.set_speed(self._speed)
         return super().initialize()
+
+    def end(self, interrupted: bool) -> None:
+        subsystems.shooter.feeder.set_speed(0)
+        return super().end(interrupted)

@@ -81,7 +81,7 @@ class Shooter(ConstantsClass):
         P = 0
         I = 0
         D = 0
-    
+
     class Feeder(ConstantsClass):
         MOTOR_IDs = 5,
         DEFAULT_SPEED = -0.5
