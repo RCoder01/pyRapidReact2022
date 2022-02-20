@@ -131,7 +131,7 @@ class Shooter(ConstantsClass):
             MOTOR_IDs = 3,
 
             class PID(ConstantsClass):
-                P = 0
+                P = 0.5
                 I = 0
                 D = 0
 
@@ -148,7 +148,7 @@ class Shooter(ConstantsClass):
             MOTOR_IDs = 1,
 
             class PID(ConstantsClass):
-                P = 0
+                P = 0.5
                 I = 0
                 D = 0
 

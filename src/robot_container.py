@@ -45,11 +45,22 @@ class RobotContainer():
         oi.Feeder.manual_activate \
             .whileHeld(commands.belt.Active())
 
-        oi.Turret.manual_control \
-            .whenHeld(commands.shooter.turret.ManualControl(oi.Turret.turret_speed))
+        # oi.Turret.manual_control \
+        #     .whenHeld(commands.shooter.turret.ManualControl(oi.Turret.turret_speed))
 
         oi.exgest \
             .whenHeld(commands.Exgest())
+
+        wpilib.SmartDashboard.putNumber("Mo Speed", 0)
+        oi.JoystickButton(oi._driver, oi._driver.Button.kLeftBumper) \
+            .whenHeld(commands.shooter.josh.SetMoVariableSpeed(lambda: wpilib.SmartDashboard.getNumber("Mo Speed", 0)))
+
+        wpilib.SmartDashboard.putNumber("Lester Speed", 0)
+        oi.JoystickButton(oi._driver, oi._driver.Button.kRightBumper) \
+            .whenHeld(commands.shooter.josh.SetLesterVariableSpeed(lambda: wpilib.SmartDashboard.getNumber("Lester Speed", 0)))
+
+        oi.JoystickButton(oi._driver, oi._driver.Button.kA) \
+            .whenHeld(commands.shooter.feeder.Active())
 
         self.pd = wpilib.PowerDistribution()
 

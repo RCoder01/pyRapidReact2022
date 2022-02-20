@@ -35,7 +35,7 @@ class Limelight:
 
 class Turret:
     manual_control = JoystickButton(_manip, _manip.Button.kA)
-    turret_speed = _manip.getLeftX
+    turret_speed = _manip.getRightX
 
 
 class Intake:

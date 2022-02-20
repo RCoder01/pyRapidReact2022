@@ -12,7 +12,7 @@ class Exgest(commands2.ParallelDeadlineGroup):
             self,
             commands2.ParallelRaceGroup(
                 commands2.WaitCommand(constants.Misc.EXGEST_TIMEOUT),
-                commands2.WaitUntilCommand(lambda: SmartDashboard.getNumber("Stored Balls", 1) <= 0),
+                commands2.WaitUntilCommand(lambda: SmartDashboard.getNumber("Stored Balls", 1) <= -1), #TODO: Revert -1 to 0
             ),
             commands2.ParallelCommandGroup(
                 commands.intake.Active(constants.Intake.DEFAULT_EXGEST_SPEED),
