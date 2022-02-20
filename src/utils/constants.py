@@ -104,7 +104,7 @@ class ConstantsType(NonwritableType):
         return tuple((k, v) for k, v in remove_dunder_attrs(self.__dict__).items())
 
     def __iter__(self) -> typing.Iterator[str]:
-        return self.keys().__iter__()
+        return self.values().__iter__()
 
 
 class ConstantsClass(metaclass=ConstantsType):
