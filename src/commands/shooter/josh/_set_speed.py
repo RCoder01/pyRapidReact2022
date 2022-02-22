@@ -7,6 +7,8 @@ import subsystems
 class SetSpeed(commands2.CommandBase):
     def __init__(self, josh: subsystems.shooter._josh.Josh, speed: float, PID_controller: wpimath.controller.PIDController, feedforward_constants, tolerance_constants) -> None:
         commands2.CommandBase.__init__(self)
+        self.addRequirements(josh)
+        self.setName(f"Set {josh.getName()} Speed")
 
         self._josh = josh
 

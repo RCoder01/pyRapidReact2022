@@ -37,6 +37,7 @@ class Drivetrain(commands2.SubsystemBase):
             right_encoder_speed_to_real_speed: float = 1.0,
             ) -> None:
         commands2.SubsystemBase.__init__(self)
+        self.setName('Drivetrain')
 
         self._left_motors = utils.motor.OdometricHeadedDefaultMotorGroup(left_motor_IDs, left_encoder_counts_per_meter)
         self._right_motors = utils.motor.OdometricHeadedDefaultMotorGroup(right_motor_IDs, right_encoder_counts_per_meter or left_encoder_counts_per_meter)

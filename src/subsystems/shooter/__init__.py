@@ -22,6 +22,8 @@ feeder = _feeder.Feeder(
 lester = _josh.Josh(
     constants.Shooter.Josh.Lester.MOTOR_IDs,
 )
+lester.setName('Lester')
 mo = _josh.Josh(
     constants.Shooter.Josh.Mo.MOTOR_IDs,
 )
+mo.setName('Mo')

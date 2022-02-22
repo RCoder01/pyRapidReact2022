@@ -21,6 +21,7 @@ class Turret(commands2.SubsystemBase):
 
     def __init__(self, motor_IDs: typing.Collection[int], sensor_IDs: typing.Collection[int], total_cumulative_encoder_counts: int, angle_range_degrees: float = 1):
         commands2.SubsystemBase.__init__(self)
+        self.setName('Turret')
 
         self._TOTAL_CUMULATIVE_ENCODER_COUNTS = total_cumulative_encoder_counts
         self._ANGLE_RANGE = angle_range_degrees

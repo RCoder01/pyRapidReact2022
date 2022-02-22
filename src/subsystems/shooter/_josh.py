@@ -12,6 +12,7 @@ class Josh(commands2.SubsystemBase):
 
     def __init__(self, motor_ids: typing.Collection[int]):
         commands2.SubsystemBase.__init__(self)
+        self.setName('Josh')
 
         self._motors = utils.motor.HeadedDefaultMotorGroup(motor_ids)
 

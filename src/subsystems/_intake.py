@@ -19,6 +19,7 @@ class Intake(commands2.SubsystemBase):
     
     def __init__(self, motor_IDs: typing.Collection[int]) -> None:
         commands2.SubsystemBase.__init__(self)
+        self.setName('Intake')
 
         self._motors = utils.motor.HeadedDefaultMotorGroup(motor_IDs)
 
