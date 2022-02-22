@@ -17,6 +17,7 @@ class SetVariableSpeed(SetSpeed):
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", category=self.SpeedSetpointOverrideWarning)
             super().__init__(josh, 0, PID_controller, feedforward_constants, tolerance_constants)
+        self.setName(f"Set {josh.getName()} Variable Speed")
 
         self._speed_supplier = speed_supplier
 

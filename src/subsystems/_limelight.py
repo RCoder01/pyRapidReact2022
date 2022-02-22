@@ -19,6 +19,7 @@ class Limelight(commands2.SubsystemBase):
 
     def __init__(self):
         commands2.SubsystemBase.__init__(self)
+        self.setName('Limelight')
 
         self._table = NetworkTables.getTable('limelight')
         self._pipeline_entry = self._table.getEntry('pipeline')

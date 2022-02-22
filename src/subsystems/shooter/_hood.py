@@ -12,6 +12,7 @@ class Hood(commands2.SubsystemBase):
 
     def __init__(self, motor_IDs: typing.Collection[int], /, min_encoder_counts: int, max_encoder_counts: int):
         commands2.SubsystemBase.__init__(self)
+        self.setName('Hood')
 
         self._motors = utils.motor.LimitedHeadedDefaultMotorGroup(
             motor_IDs,

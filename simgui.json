@@ -112,12 +112,27 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/Ungrouped/Belt": "Subsystem",
+      "/LiveWindow/Ungrouped/Drivetrain": "Subsystem",
       "/LiveWindow/Ungrouped/Feeder": "Subsystem",
+      "/LiveWindow/Ungrouped/Intake": "Subsystem",
+      "/LiveWindow/Ungrouped/Josh": "Subsystem",
+      "/LiveWindow/Ungrouped/Lester": "Subsystem",
+      "/LiveWindow/Ungrouped/Limelight": "Subsystem",
+      "/LiveWindow/Ungrouped/Mo": "Subsystem",
       "/LiveWindow/Ungrouped/class frc2::SubsystemBase": "Subsystem",
       "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro"
     }
   },
   "NetworkTables": {
+    "LiveWindow": {
+      "Ungrouped": {
+        "class frc2::SubsystemBase": {
+          "open": true
+        },
+        "open": true
+      },
+      "open": true
+    },
     "SmartDashboard": {
       "open": true
     }
