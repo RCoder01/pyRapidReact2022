@@ -18,6 +18,6 @@ class Feeder(commands2.SubsystemBase):
         """Set the speed of the feeder motors."""
         self._motor_group.set_output(speed)
 
-    def get_current_speed(self):
+    def get_speed(self):
         """Return the current speed of the feeder motors."""
         return self._motor_group.get_lead_encoder_velocity()

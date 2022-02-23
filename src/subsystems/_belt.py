@@ -35,7 +35,7 @@ class Belt(commands2.SubsystemBase):
     def set_speed(self, speed: float):
         """Set the speed of the feeder motors."""
         self._motor_group.set_output(speed)
-    
+
     def get_current_speed(self):
         """Return the current speed of the feeder motors."""
         return self._motor_group.get_lead_encoder_velocity()

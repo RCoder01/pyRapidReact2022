@@ -23,8 +23,6 @@ class Drivetrain(ConstantsClass):
 
     ENCODER_COUNTS_PER_METER = 2048 * (7.82887701) / (0.15 * math.pi) # Encoder counts/revolution * gear ratio / (wheel diameter (meters) * pi = wheel circumference)
 
-    ENCODER_SPEED_TO_REAL_SPEED = 10 / ENCODER_COUNTS_PER_METER # Encoder speed given in encoder counts per 100 ms
-
     class Characterization(ConstantsClass): # TODO: https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/characterizing-drive.html
 
         class FeedForward(ConstantsClass):

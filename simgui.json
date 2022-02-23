@@ -119,6 +119,7 @@
       "/LiveWindow/Ungrouped/Lester": "Subsystem",
       "/LiveWindow/Ungrouped/Limelight": "Subsystem",
       "/LiveWindow/Ungrouped/Mo": "Subsystem",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/LiveWindow/Ungrouped/class frc2::SubsystemBase": "Subsystem",
       "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro"
     }

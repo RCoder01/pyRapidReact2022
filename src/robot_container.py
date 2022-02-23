@@ -85,7 +85,7 @@ class RobotContainer():
         def passed_sensor(is_in: bool):
             nonlocal ball_count
             ball_count_num = ball_count.getDouble(0)
-            if (subsystems.belt.get_current_speed() > 0) ^ (not is_in):
+            if (subsystems.belt.get_current_raw_speed() > 0) ^ (not is_in):
                 # If entering belt
                 capacity = constants.Misc.BallCounting.MAX_CAPACITY
                 if ball_count_num >= capacity:

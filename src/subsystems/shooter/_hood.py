@@ -1,23 +1,20 @@
+# TODO: Finish this
 import typing
 
 import commands2
-import ctre
 
 import utils.motor
 
 
 class Hood(commands2.SubsystemBase):
-    def periodic(self):
-        self._status = self._motors.periodic()
-
     def __init__(self, motor_IDs: typing.Collection[int], /, min_encoder_counts: int, max_encoder_counts: int):
         commands2.SubsystemBase.__init__(self)
         self.setName('Hood')
 
         self._motors = utils.motor.LimitedHeadedDefaultMotorGroup(
             motor_IDs,
-            min_cumulative_encoder_counts=min_encoder_counts,
-            max_cumulative_encoder_counts=max_encoder_counts
+            min_encoder_counts=min_encoder_counts,
+            max_encoder_counts=max_encoder_counts
         )
 
         self._status = utils.motor.LimitedHeadedDefaultMotorGroup.Status.WITHIN_BOUNDS
@@ -38,4 +35,3 @@ class Hood(commands2.SubsystemBase):
     def deactivate(self):
         self._motors.set_neutral_mode_coast()
         self._motors.set_output(0)
-        self._motors.reset_odometry()

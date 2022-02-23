@@ -31,7 +31,12 @@ class HeadedDefaultMotorGroup:
 
     ENCODER_COUNTS_PER_ROTATION: int = constants.Misc.ENCODER_COUNTS_PER_ROTATION
 
-    def __init__(self, ID_List: typing.Collection[int], encoder_counts_per_rotation: int = None, inversions: typing.Collection[bool] = None) -> None:
+    def __init__(
+            self,
+            ID_List: typing.Collection[int],
+            encoder_counts_per_rotation: int = None,
+            inversions: typing.Collection[bool] = None
+            ) -> None:
         self.motors = [ctre.WPI_TalonFX(ID) for ID in ID_List]
         self.lead = self.motors[0]
         for motor in self.motors[1:]:
@@ -50,21 +55,34 @@ class HeadedDefaultMotorGroup:
         if encoder_counts_per_rotation is not None:
             self.ENCODER_COUNTS_PER_ROTATION = encoder_counts_per_rotation
 
+        self._RPM_CONVERSION_FACTOR = 10 * 60 / self.ENCODER_COUNTS_PER_ROTATION
+
+        self.reset_lead_encoder_position()
+
+        self.configure_units(1)
+
+    def configure_units(self, encoder_counts_per_unit: int):
+        """Configure custom encoder units."""
+        self.ENCODER_COUNTS_PER_UNIT = encoder_counts_per_unit
+
     def get_lead_encoder_position(self):
-        """Return the encoder position of the lead motor."""
+        """Return the raw encoder position of the lead motor."""
         return self.lead.getSelectedSensorPosition() or 0
-    
+
+    def get_configured_lead_encoder_position(self):
+        return self.get_lead_encoder_position() / self.ENCODER_COUNTS_PER_UNIT
+
     def get_lead_encoder_velocity(self):
-        """Return the encoder velocity of the lead motor."""
+        """Return the raw encoder velocity of the lead motor."""
         return self.lead.getSelectedSensorVelocity() or 0
 
-    def get_lead_encoder_velocity_rpm(self):
-        """Return the encoder velocity of the lead motor."""
-        return self.get_lead_encoder_velocity() * 10 * 60 / self.ENCODER_COUNTS_PER_ROTATION or 0
+    def get_configured_lead_encoder_velocity(self):
+        """Return the encoder velocity of the lead motor in configured units/second"""
+        return self.get_lead_encoder_velocity() * 10 / self.ENCODER_COUNTS_PER_UNIT
 
-    def reset_lead_encoder(self):
+    def reset_lead_encoder_position(self, new_position: int = 0):
         """Reset the encoder of the lead motor."""
-        self.lead.setSelectedSensorPosition(0)
+        self.lead.setSelectedSensorPosition(new_position)
 
     def invert_all(self, inverted: bool = True):
         """Set the inversion of the motors."""
@@ -94,63 +112,12 @@ class HeadedDefaultMotorGroup:
         """Set the velocity of the motors, using the default configuration."""
         self.lead.set(ctre.ControlMode.Velocity, target_velocity)
 
-
-class OdometricHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
-
-    def __init__(
-            self,
-            ID_List: typing.Collection[int],
-            encoder_counts_per_rotation: int = None,
-            inversions: typing.Collection[bool] = None,
-            conversion_factor: float = 1
-            ) -> None:
-        super().__init__(ID_List, encoder_counts_per_rotation, inversions)
-        self._CONVERSION_FACTOR = conversion_factor
-
-        self._cumulative_encoder = CumulativeEncoder(self.ENCODER_COUNTS_PER_ROTATION)
-
-        self.reset_lead_encoder()
-
-    def reset_lead_encoder(self):
-        """Reset the encoder of the lead motor."""
-        self._cumulative_encoder.last_raw_ticks = 0
-
-        super().reset_lead_encoder()
-
-    def reset_odometry(self):
-        """
-        Reset the cumulative and current encoder counts of the motors.
-
-        Will likely break any discontinuous motion.
-
-        :returns: The cumulative distance of the motors before being reset.
-        """
-        self.reset_lead_encoder()
-
-        return self._cumulative_encoder.reset() * self._CONVERSION_FACTOR
-
-    def periodic(self):
-        """
-        Update the cumulative encoder counts of the motors.
-
-        Must be called periodically.
-        """
-
-        self._cumulative_encoder.update(self.get_lead_encoder_position(), self.get_lead_encoder_velocity())\
-
-    def get_last_distance(self):
-        """
-        Return the distance traveled since the last reset.
-
-        Calculated by the encoder ticks.
-        """
-        return self._cumulative_encoder.delta / self._CONVERSION_FACTOR
-
-    def get_cumulative_distance(self):
-        return self._cumulative_encoder.ticks
+    def set_configured_velocity(self, target_velocity: float):
+        """Set the velocity of the motors in configured units/second."""
+        self.set_velocity(ctre.ControlMode.Velocity, target_velocity / (10 * self.ENCODER_COUNTS_PER_UNIT))
 
 
-class LimitedHeadedDefaultMotorGroup(OdometricHeadedDefaultMotorGroup):
+class LimitedHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
     class Status(enum.Enum):
         AT_LOWER_LIMIT = -1
         WITHIN_BOUNDS = 0
@@ -161,30 +128,29 @@ class LimitedHeadedDefaultMotorGroup(OdometricHeadedDefaultMotorGroup):
             ID_List: typing.Collection[int],
             encoder_counts_per_rotation: int = None,
             inversions: typing.Collection[bool] = None,
-            conversion_factor: float = 1,
-            min_cumulative_encoder_counts: int = 0,
-            max_cumulative_encoder_counts: int = 0,
+            min_encoder_counts: int = 0,
+            max_encoder_counts: int = 0,
             ) -> None:
-        super().__init__(ID_List, encoder_counts_per_rotation, inversions, conversion_factor)
+        super().__init__(ID_List, encoder_counts_per_rotation, inversions)
 
-        self._MIN_CUMULATIVE_ENCODER_COUNTS = min_cumulative_encoder_counts
-        self._MAX_CUMULATIVE_ENCODER_COUNTS = max_cumulative_encoder_counts
+        self._MIN_ENCODER_COUNTS = min_encoder_counts
+        self._MAX_ENCODER_COUNTS = max_encoder_counts
 
         self.status = self.Status.WITHIN_BOUNDS
 
-        if min_cumulative_encoder_counts > max_cumulative_encoder_counts:
-            raise ValueError("min_cumulative_encoder_counts must be less than or equal to max_cumulative_encoder_counts")
+        if min_encoder_counts > max_encoder_counts:
+            raise ValueError("min_encoder_counts must be less than or equal to max_encoder_counts")
 
-    def periodic(self):
-        super().periodic()
+    def get_status(self):
+        position = self.get_lead_encoder_position()
 
-        if self._cumulative_encoder.ticks <= self._MIN_CUMULATIVE_ENCODER_COUNTS:
+        if position <= self._MIN_ENCODER_COUNTS:
             self.status = self.Status.AT_LOWER_LIMIT
-
-        if self._cumulative_encoder.ticks > self._MAX_CUMULATIVE_ENCODER_COUNTS:
+        elif position > self._MAX_ENCODER_COUNTS:
             self.status = self.Status.AT_UPPER_LIMIT
+        else:
+            self.status = self.Status.WITHIN_BOUNDS
 
-        self.status = self.Status.WITHIN_BOUNDS
         return self.status
 
     def set_output(self, value: float):
@@ -195,16 +161,33 @@ class LimitedHeadedDefaultMotorGroup(OdometricHeadedDefaultMotorGroup):
         return super().set_output(value)
 
     def get_percent_limit(self):
-        return (self._cumulative_encoder.ticks - self._MIN_CUMULATIVE_ENCODER_COUNTS) / (self._MAX_CUMULATIVE_ENCODER_COUNTS - self._MIN_CUMULATIVE_ENCODER_COUNTS)
+        return (self.get_lead_encoder_position() - self._MIN_ENCODER_COUNTS) / (self._MAX_ENCODER_COUNTS - self._MIN_ENCODER_COUNTS)
 
 
-class ContinuousHeadedDefaultMotorGroup(LimitedHeadedDefaultMotorGroup):
+class ContinuousHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
+    def __init__(
+            self,
+            ID_List: typing.Collection[int],
+            encoder_counts_per_rotation: int = None,
+            inversions: typing.Collection[bool] = None,
+            min_encoder_counts: int = 0,
+            max_encoder_counts: int = 0,
+            ) -> None:
+        super().__init__(ID_List, encoder_counts_per_rotation, inversions)
 
-    def periodic(self):
-        super(LimitedHeadedDefaultMotorGroup, self).periodic()
+        if min_encoder_counts > max_encoder_counts:
+            raise ValueError("min_encoder_counts must be less than or equal to max_encoder_counts")
 
-        if self._cumulative_encoder.ticks < self._MIN_CUMULATIVE_ENCODER_COUNTS:
-            self._cumulative_encoder.ticks += (self._MAX_CUMULATIVE_ENCODER_COUNTS - self._MIN_CUMULATIVE_ENCODER_COUNTS)
-        
-        if self._cumulative_encoder.ticks > self._MAX_CUMULATIVE_ENCODER_COUNTS:
-            self._cumulative_encoder.ticks -= (self._MAX_CUMULATIVE_ENCODER_COUNTS - self._MIN_CUMULATIVE_ENCODER_COUNTS)
+        self._MIN_ENCODER_COUNTS = min_encoder_counts
+        self._MAX_ENCODER_COUNTS = max_encoder_counts
+
+    def get_lead_encoder_position(self):
+        position = super().get_lead_encoder_position()
+
+        if position < self._MIN_ENCODER_COUNTS:
+            self.reset_lead_encoder_position(position + (self._MAX_ENCODER_COUNTS - self._MIN_ENCODER_COUNTS))
+
+        if position > self._MAX_ENCODER_COUNTS:
+            self.reset_lead_encoder_position(position - (self._MAX_ENCODER_COUNTS - self._MAX_ENCODER_COUNTS))
+
+        return super().get_lead_encoder_position()
