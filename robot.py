@@ -162,24 +162,24 @@ class Subsystem(commands2.SubsystemBase):
     pass
 subsystem = Subsystem()
 
-class Command(commands2.InstantCommand):
-    def __init__(self) -> None:
-        commands2.InstantCommand.__init__(self)
-        self.addRequirements(subsystem)
-        self.setName('CommandA')
-        print('CommandA init')
-    def end(self, interrupted) -> None:
-        print('CommandA end')
+# class Command(commands2.InstantCommand):
+#     def __init__(self) -> None:
+#         commands2.InstantCommand.__init__(self)
+#         self.addRequirements(subsystem)
+#         self.setName('CommandA')
+#         print('CommandA init')
+#     def end(self, interrupted) -> None:
+#         print('CommandA end')
 
-class Command2(commands2.CommandBase):
-    def __init__(self) -> None:
-        super().__init__()
-        self.addRequirements(subsystem)
-        self.setName('CommandB')
-        print('CommandB init')
-    def end(self, interrupted: bool) -> None:
-        print('CommandB end')
-        self.andThen(Command())
+# class Command2(commands2.CommandBase):
+#     def __init__(self) -> None:
+#         super().__init__()
+#         self.addRequirements(subsystem)
+#         self.setName('CommandB')
+#         print('CommandB init')
+#     def end(self, interrupted: bool) -> None:
+#         print('CommandB end')
+#         self.andThen(Command())
 
 class Robot(commands2.TimedCommandRobot):
     def robotInit(self) -> None:

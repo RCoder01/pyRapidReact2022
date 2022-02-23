@@ -1,3 +1,4 @@
+import math
 import wpilib
 
 from utils.constants import ConstantsClass
@@ -19,8 +20,8 @@ class Drivetrain(ConstantsClass):
             P = 0
             I = 0 # Probably keep 0
             D = 0 # Probably keep 0
-    
-    ENCODER_COUNTS_PER_METER = 3000
+
+    ENCODER_COUNTS_PER_METER = 2048 * (7.82887701) / (0.15 * math.pi) # Encoder counts/revolution * gear ratio / (wheel diameter (meters) * pi = wheel circumference)
 
     ENCODER_SPEED_TO_REAL_SPEED = 10 / ENCODER_COUNTS_PER_METER # Encoder speed given in encoder counts per 100 ms
 
@@ -37,8 +38,8 @@ class Drivetrain(ConstantsClass):
         MAX_ACCELERATION = 0 # meters per second per second
 
         class Ramesete(ConstantsClass):
-            B = 0
-            ZETA = 0
+            B = 2
+            ZETA = 0.7
 
 
 class Belt(ConstantsClass):

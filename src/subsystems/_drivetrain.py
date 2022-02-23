@@ -46,9 +46,7 @@ class Drivetrain(commands2.SubsystemBase):
         self.reset_encoders()
 
         self._gyro = navx.AHRS(wpilib.SPI.Port.kMXP)
-
-        # TODO: Give this 1 sec delay or something
-        self.reset_gyro()
+        self._gyro.reset()
 
         self._simulation_init()
 
@@ -110,10 +108,6 @@ class Drivetrain(commands2.SubsystemBase):
     def get_gyro(self):
         """Returns the gyro angle in a wpilib Rotation2d object."""
         return self._gyro.getRotation2d()
-
-    def reset_gyro(self):
-        """Resets the gyro heading to zero."""
-        self._gyro.reset()
 
     def get_turn_rate(self):
         """Returns the robot's turn rate."""

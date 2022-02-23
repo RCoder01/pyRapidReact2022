@@ -11,7 +11,7 @@ drivetrain = _drivetrain.Drivetrain(
     constants.Drivetrain.LeftMotors.IDs,
     constants.Drivetrain.RightMotors.IDs,
     constants.Drivetrain.ENCODER_COUNTS_PER_METER,
-    None,
+    constants.Drivetrain.ENCODER_COUNTS_PER_METER,
     constants.Drivetrain.ENCODER_SPEED_TO_REAL_SPEED,
     constants.Drivetrain.ENCODER_SPEED_TO_REAL_SPEED,
 )
