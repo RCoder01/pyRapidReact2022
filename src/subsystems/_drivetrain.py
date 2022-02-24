@@ -11,13 +11,24 @@ import utils.motor
 
 
 class Drivetrain(commands2.SubsystemBase):
-
     def periodic(self) -> None:
-        self._update_odometry()
+        ldelta = self.get_left_encoder_position() - self._last_left_encoder_value
+        rdelta = self.get_right_encoder_position() - self._last_right_encoder_value
+        wpilib.SmartDashboard.putNumber('Last Drivetrain Left Encoder', self._last_left_encoder_value)
+        wpilib.SmartDashboard.putNumber('Last Drivetrain Right Encoder', self._last_right_encoder_value)
+        pose = self._update_odometry()
 
+        wpilib.SmartDashboard.putNumber('Drivetrain Left Encoder Delta', ldelta)
+        wpilib.SmartDashboard.putNumber('Drivetrain Right Encoder Delta', rdelta)
         wpilib.SmartDashboard.putNumber('Drivetrain Left Encoder', self.get_left_encoder_position())
         wpilib.SmartDashboard.putNumber('Drivetrain Right Encoder', self.get_right_encoder_position())
-        wpilib.SmartDashboard.putString('Drivetrain Pose', str(self.get_pose()))
+        wpilib.SmartDashboard.putString('Drivetrain Pose', str(pose))
+
+        if self.gyro_reset_timer >= 1:
+            self.gyro_reset_timer -= 1
+            if self.gyro_reset_timer == 0:
+                self._gyro.reset()
+        wpilib.SmartDashboard.putNumber('Gyro Reset Timer', self.gyro_reset_timer)
 
         return super().periodic()
 
@@ -45,7 +56,7 @@ class Drivetrain(commands2.SubsystemBase):
         self.reset_encoders()
 
         self._gyro = navx.AHRS(wpilib.SPI.Port.kMXP)
-        self._gyro.reset()
+        self.gyro_reset_timer = 10
 
         self._simulation_init()
 
@@ -111,15 +122,15 @@ class Drivetrain(commands2.SubsystemBase):
 
     def _init_odometry(self):
         initial_x = wpilib.SmartDashboard.getNumber('Initial X', 0)
-        initial_y = wpilib.SmartDashboard.getNumber('Initial Y', 1.5)
+        initial_y = wpilib.SmartDashboard.getNumber('Initial Y', 0)
         initial_heading = wpilib.SmartDashboard.getNumber('Initial Heading', 0)
 
         self._odometry = wpimath.kinematics.DifferentialDriveOdometry(
             self._gyro.getRotation2d(),
             wpimath.geometry.Pose2d(initial_x, initial_y, initial_heading),
         )
-        self._last_left_encoder_value = self.get_left_encoder_speed()
-        self._last_right_encoder_value = self.get_right_encoder_speed()
+        self._last_left_encoder_value = self.get_left_encoder_position()
+        self._last_right_encoder_value = self.get_right_encoder_position()
 
     def _update_odometry(self):
         """
@@ -127,14 +138,18 @@ class Drivetrain(commands2.SubsystemBase):
 
         Intended to be called periodically.
         """
-        self._odometry.update(
+        new_pose = self._odometry.update(
             self._gyro.getRotation2d(),
-            self.get_left_encoder_position() - self._last_left_encoder_value,
-            self.get_right_encoder_position() - self._last_right_encoder_value,
+            # self.get_left_encoder_position() - self._last_left_encoder_value,
+            # self.get_right_encoder_position() - self._last_right_encoder_value,
+            self.get_left_encoder_position(),
+            self.get_right_encoder_position(),
         )
 
         self._last_left_encoder_value = self.get_left_encoder_position()
-        self._last_right_encoder_value = self.get_left_encoder_position()
+        self._last_right_encoder_value = self.get_right_encoder_position()
+
+        return new_pose
 
     def get_pose(self):
         """Returns the robot's pose in a wpilib Pose2d object."""

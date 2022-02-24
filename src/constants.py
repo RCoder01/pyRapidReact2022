@@ -35,7 +35,7 @@ class Drivetrain(ConstantsClass):
             ZETA = 0.7
 
 class Belt(ConstantsClass):
-    MOTOR_IDs = 0,
+    MOTOR_IDs = -2,
     DEFAULT_SPEED = -0.5
     DEFAULT_EXGEST_SPEED = -DEFAULT_SPEED
 
@@ -46,7 +46,7 @@ class Belt(ConstantsClass):
     IN_SENSOR_DEBOUNCE_TIME = 0.5
 
 class Intake(ConstantsClass):
-    MOTOR_IDs = 4,
+    MOTOR_IDs = -3,
     DEFAULT_INTAKE_SPEED = 0.3
     DEFAULT_EXGEST_SPEED = -DEFAULT_INTAKE_SPEED
 
@@ -60,11 +60,11 @@ class Limelight(ConstantsClass):
 
 class Shooter(ConstantsClass):
     class Feeder(ConstantsClass):
-        MOTOR_IDs = 5,
+        MOTOR_IDs = -4,
         DEFAULT_SPEED = -0.5
 
     class Turret(ConstantsClass):
-        MOTOR_IDs = -1,
+        MOTOR_IDs = -5,
         SENSOR_IDs = None, None
 
         ENCODER_COUNTS_PER_ROTATION = 2048
@@ -78,13 +78,13 @@ class Shooter(ConstantsClass):
         HeadingFeedForward = 0
 
     class Hood(ConstantsClass):
-        MOTOR_IDs = -2,
+        MOTOR_IDs = -6
         EncoderLimits = (0, 2048)
         PID = PIDConfiguration()
 
     class Josh(ConstantsClass):
         class Mo(ConstantsClass):
-            MOTOR_IDs = 3,
+            MOTOR_IDs = -7,
             SPEED_DECREASE_FACTOR = 1
 
             PID = PIDConfiguration(0.5)
@@ -92,7 +92,7 @@ class Shooter(ConstantsClass):
             FeedForward = FeedForwardConfiguration()
 
         class Lester(ConstantsClass):
-            MOTOR_IDs = 1,
+            MOTOR_IDs = -8,
             SPEED_DECREASE_FACTOR = 1
 
             PID = PIDConfiguration(0.5)

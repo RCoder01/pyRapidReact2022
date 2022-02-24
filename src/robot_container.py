@@ -14,6 +14,12 @@ import subsystems
 
 class RobotContainer():
     def __init__(self):
+        self.init_command_printing()
+        self.configure_bindings()
+        self.configure_default_commands()
+        # self.init_ball_counting()
+
+    def init_command_printing(self) -> None:
         active_command_string_list = []
 
         def on_command_schedule(command: commands2.Command):
@@ -34,33 +40,31 @@ class RobotContainer():
         commands2.CommandScheduler.getInstance().onCommandFinish(on_command_finish)
         commands2.CommandScheduler.getInstance().onCommandInterrupt(on_command_finish)
 
-        self.configure_bindings()
-        self.configure_default_commands()
-        self.init_ball_counting()
+        wpilib.SmartDashboard.putData("Reset Drivetrain Gyro", commands2.InstantCommand(lambda: subsystems.drivetrain._gyro.reset()))
 
     def configure_bindings(self) -> None:
-        oi.Intake.activate \
-            .whileHeld(commands.intake.Active())
+        # oi.Intake.activate \
+        #     .whileHeld(commands.intake.Active())
 
-        oi.Feeder.manual_activate \
-            .whileHeld(commands.belt.Active())
+        # oi.Feeder.manual_activate \
+        #     .whileHeld(commands.belt.Active())
 
         # oi.Turret.manual_control \
         #     .whenHeld(commands.shooter.turret.ManualControl(oi.Turret.turret_speed))
 
-        oi.exgest \
-            .whenHeld(commands.Exgest())
+        # oi.exgest \
+        #     .whenHeld(commands.Exgest())
 
-        wpilib.SmartDashboard.putNumber("Mo Speed", 0)
-        oi.JoystickButton(oi._driver, oi._driver.Button.kLeftBumper) \
-            .whenHeld(commands.shooter.josh.SetMoVariableSpeed(lambda: wpilib.SmartDashboard.getNumber("Mo Speed", 0)))
+        # wpilib.SmartDashboard.putNumber("Mo Speed", 0)
+        # oi.JoystickButton(oi._driver, oi._driver.Button.kLeftBumper) \
+        #     .whenHeld(commands.shooter.josh.SetMoVariableSpeed(lambda: wpilib.SmartDashboard.getNumber("Mo Speed", 0)))
 
-        wpilib.SmartDashboard.putNumber("Lester Speed", 0)
-        oi.JoystickButton(oi._driver, oi._driver.Button.kRightBumper) \
-            .whenHeld(commands.shooter.josh.SetLesterVariableSpeed(lambda: wpilib.SmartDashboard.getNumber("Lester Speed", 0)))
+        # wpilib.SmartDashboard.putNumber("Lester Speed", 0)
+        # oi.JoystickButton(oi._driver, oi._driver.Button.kRightBumper) \
+        #     .whenHeld(commands.shooter.josh.SetLesterVariableSpeed(lambda: wpilib.SmartDashboard.getNumber("Lester Speed", 0)))
 
-        oi.JoystickButton(oi._driver, oi._driver.Button.kA) \
-            .whenHeld(commands.shooter.feeder.Active())
+        # oi.JoystickButton(oi._driver, oi._driver.Button.kA) \
+        #     .whenHeld(commands.shooter.feeder.Active())
 
         self.pd = wpilib.PowerDistribution()
 
@@ -69,7 +73,7 @@ class RobotContainer():
             oi.Drivetrain.ArcadeDrive.get_forward_speed,
             oi.Drivetrain.ArcadeDrive.get_turn_speed,
         ))
-        subsystems.belt.setDefaultCommand(commands.belt.Monitor())
+        # subsystems.belt.setDefaultCommand(commands.belt.Monitor())
 
     def get_autonomous_command(self) -> commands2.Command:
         trajectory_generator = wpimath.trajectory.TrajectoryGenerator.generateTrajectory(
