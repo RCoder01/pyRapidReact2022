@@ -49,6 +49,8 @@ class Drivetrain(commands2.SubsystemBase):
 
         self._simulation_init()
 
+        self._init_odometry()
+
     def _simulation_init(self):
         self._intended_left_speed = 0
         self._intended_right_speed = 0
@@ -127,8 +129,8 @@ class Drivetrain(commands2.SubsystemBase):
         """
         self._odometry.update(
             self._gyro.getRotation2d(),
-            self.get_left_encoder_position() - self._last_left_encoder_value[0],
-            self.get_right_encoder_position() - self._last_right_encoder_value[0],
+            self.get_left_encoder_position() - self._last_left_encoder_value,
+            self.get_right_encoder_position() - self._last_right_encoder_value,
         )
 
         self._last_left_encoder_value = self.get_left_encoder_position()

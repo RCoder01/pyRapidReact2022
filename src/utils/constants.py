@@ -1,4 +1,5 @@
 from __future__ import annotations
+from collections import namedtuple
 import typing
 import warnings
 
@@ -137,3 +138,9 @@ class ConstantsClass(metaclass=ConstantsType):
 
     def __new__(cls: ConstantsClass) -> ConstantsClass:
         return cls
+
+PIDConfiguration = namedtuple('PID_configuration', ('Kp', 'Ki', 'Kd'), defaults=(0, 0, 0))
+PIDSetpointConfiguration = namedtuple('PID_setpoint_configuration', ('position', 'velocity'), defaults=(0, 0))
+# ExtendedPIDConfiguration = namedtuple('extended_PID_configuration', ('constants', 'tolerance'), defaults=(PIDConfiguration(), PIDSetpointConfiguration()))
+
+FeedForwardConfiguration = namedtuple('feedForward_configuration', ('kS', 'kV', 'kA'), defaults=(0, 0, 0))

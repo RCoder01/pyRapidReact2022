@@ -14,10 +14,10 @@ class SetLesterVariableSpeed(SetVariableSpeed):
             subsystems.shooter.lester,
             speed_supplier,
             wpimath.controller.PIDController(
-                constants.Shooter.Josh.Lester.PID.P,
-                constants.Shooter.Josh.Lester.PID.I,
-                constants.Shooter.Josh.Lester.PID.D,
+                constants.Shooter.Josh.Lester.PID.Kp,
+                constants.Shooter.Josh.Lester.PID.Ki,
+                constants.Shooter.Josh.Lester.PID.Kd,
             ),
             constants.Shooter.Josh.Lester.FeedForward,
-            constants.Shooter.Josh.Lester.PID.SetpointTolerance,
+            constants.Shooter.Josh.Lester.PIDTolerance,
         )

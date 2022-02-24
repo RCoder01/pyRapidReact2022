@@ -1,34 +1,29 @@
 import math
 import wpilib
 
-from utils.constants import ConstantsClass
+from utils.constants import (
+    ConstantsClass,
+    PIDConfiguration,
+    PIDSetpointConfiguration,
+    # ExtendedPIDConfiguration,
+    FeedForwardConfiguration,
+)
 
 
 class Drivetrain(ConstantsClass):
     class LeftMotors(ConstantsClass):
         IDs = 2, 6
-
-        class PID(ConstantsClass):
-            P = 0
-            I = 0 # Probably keep 0 (https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/creating-following-trajectory.html)
-            D = 0 # Probably keep 0
+        PID = PIDConfiguration(Ki=0, Kd=0) # (https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/creating-following-trajectory.html)
 
     class RightMotors(ConstantsClass):
         IDs = 7, 8
-
-        class PID(ConstantsClass):
-            P = 0
-            I = 0 # Probably keep 0
-            D = 0 # Probably keep 0
+        PID = PIDConfiguration(Ki=0, Kd=0)
 
     ENCODER_COUNTS_PER_METER = 2048 * (7.82887701) / (0.15 * math.pi) # Encoder counts/revolution * gear ratio / (wheel diameter (meters) * pi = wheel circumference)
 
     class Characterization(ConstantsClass): # TODO: https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/characterizing-drive.html
 
-        class FeedForward(ConstantsClass):
-            S = 0
-            V = 0
-            A = 0
+        FeedForward = FeedForwardConfiguration()
 
         TRACK_WIDTH = 0.30 # meters
 
@@ -38,7 +33,6 @@ class Drivetrain(ConstantsClass):
         class Ramesete(ConstantsClass):
             B = 2
             ZETA = 0.7
-
 
 class Belt(ConstantsClass):
     MOTOR_IDs = 0,
@@ -51,36 +45,20 @@ class Belt(ConstantsClass):
     OUT_SENSOR_IDs = 1, 0
     IN_SENSOR_DEBOUNCE_TIME = 0.5
 
-
 class Intake(ConstantsClass):
     MOTOR_IDs = 4,
     DEFAULT_INTAKE_SPEED = 0.3
     DEFAULT_EXGEST_SPEED = -DEFAULT_INTAKE_SPEED
 
-
 class Limelight(ConstantsClass):
     MOUNT_ANGLE = 0
 
-    class PID(ConstantsClass):
-        P = 0
-        I = 0
-        D = 0
-
     Ka = 0
-
     PIPELINE = 1
     LED_MODE = 3
-
     X_TOLERANCE = 0.1
 
-
 class Shooter(ConstantsClass):
-
-    class PID(ConstantsClass):
-        P = 0
-        I = 0
-        D = 0
-
     class Feeder(ConstantsClass):
         MOTOR_IDs = 5,
         DEFAULT_SPEED = -0.5
@@ -90,75 +68,36 @@ class Shooter(ConstantsClass):
         SENSOR_IDs = None, None
 
         ENCODER_COUNTS_PER_ROTATION = 2048
-
         COVERAGE_AMOUNT = 1.00
-
         CONTINUOUS_MAX_CUMULATIVE_ENCODER_COUNTS = int(2048 * (140*4 / 10) * COVERAGE_AMOUNT // 1)
-
         ANGLE_RANGE_DEGREES = 270
 
-        class PID(ConstantsClass):
-            P = 0
-            I = 0
-            D = 0
-
-            class SetpointTolerance(ConstantsClass):
-                POSITION = 0
-                VELOCITY = 0
-
-        class FeedForward(ConstantsClass):
-            S = 0
-            V = 0
-            A = 0
-            H = 0
+        PID = PIDConfiguration()
+        PIDTolerance = PIDSetpointConfiguration()
+        FeedForward = FeedForwardConfiguration()
+        HeadingFeedForward = 0
 
     class Hood(ConstantsClass):
         MOTOR_IDs = -2,
-
-        class EncoderLimits(ConstantsClass):
-            MIN = 0
-            MAX = 2048
-
-        class PID(ConstantsClass):
-            P = 0
-            I = 0
-            D = 0
+        EncoderLimits = (0, 2048)
+        PID = PIDConfiguration()
 
     class Josh(ConstantsClass):
-
         class Mo(ConstantsClass):
             MOTOR_IDs = 3,
+            SPEED_DECREASE_FACTOR = 1
 
-            class PID(ConstantsClass):
-                P = 0.5
-                I = 0
-                D = 0
-
-                class SetpointTolerance(ConstantsClass):
-                    POSITION = 0
-                    VELOCITY = 0
-
-            class FeedForward(ConstantsClass):
-                S = 0
-                V = 0
-                A = 0
+            PID = PIDConfiguration(0.5)
+            PIDTolerance = PIDSetpointConfiguration()
+            FeedForward = FeedForwardConfiguration()
 
         class Lester(ConstantsClass):
             MOTOR_IDs = 1,
+            SPEED_DECREASE_FACTOR = 1
 
-            class PID(ConstantsClass):
-                P = 0.5
-                I = 0
-                D = 0
-
-                class SetpointTolerance(ConstantsClass):
-                    POSITION = 0
-                    VELOCITY = 0
-
-            class FeedForward(ConstantsClass):
-                S = 0
-                V = 0
-                A = 0
+            PID = PIDConfiguration(0.5)
+            PIDTolerance = PIDSetpointConfiguration()
+            FeedForward = FeedForwardConfiguration()
 
 
 class Misc(ConstantsClass):

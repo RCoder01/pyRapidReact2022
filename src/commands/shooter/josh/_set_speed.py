@@ -3,9 +3,18 @@ import wpimath.controller
 
 import subsystems
 
+import utils.constants
+
 
 class SetSpeed(commands2.CommandBase):
-    def __init__(self, josh: subsystems.shooter._josh.Josh, speed: float, PID_controller: wpimath.controller.PIDController, feedforward_constants, tolerance_constants) -> None:
+    def __init__(
+            self,
+            josh: subsystems.shooter._josh.Josh,
+            speed: float,
+            PID_controller: wpimath.controller.PIDController,
+            feedforward_constants: utils.constants.FeedForwardConfiguration,
+            tolerance_constants: utils.constants.PIDSetpointConfiguration,
+            ) -> None:
         commands2.CommandBase.__init__(self)
         self.addRequirements(josh)
         self.setName(f"Set {josh.getName()} Speed")
@@ -15,11 +24,7 @@ class SetSpeed(commands2.CommandBase):
         self._pid_controller = PID_controller
         self._pid_controller.setTolerance(*tolerance_constants)
 
-        self._feedforward = wpimath.controller.SimpleMotorFeedforwardMeters(
-            feedforward_constants.S,
-            feedforward_constants.V,
-            feedforward_constants.A,
-        )
+        self._feedforward = wpimath.controller.SimpleMotorFeedforwardMeters(*feedforward_constants)
         self._speed_setpoint = speed
 
     def initialize(self) -> None:

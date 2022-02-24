@@ -24,7 +24,7 @@ class ToFieldAngle(ToRobotAngle):
         self._pose_supplier = subsystems.drivetrain.get_pose
 
         self._heading_feed_forward = utils.math.HeadingFeedForward(
-            constants.Shooter.Turret.FeedForward.H,
+            constants.Shooter.Turret.HeadingFeedForward,
             self._pose_supplier()
         )
 

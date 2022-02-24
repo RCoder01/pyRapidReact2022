@@ -14,10 +14,10 @@ class SetMoVariableSpeed(SetVariableSpeed):
             subsystems.shooter.mo,
             speed_supplier,
             wpimath.controller.PIDController(
-                constants.Shooter.Josh.Mo.PID.P,
-                constants.Shooter.Josh.Mo.PID.I,
-                constants.Shooter.Josh.Mo.PID.D,
+                constants.Shooter.Josh.Mo.PID.Kp,
+                constants.Shooter.Josh.Mo.PID.Ki,
+                constants.Shooter.Josh.Mo.PID.Kd,
             ),
             constants.Shooter.Josh.Mo.FeedForward,
-            constants.Shooter.Josh.Mo.PID.SetpointTolerance,
+            constants.Shooter.Josh.Mo.PIDTolerance,
         )
