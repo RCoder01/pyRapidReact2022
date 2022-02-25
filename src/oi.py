@@ -21,9 +21,9 @@ class Drivetrain:
 
     class ArcadeDrive:
         def get_forward_speed() -> float:
-            if _driver.getLeftTriggerAxis() > 0:
-                return _driver.getLeftTriggerAxis()
-            return -_driver.getRightTriggerAxis()
+            if _driver.getRightTriggerAxis() > 0:
+                return _driver.getRightTriggerAxis()
+            return -_driver.getLeftTriggerAxis()
 
         get_turn_speed = _driver.getLeftX
 
