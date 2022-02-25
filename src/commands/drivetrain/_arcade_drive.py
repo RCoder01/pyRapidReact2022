@@ -18,7 +18,11 @@ class ArcadeDrive(commands2.CommandBase):
         self._turning_supplier = turning_supplier
 
     def execute(self) -> None:
-        speeds = wpilib.drive.DifferentialDrive.arcadeDriveIK(utils.controls.deadzone(self._forward_supplier()), utils.controls.deadzone(self._turning_supplier()), False)
+        speeds = wpilib.drive.DifferentialDrive.arcadeDriveIK(
+            utils.controls.deadzone(self._forward_supplier(), higher_deadzone=0, lower_deadzone=-0),
+            utils.controls.deadzone(self._turning_supplier(), higher_deadzone=0, lower_deadzone=-0),
+            False,
+        )
 
         subsystems.drivetrain.set_speed(speeds.left, speeds.right)
         return super().execute()

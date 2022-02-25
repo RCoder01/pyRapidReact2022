@@ -121,7 +121,9 @@
       "/LiveWindow/Ungrouped/Mo": "Subsystem",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/LiveWindow/Ungrouped/class frc2::SubsystemBase": "Subsystem",
-      "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro"
+      "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
+      "/SmartDashboard/Reset Drivetrain Gyro": "Command",
+      "/SmartDashboard/Reset Drivetrain Odometry": "Command"
     }
   },
   "NetworkTables": {
