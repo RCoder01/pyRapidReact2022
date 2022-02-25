@@ -14,12 +14,12 @@ import subsystems
 
 class RobotContainer():
     def __init__(self):
-        self.init_command_printing()
+        self.configure_smartdashboard()
         self.configure_bindings()
         self.configure_default_commands()
         # self.init_ball_counting()
 
-    def init_command_printing(self) -> None:
+    def configure_smartdashboard(self) -> None:
         active_command_string_list = []
 
         def on_command_schedule(command: commands2.Command):
@@ -40,7 +40,7 @@ class RobotContainer():
         commands2.CommandScheduler.getInstance().onCommandFinish(on_command_finish)
         commands2.CommandScheduler.getInstance().onCommandInterrupt(on_command_finish)
 
-        wpilib.SmartDashboard.putData("Reset Drivetrain Gyro", commands2.InstantCommand(lambda: subsystems.drivetrain._gyro.reset()))
+        wpilib.SmartDashboard.putData("Reset Drivetrain Odometry", commands2.InstantCommand(lambda: subsystems.drivetrain.reset_odometry()))
 
     def configure_bindings(self) -> None:
         # oi.Intake.activate \

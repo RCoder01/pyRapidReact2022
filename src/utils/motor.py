@@ -41,6 +41,8 @@ class HeadedDefaultMotorGroup:
         self.lead = self.motors[0]
         for motor in self.motors[1:]:
             motor.follow(self.lead)
+        for motor in self.motors:
+            motor.configFactoryDefault()
 
         if inversions is None:
             for motor in self.motors[1:]:

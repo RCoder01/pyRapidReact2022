@@ -12,9 +12,19 @@ import utils.motor
 
 class Drivetrain(commands2.SubsystemBase):
     def periodic(self) -> None:
+        # if self._gyro_reset_time < 0:
         wpilib.SmartDashboard.putString('Drivetrain Pose', str(self._update_odometry()))
 
         wpilib.SmartDashboard.putNumber('Gyro Rot2D', self.get_gyro().degrees())
+        # wpilib.SmartDashboard.putNumber('Gyro Angle', self._gyro.getAngle())
+        # wpilib.SmartDashboard.putNumber('Left Motor Output Percent', self._left_motors.lead.getMotorOutputPercent() * 100)
+        # wpilib.SmartDashboard.putNumber('Right Motor Output Percent', self._right_motors.lead.getMotorOutputPercent() * 100)
+
+        # if self._gyro_reset_time >= 0:
+        #     if self._gyro_reset_time == 0:
+        #         self._gyro.reset()
+        #         self._init_odometry()
+        #     self._gyro_reset_time -= 1
 
         return super().periodic()
 
@@ -44,6 +54,7 @@ class Drivetrain(commands2.SubsystemBase):
         self.reset_encoders()
 
         self._gyro = navx.AHRS(wpilib.SPI.Port.kMXP)
+        # self._gyro_reset_time = 50
 
         self._simulation_init()
 
