@@ -1,4 +1,5 @@
 import commands2
+import wpilib
 import wpimath.controller
 
 import constants
@@ -31,12 +32,14 @@ class ToRobotAngle(commands2.CommandBase):
         self._motor_feed_forward.calculate(subsystems.shooter.turret.get_angular_velocity())
 
     def execute(self) -> None:
+        wpilib.SmartDashboard.putNumber('Turret/Robot Angle Setpoint', self._setpoint)
         subsystems.shooter.turret.set_speed(self.calculate_output())
 
     def isFinished(self) -> bool:
         return self._PID_controller.atSetpoint()
 
     def end(self, interrupted: bool) -> None:
+        wpilib.SmartDashboard.delete('Turret/Robot Angle Setpoint')
         subsystems.shooter.turret.set_speed(0)
         return super().end(interrupted)
 

@@ -1,38 +1,41 @@
 import enum
+import typing
 
 import wpilib
 
 
-class DoubleDigitialInput:
-    class Error(enum.Enum):
-        AGREE = 0
-        DISAGREE = 1
+class SingleDigitalInput(wpilib.DigitalInput):
+    def __init__(self, channel: int, inverted: bool) -> None:
+        super().__init__(channel)
+        self._INVERTED = inverted
+    
+    def get(self):
+        return super().get() ^ self._INVERTED
 
-    def __init__(self, sensor_1_ID: int, sensor_2_ID: int, sensor_1_inverted: bool, sensor_2_inverted: bool):
-        if not wpilib.RobotBase.isSimulation:
-            self._sensor_1 = wpilib.DigitalInput(sensor_1_ID)
-            self._sensor_2 = wpilib.DigitalInput(sensor_2_ID)
-        else:
-            self._sensor_1 = None
-            self._sensor_2 = None
-        self._sensor_1_inverted = bool(sensor_1_inverted)
-        self._sensor_2_inverted = bool(sensor_2_inverted)
 
-    @property
-    def sensor1_active(self):
-        if self._sensor_1 is None: return None
-        return self._sensor_1.get() ^ self._sensor_1_inverted
+class DoubleDigitialInput(SingleDigitalInput):
+    def __init__(self, primary_ID: int, secondary_ID: int, primary_inverted: bool, secondary_inverted: bool):
+        super().__init__(primary_ID, primary_inverted)
+        self._secondary = SingleDigitalInput(secondary_ID, secondary_inverted)
+        self.config_default_get(self.get_primary)
 
-    @property
-    def sensor2_active(self):
-        if self._sensor_2 is None: return None
-        return self._sensor_2.get() ^ self._sensor_2_inverted
+    def config_default_get(self, method: typing.Callable[[], bool]):
+        self._default_get = method
+
+    def get(self):
+        return self._default_get()
+
+    def get_primary(self):
+        return super().get()
+
+    def get_secondary(self):
+        return self._secondary.get()
 
     def get_leniant(self):
-        return self.sensor1_active or self.sensor2_active
+        return self.get_primary() or self.get_secondary()
 
     def get_strict(self):
-        return self.sensor1_active and self.sensor2_active
+        return self.get_primary() and self.get_secondary()
 
-    def get_error_state(self):
-        return self.Error(int(bool(self.get_leniant() and not self.get_strict())))
+    def in_error_state(self):
+        return self.get_leniant() and not self.get_strict()

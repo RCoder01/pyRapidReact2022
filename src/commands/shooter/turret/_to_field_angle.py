@@ -1,5 +1,6 @@
 import typing
 import warnings
+import wpilib
 
 import wpimath.geometry
 
@@ -29,6 +30,10 @@ class ToFieldAngle(ToRobotAngle):
         )
 
         self._field_relative_angle = angle
+
+    def execute(self) -> None:
+        wpilib.SmartDashboard.putNumber('Turret/Field Angle Setpoint', self._field_relative_angle)
+        return super().execute()
 
     @property
     def _setpoint(self):

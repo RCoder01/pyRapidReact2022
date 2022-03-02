@@ -11,10 +11,11 @@ import utils.warnings
 
 class Belt(commands2.SubsystemBase):
     def periodic(self) -> None:
-        wpilib.SmartDashboard.putBoolean('Belt In Sensor', self.get_in_sensor())
-        wpilib.SmartDashboard.putBoolean('Belt In Sensor Disagreement', bool(self._in_sensor.get_error_state()))
-        wpilib.SmartDashboard.putBoolean('Belt Out Sensor', self.get_out_sensor())
-        wpilib.SmartDashboard.putBoolean('Belt Out Sensor Disagreement', bool(self._out_sensor.get_error_state()))
+        wpilib.SmartDashboard.putBoolean('Belt/In Sensor', self.get_in_sensor())
+        wpilib.SmartDashboard.putBoolean('Belt/In Sensor Disagreement', bool(self._in_sensor.in_error_state()))
+        wpilib.SmartDashboard.putBoolean('Belt/Out Sensor', self.get_out_sensor())
+        wpilib.SmartDashboard.putBoolean('Belt/Out Sensor Disagreement', bool(self._out_sensor.in_error_state()))
+        wpilib.SmartDashboard.putNumber('Belt/Speed', self.get_current_speed())
 
     def __init__(
             self,
@@ -26,7 +27,9 @@ class Belt(commands2.SubsystemBase):
         self.setName('Belt')
 
         self._in_sensor = utils.sensor.DoubleDigitialInput(*in_sensor_IDs, False, True)
+        self._in_sensor.config_default_get(self._in_sensor.get_leniant)
         self._out_sensor = utils.sensor.DoubleDigitialInput(*out_sensor_ID, False, True)
+        self._out_sensor.config_default_get(self._out_sensor.get_leniant)
 
         self._motor_group = utils.motor.HeadedDefaultMotorGroup(motor_IDs)
 
@@ -42,12 +45,12 @@ class Belt(commands2.SubsystemBase):
 
     def get_in_sensor(self, strict: bool = False):
         """Return whether the first feeder sensor is active."""
-        if self._in_sensor.get_error_state():
+        if self._in_sensor.in_error_state():
             warnings.warn('Belt in sensor disagreement', utils.warnings.LikelyHardwareError)
-        return self._in_sensor.get_strict() if strict else self._in_sensor.get_leniant()
+        return self._in_sensor.get_strict() if strict else self._in_sensor.get()
 
     def get_out_sensor(self, strict: bool = False):
         """Return whether the second feeder sensor is active."""
-        if self._out_sensor.get_error_state():
+        if self._out_sensor.in_error_state():
             warnings.warn('Belt out sensor disagreement', utils.warnings.LikelyHardwareError)
-        return self._out_sensor.get_strict() if strict else self._out_sensor.get_leniant()
+        return self._out_sensor.get_strict() if strict else self._out_sensor.get()

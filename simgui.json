@@ -112,7 +112,11 @@
     "types": {
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/Ungrouped/Belt": "Subsystem",
+      "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
       "/LiveWindow/Ungrouped/DigitalInput[0]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[1]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[2]": "Digital Input",
+      "/LiveWindow/Ungrouped/DigitalInput[3]": "Digital Input",
       "/LiveWindow/Ungrouped/Drivetrain": "Subsystem",
       "/LiveWindow/Ungrouped/Feeder": "Subsystem",
       "/LiveWindow/Ungrouped/Intake": "Subsystem",
@@ -132,6 +136,9 @@
     "LiveWindow": {
       "Ungrouped": {
         "DigitalInput[0]": {
+          "open": true
+        },
+        "DigitalInput[1]": {
           "open": true
         },
         "class frc2::SubsystemBase": {

@@ -1,13 +1,14 @@
 import typing
 
 import commands2
+import wpilib
 
 import utils.motor
 
 
 class Josh(commands2.SubsystemBase):
     def periodic(self):
-        ...
+        wpilib.SmartDashboard.putNumber(f'{self.getName()} Jeff', self.get_jeff())
 
     def __init__(self, motor_ids: typing.Collection[int], gear_speed_increase: float):
         commands2.SubsystemBase.__init__(self)

@@ -1,11 +1,15 @@
 import typing
 
 import commands2
+import wpilib
 
 import utils.motor
 
 
 class Feeder(commands2.SubsystemBase):
+    def periodic(self) -> None:
+        wpilib.SmartDashboard.putNumber('Feeder Speed', self.get_speed())
+
     def __init__(self, motor_IDs: typing.Collection[float]) -> None:
         commands2.SubsystemBase.__init__(self)
         self.setName('Feeder')

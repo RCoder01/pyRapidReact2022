@@ -13,7 +13,11 @@ import utils.motor
 class Drivetrain(commands2.SubsystemBase):
     def periodic(self) -> None:
         # if self._gyro_reset_time < 0:
-        wpilib.SmartDashboard.putString('Drivetrain Pose', str(self._update_odometry()))
+        wpilib.SmartDashboard.putString('Drivetrain/Pose', str(self._update_odometry()))
+        wpilib.SmartDashboard.putNumber('Drivetrain/Left Speed', self._left_motors.get_configured_lead_encoder_velocity())
+        wpilib.SmartDashboard.putNumber('Drivetrain/Left Position', self._left_motors.get_configured_lead_encoder_position())
+        wpilib.SmartDashboard.putNumber('Drivetrain/Right Speed', self._right_motors.get_configured_lead_encoder_velocity())
+        wpilib.SmartDashboard.putNumber('Drivetrain/Right Position', self._right_motors.get_configured_lead_encoder_position())
 
         wpilib.SmartDashboard.putNumber('Gyro Rot2D', self.get_gyro().degrees())
         # wpilib.SmartDashboard.putNumber('Gyro Angle', self._gyro.getAngle())

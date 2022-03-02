@@ -2,19 +2,23 @@
 import typing
 
 import commands2
+import wpilib
 
 import utils.motor
 
 
 class Hood(commands2.SubsystemBase):
+    def periodic(self) -> None:
+        wpilib.SmartDashboard.putNumber('Hood Extension', self.get_percent_extension())
+
     def __init__(self, motor_IDs: typing.Collection[int], /, min_encoder_counts: int, max_encoder_counts: int):
         commands2.SubsystemBase.__init__(self)
         self.setName('Hood')
 
         self._motors = utils.motor.LimitedHeadedDefaultMotorGroup(
             motor_IDs,
-            min_encoder_counts=min_encoder_counts,
-            max_encoder_counts=max_encoder_counts
+            min_limit=min_encoder_counts,
+            max_limit=max_encoder_counts
         )
 
         self._status = utils.motor.LimitedHeadedDefaultMotorGroup.Status.WITHIN_BOUNDS

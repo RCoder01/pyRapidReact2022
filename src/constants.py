@@ -41,8 +41,8 @@ class Belt(ConstantsClass):
 
     STAGING_RUN_TIME = 0.5
 
-    IN_SENSOR_IDs = 3, 2
-    OUT_SENSOR_IDs = 1, 0
+    IN_SENSOR_IDs = 0, 1
+    OUT_SENSOR_IDs = 2, 3
     IN_SENSOR_DEBOUNCE_TIME = 0.5
 
 class Intake(ConstantsClass):
@@ -65,12 +65,15 @@ class Shooter(ConstantsClass):
 
     class Turret(ConstantsClass):
         MOTOR_IDs = -5,
-        SENSOR_IDs = None, None
+        SENSOR_IDs = 4, 5
+        SENSOR_INVERSIONS = True, True
 
-        ENCODER_COUNTS_PER_ROTATION = 2048
-        COVERAGE_AMOUNT = 1.00
-        CONTINUOUS_MAX_CUMULATIVE_ENCODER_COUNTS = int(2048 * (140*4 / 10) * COVERAGE_AMOUNT // 1)
-        ANGLE_RANGE_DEGREES = 270
+        ENCODER_COUNTS_PER_DEGREE = 1000
+        ANGLE_MIN_DEGREES = -130
+        ANGLE_MAX_DEGREES = 130
+
+        CALIBRATION_SPEED = 0.01
+        POSITIVE_SPEED_CLOCKWISE = True
 
         PID = PIDConfiguration()
         PIDTolerance = PIDSetpointConfiguration()

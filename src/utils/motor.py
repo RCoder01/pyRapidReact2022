@@ -2,6 +2,7 @@ import enum
 import typing
 
 import ctre
+import wpilib
 
 import constants
 
@@ -44,15 +45,11 @@ class HeadedDefaultMotorGroup:
         for motor in self.motors:
             motor.configFactoryDefault()
 
-        if inversions is None:
-            for motor in self.motors[1:]:
-                motor.setInverted(ctre.InvertType.FollowMaster)
-        else:
-            for motor, inverted in zip(self.motors, inversions):
-                if inverted:
-                    motor.setInverted(ctre.InvertType.FollowMaster)
-                else:
-                    motor.setInverted(ctre.InvertType.OpposeMaster)
+        for motor in self.motors[1:]:
+            motor.setInverted(ctre.InvertType.FollowMaster)
+        for motor, inverted in zip(self.motors, inversions):
+            if inverted:
+                motor.setInverted(ctre.InvertType.OpposeMaster)
 
         if encoder_counts_per_rotation is not None:
             self.ENCODER_COUNTS_PER_ROTATION = encoder_counts_per_rotation
@@ -128,27 +125,24 @@ class LimitedHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
     def __init__(
             self,
             ID_List: typing.Collection[int],
+            min_limit: int | typing.Callable[[int], bool],
+            max_limit: int | typing.Callable[[int], bool],
             encoder_counts_per_rotation: int = None,
             inversions: typing.Collection[bool] = None,
-            min_encoder_counts: int = 0,
-            max_encoder_counts: int = 0,
             ) -> None:
         super().__init__(ID_List, encoder_counts_per_rotation, inversions)
 
-        self._MIN_ENCODER_COUNTS = min_encoder_counts
-        self._MAX_ENCODER_COUNTS = max_encoder_counts
-
         self.status = self.Status.WITHIN_BOUNDS
 
-        if min_encoder_counts > max_encoder_counts:
-            raise ValueError("min_encoder_counts must be less than or equal to max_encoder_counts")
+        self._at_min_limit: typing.Callable[[int], bool] = lambda count: count < min_limit if isinstance(min_limit, int) else min_limit
+        self._at_max_limit: typing.Callable[[int], bool] = lambda count: count < max_limit if isinstance(max_limit, int) else max_limit
 
     def get_status(self):
         position = self.get_lead_encoder_position()
 
-        if position <= self._MIN_ENCODER_COUNTS:
+        if self._at_min_limit(position):
             self.status = self.Status.AT_LOWER_LIMIT
-        elif position > self._MAX_ENCODER_COUNTS:
+        elif self._at_max_limit(position):
             self.status = self.Status.AT_UPPER_LIMIT
         else:
             self.status = self.Status.WITHIN_BOUNDS
@@ -161,9 +155,6 @@ class LimitedHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
         if self.status == self.Status.AT_UPPER_LIMIT and value > 0:
             return
         return super().set_output(value)
-
-    def get_percent_limit(self):
-        return (self.get_lead_encoder_position() - self._MIN_ENCODER_COUNTS) / (self._MAX_ENCODER_COUNTS - self._MIN_ENCODER_COUNTS)
 
 
 class ContinuousHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
