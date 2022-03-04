@@ -61,14 +61,8 @@ class DriveTrajectory(commands2.RamseteCommand):
             wpimath.controller.RamseteController(
                 *constants.Drivetrain.Characterization.Ramesete,
             ),
-            wpimath.controller.SimpleMotorFeedforwardMeters(
-                *constants.Drivetrain.Characterization.FeedForward,
-            ),
             drive_kinematics,
-            subsystems.drivetrain.get_wheel_speeds,
-            left_PID_controller,
-            right_PID_controller,
-            subsystems.drivetrain.set_speed,
+            subsystems.drivetrain.set_velocities,
             subsystems.drivetrain,
         )
 

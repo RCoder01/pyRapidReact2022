@@ -19,8 +19,8 @@ drivetrain = _drivetrain.Drivetrain(
 #     constants.Intake.MOTOR_IDs,
 # )
 
-belt = _belt.Belt(
-    constants.Belt.MOTOR_IDs,
-    constants.Belt.IN_SENSOR_IDs,
-    constants.Belt.OUT_SENSOR_IDs,
-)
+# belt = _belt.Belt(
+#     constants.Belt.MOTOR_IDs,
+#     constants.Belt.IN_SENSOR_IDs,
+#     constants.Belt.OUT_SENSOR_IDs,
+# )

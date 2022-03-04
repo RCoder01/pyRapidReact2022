@@ -13,25 +13,14 @@ class Callibrate(commands2.SequentialCommandGroup):
         self.ccw_encoder_counts = subsystems.shooter.turret.get_raw_position()
 
     def __init__(self) -> None:
-        speed_direction = 1 if constants.Shooter.Turret.POSITIVE_SPEED_CLOCKWISE else -1
         commands2.SequentialCommandGroup.__init__(
-            self,
             [
-                SetSpeed(speed_direction * constants.Shooter.Turret.CALIBRATION_SPEED).until(subsystems.shooter.turret.get_cw_limit_switch),
-                commands2.InstantCommand(self.set_cw_val),
-                SetSpeed(-speed_direction * constants.Shooter.Turret.CALIBRATION_SPEED).until(subsystems.shooter.turret.get_ccw_limit_switch()),
-                commands2.InstantCommand(self.set_ccw_val),
-                SetSpeed(speed_direction * constants.Shooter.Turret.CALIBRATION_SPEED).until(
-                        lambda: speed_direction * subsystems.shooter.turret.get_raw_position() > 
-                            (speed_direction * (self.cw_encoder_counts + self.ccw_encoder_counts) / 2)
-                    )
+                commands2.InstantCommand(subsystems.shooter.turret.set_speed(-0.5)),
+                commands2.WaitCommand(10),
             ]
         )
         self.setName("Callibrate Turret")
 
     def end(self, interrupted: bool) -> None:
-        subsystems.shooter.turret._motors.configure_units(
-            (self.cw_encoder_counts - self.ccw_encoder_counts)
-             / (constants.Shooter.Turret.ANGLE_MAX_DEGREES - constants.Shooter.Turret.ANGLE_MIN_DEGREES)
-        )
-        subsystems.shooter.turret._motors.reset_lead_encoder_position()
+        subsystems.shooter.turret.set_speed(0)
+        super().end()

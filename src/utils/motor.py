@@ -38,6 +38,7 @@ class HeadedDefaultMotorGroup:
             encoder_counts_per_rotation: int = None,
             inversions: typing.Collection[bool] = None
             ) -> None:
+        inversions = inversions or []
         self.motors = [ctre.WPI_TalonFX(ID) for ID in ID_List]
         self.lead = self.motors[0]
         for motor in self.motors[1:]:

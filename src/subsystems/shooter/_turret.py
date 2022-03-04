@@ -28,8 +28,6 @@ class Turret(commands2.SubsystemBase):
     def __init__(
             self,
             motor_IDs: typing.Collection[int],
-            sensor_IDs: tuple[int, int],
-            sensor_inversions: tuple[int, int],
             angle_range_degrees: float = 360,
             encoder_counts_per_degree: int = 1,
             ) -> None:
@@ -38,16 +36,7 @@ class Turret(commands2.SubsystemBase):
 
         self._ANGLE_RANGE = angle_range_degrees
 
-        self._min_limit_switch = utils.sensor.SingleDigitalInput(sensor_IDs[0], sensor_inversions[0])
-        self._max_limit_switch = utils.sensor.SingleDigitalInput(sensor_IDs[1], sensor_inversions[1])
-        self.get_ccw_limit_switch = self._min_limit_switch.get
-        self.get_cw_limit_switch = self._max_limit_switch.get
-
-        self._motors = utils.motor.LimitedHeadedDefaultMotorGroup(
-            motor_IDs,
-            min_limit=lambda count: self._min_limit_switch.get(),
-            max_limit=lambda count: self._max_limit_switch.get(),
-        )
+        self._motors = utils.motor.HeadedDefaultMotorGroup(motor_IDs)
         self._motors.configure_units(encoder_counts_per_degree)
 
         self.set_speed(0)

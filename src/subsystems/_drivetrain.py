@@ -79,6 +79,10 @@ class Drivetrain(commands2.SubsystemBase):
         self._left_motors.set_output(left)
         self._right_motors.set_output(right)
 
+    def set_velocities(self, left: float, right: float):
+        self._left_motors.set_configured_velocity(left)
+        self._right_motors.set_configured_velocity(right)
+
     def reset_encoders(self):
         """Zeroes the encoders."""
         self._left_motors.reset_lead_encoder_position()

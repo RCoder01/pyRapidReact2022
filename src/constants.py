@@ -1,4 +1,5 @@
 import math
+import ctre
 import wpilib
 
 from utils.constants import (
@@ -10,13 +11,14 @@ from utils.constants import (
 )
 
 
+
 class Drivetrain(ConstantsClass):
     class LeftMotors(ConstantsClass):
-        IDs = 2, 6
+        IDs = 1, 20
         PID = PIDConfiguration(Ki=0, Kd=0) # (https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/creating-following-trajectory.html)
 
     class RightMotors(ConstantsClass):
-        IDs = 7, 8
+        IDs = 2, 3
         PID = PIDConfiguration(Ki=0, Kd=0)
 
     ENCODER_COUNTS_PER_METER = 2048 * (7.82887701) / (0.15 * math.pi) # Encoder counts/revolution * gear ratio / (wheel diameter (meters) * pi = wheel circumference)
@@ -25,7 +27,7 @@ class Drivetrain(ConstantsClass):
 
         FeedForward = FeedForwardConfiguration()
 
-        TRACK_WIDTH = 0.30 # meters
+        TRACK_WIDTH = 0.88 # meters
 
         MAX_SPEED = 0 # meters per second
         MAX_ACCELERATION = 0 # meters per second per second
@@ -35,7 +37,7 @@ class Drivetrain(ConstantsClass):
             ZETA = 0.7
 
 class Belt(ConstantsClass):
-    MOTOR_IDs = -2,
+    MOTOR_IDs = 4,
     DEFAULT_SPEED = -0.5
     DEFAULT_EXGEST_SPEED = -DEFAULT_SPEED
 
@@ -46,7 +48,7 @@ class Belt(ConstantsClass):
     IN_SENSOR_DEBOUNCE_TIME = 0.5
 
 class Intake(ConstantsClass):
-    MOTOR_IDs = -3,
+    MOTOR_IDs = 8,
     DEFAULT_INTAKE_SPEED = 0.3
     DEFAULT_EXGEST_SPEED = -DEFAULT_INTAKE_SPEED
 
@@ -60,11 +62,11 @@ class Limelight(ConstantsClass):
 
 class Shooter(ConstantsClass):
     class Feeder(ConstantsClass):
-        MOTOR_IDs = -4,
+        MOTOR_IDs = 5,
         DEFAULT_SPEED = -0.5
 
     class Turret(ConstantsClass):
-        MOTOR_IDs = -5,
+        MOTOR_IDs = 6,
         SENSOR_IDs = 4, 5
         SENSOR_INVERSIONS = True, True
 
@@ -75,13 +77,27 @@ class Shooter(ConstantsClass):
         CALIBRATION_SPEED = 0.01
         POSITIVE_SPEED_CLOCKWISE = True
 
-        PID = PIDConfiguration()
+        PID = PIDConfiguration(0.1, 0.001)
         PIDTolerance = PIDSetpointConfiguration()
         FeedForward = FeedForwardConfiguration()
         HeadingFeedForward = 0
 
+        MOTOR_CONFIG = ctre.TalonFXConfiguration()
+        MOTOR_CONFIG.slot0 = ctre.SlotConfiguration()
+        MOTOR_CONFIG.slot0.kP = 0.1
+        MOTOR_CONFIG.slot0.kI = 0.001
+        MOTOR_CONFIG.slot0.kD = 0
+        MOTOR_CONFIG.slot0.kF = 0
+        MOTOR_CONFIG.slot0.integralZone = 1000
+        MOTOR_CONFIG.slot0.integralZone = 1000
+        MOTOR_CONFIG.forwardSoftLimitEnable = True
+        MOTOR_CONFIG.forwardSoftLimitThreshold = 69000
+        MOTOR_CONFIG.forwardSoftLimitThreshold = 69000
+        MOTOR_CONFIG.reverseSoftLimitThreshold = 2000
+        MOTOR_CONFIG.clearPositionOnLimitR = True
+
     class Hood(ConstantsClass):
-        MOTOR_IDs = -6
+        MOTOR_IDs = -6,
         EncoderLimits = (0, 2048)
         PID = PIDConfiguration()
 

@@ -10,7 +10,6 @@ _driver = wpilib.XboxController(0)
 _manip = wpilib.XboxController(0)
 # _manip = wpilib.Joystick(1)
 
-
 class Drivetrain:
     class TankDrive:
         def get_left_speed() -> float:
@@ -25,6 +24,7 @@ class Drivetrain:
                 return _driver.getRightTriggerAxis()
             return -_driver.getLeftTriggerAxis()
 
+        def get_turn_speed(): pass
         get_turn_speed = _driver.getLeftX
 
 
