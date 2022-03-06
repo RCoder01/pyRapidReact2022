@@ -19,7 +19,7 @@ class Drivetrain(commands2.SubsystemBase):
         wpilib.SmartDashboard.putNumber('Drivetrain/Right Speed', self._right_motors.get_configured_lead_encoder_velocity())
         wpilib.SmartDashboard.putNumber('Drivetrain/Right Position', self._right_motors.get_configured_lead_encoder_position())
 
-        wpilib.SmartDashboard.putNumber('Gyro Rot2D', self.get_gyro().degrees())
+        # wpilib.SmartDashboard.putNumber('Gyro Rot2D', self.get_gyro().degrees())
         # wpilib.SmartDashboard.putNumber('Gyro Angle', self._gyro.getAngle())
         # wpilib.SmartDashboard.putNumber('Left Motor Output Percent', self._left_motors.lead.getMotorOutputPercent() * 100)
         # wpilib.SmartDashboard.putNumber('Right Motor Output Percent', self._right_motors.lead.getMotorOutputPercent() * 100)

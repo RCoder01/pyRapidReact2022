@@ -24,10 +24,11 @@ class ToFieldAngle(ToRobotAngle):
 
         self._pose_supplier = subsystems.drivetrain.get_pose
 
-        self._heading_feed_forward = utils.math.HeadingFeedForward(
-            constants.Shooter.Turret.HeadingFeedForward,
-            self._pose_supplier()
-        )
+        # self._heading_feed_forward = lambda: (subsystems.drivetrain.get_turn_rate() * constants.Shooter.Turret.HeadingFeedForward)
+        # self._heading_feed_forward = utils.math.HeadingFeedForward(
+        #     constants.Shooter.Turret.HeadingFeedForward,
+        #     self._pose_supplier()
+        # )
 
         self._field_relative_angle = angle
 
@@ -42,6 +43,3 @@ class ToFieldAngle(ToRobotAngle):
     @_setpoint.setter
     def _setpoint(self, value: typing.Any):
         warnings.warn("TurretToFieldAngle's setpoint is read-only", self.SetpointOverrideWarning)
-
-    def calculate_output(self) -> float:
-        return super().calculate_output() + self._heading_feed_forward(self._pose_supplier())

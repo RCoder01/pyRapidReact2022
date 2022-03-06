@@ -68,6 +68,9 @@
         "name": "Feeder"
       },
       "Talon FX[6]": {
+        "header": {
+          "open": true
+        },
         "name": "Turret"
       },
       "Talon FX[7]": {
@@ -148,6 +151,12 @@
     },
     "SmartDashboard": {
       "Drivetrain": {
+        "open": true
+      },
+      "Turret": {
+        "Sim": {
+          "open": true
+        },
         "open": true
       },
       "open": true,

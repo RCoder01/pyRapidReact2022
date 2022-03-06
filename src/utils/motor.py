@@ -59,18 +59,22 @@ class HeadedDefaultMotorGroup:
 
         self.reset_lead_encoder_position()
 
+        self.set_soft_offset()
         self.configure_units(1)
+
+    def set_soft_offset(self, encoder_counts: int = 0):
+        self._soft_offset = encoder_counts
 
     def configure_units(self, encoder_counts_per_unit: int):
         """Configure custom encoder units."""
-        self.ENCODER_COUNTS_PER_UNIT = encoder_counts_per_unit
+        self._encoder_counts_per_unit = encoder_counts_per_unit
 
     def get_lead_encoder_position(self):
         """Return the raw encoder position of the lead motor."""
-        return self.lead.getSelectedSensorPosition() or 0
+        return self.lead.getSelectedSensorPosition() + self._soft_offset or 0
 
     def get_configured_lead_encoder_position(self):
-        return self.get_lead_encoder_position() / self.ENCODER_COUNTS_PER_UNIT
+        return self.get_lead_encoder_position() / self._encoder_counts_per_unit
 
     def get_lead_encoder_velocity(self):
         """Return the raw encoder velocity of the lead motor."""
@@ -78,7 +82,7 @@ class HeadedDefaultMotorGroup:
 
     def get_configured_lead_encoder_velocity(self):
         """Return the encoder velocity of the lead motor in configured units/second"""
-        return self.get_lead_encoder_velocity() * 10 / self.ENCODER_COUNTS_PER_UNIT
+        return self.get_lead_encoder_velocity() * 10 / self._encoder_counts_per_unit
 
     def reset_lead_encoder_position(self, new_position: int = 0):
         """Reset the encoder of the lead motor."""
@@ -114,8 +118,13 @@ class HeadedDefaultMotorGroup:
 
     def set_configured_velocity(self, target_velocity: float):
         """Set the velocity of the motors in configured units/second."""
-        self.set_velocity(ctre.ControlMode.Velocity, target_velocity / (10 * self.ENCODER_COUNTS_PER_UNIT))
+        self.set_velocity(ctre.ControlMode.Velocity, target_velocity / (10 * self._encoder_counts_per_unit))
 
+    def set_setpoint(self, target: int):
+        self.lead.set(ctre.ControlMode.Position, target - self._soft_offset)
+
+    def set_configured_setpoint(self, configured_target: float):
+        self.set_setpoint(int(configured_target * self._encoder_counts_per_unit))
 
 class LimitedHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
     class Status(enum.Enum):

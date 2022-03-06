@@ -73,6 +73,12 @@ class RobotContainer():
             oi.Drivetrain.ArcadeDrive.get_forward_speed,
             oi.Drivetrain.ArcadeDrive.get_turn_speed,
         ))
+        # commands2.button.Button(subsystems.shooter.turret.check_reset) \
+        #     .whenPressed(commands.shooter.turret.Callibrate().withTimeout(constants.Shooter.Turret.CALLIBRATION_TIMEOUT))
+        commands2.button.JoystickButton(oi._driver, oi._driver.Button.kB) \
+            .whenActive(commands.shooter.turret.ToRobotAngle(wpilib.SmartDashboard.getNumber("Turret Angle?", 0)))
+        commands2.button.JoystickButton(oi._driver, oi._driver.Button.kA) \
+            .whenActive(commands.shooter.turret.Callibrate().withTimeout(constants.Shooter.Turret.CALLIBRATION_TIMEOUT))
         # subsystems.belt.setDefaultCommand(commands.belt.Monitor())
 
     def get_autonomous_command(self) -> commands2.Command:

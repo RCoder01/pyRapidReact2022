@@ -54,6 +54,8 @@ class Intake(ConstantsClass):
 
 class Limelight(ConstantsClass):
     MOUNT_ANGLE = 0
+    MOUNT_HEIGHT = 0
+    TARGET_HEIGHT = 0
 
     Ka = 0
     PIPELINE = 1
@@ -70,15 +72,17 @@ class Shooter(ConstantsClass):
         SENSOR_IDs = 4, 5
         SENSOR_INVERSIONS = True, True
 
-        ENCODER_COUNTS_PER_DEGREE = 1000
-        ANGLE_MIN_DEGREES = -130
-        ANGLE_MAX_DEGREES = 130
+        ENCODER_COUNTS_PER_DEGREE = 314
+        ANGLE_MIN_DEGREES = -110
+        ANGLE_MAX_DEGREES = 125.7
 
-        CALIBRATION_SPEED = 0.01
-        POSITIVE_SPEED_CLOCKWISE = True
+        CALLIBRATION_SPEED = -0.2
+        CALLIBRATION_TIMEOUT = 5
+
+        STANDARD_TOP_SPEED = 0.3
 
         PID = PIDConfiguration(0.1, 0.001)
-        PIDTolerance = PIDSetpointConfiguration()
+        SETPOINT_TOLERANCE = 10
         FeedForward = FeedForwardConfiguration()
         HeadingFeedForward = 0
 

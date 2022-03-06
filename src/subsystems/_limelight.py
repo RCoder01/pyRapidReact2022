@@ -67,6 +67,10 @@ class Limelight(commands2.SubsystemBase):
         Innacurate unless tx is 0
         """
         return math.cos(self.ty + self._MOUNT_ANGLE)
+    
+    @property
+    def distance(self):
+        return (constants.Limelight.TARGET_HEIGHT - constants.Limelight.MOUNT_HEIGHT) / math.tan(math.radians(self.ty + constants.Limelight.MOUNT_ANGLE))
 
     @property
     def is_aligned(self):
@@ -76,6 +80,6 @@ class Limelight(commands2.SubsystemBase):
     def led_mode(self):
         self._ledmode_entry.getDouble(0)
 
-    @property
+    @led_mode.setter
     def led_mode(self, mode: int):
         self._ledmode_entry.setDouble(mode)

@@ -1,3 +1,4 @@
+import enum
 import math
 import typing
 import warnings
@@ -9,9 +10,15 @@ import wpimath.geometry
 import utils.motor
 import utils.sensor
 import utils.warnings
+import constants
 
 
 class Turret(commands2.SubsystemBase):
+    class CallibrationStatus(enum.Enum):
+        NEEDS_CALLIBRATION = 0
+        CALLIBRATING = 1
+        CALLIBRATED = 2
+
     @property
     def encoder_counts_per_degree(self):
         return self._encoder_counts_per_degree
@@ -20,10 +27,18 @@ class Turret(commands2.SubsystemBase):
         self._encoder_counts_per_degree = value
 
     def periodic(self) -> None:
-        wpilib.SmartDashboard.putNumber('Turret\Angular Velocity', self._motors.get_configured_lead_encoder_velocity())
-        wpilib.SmartDashboard.putNumber('Turret\Robot Angle', self._motors.get_configured_lead_encoder_position())
-        wpilib.SmartDashboard.putBoolean('Turret\Clockwise Limit Switch', self.get_cw_limit_switch())
-        wpilib.SmartDashboard.putBoolean('Turret\Counterclockwise Limit Switch', self.get_ccw_limit_switch())
+        if self._motors.lead.hasResetOccurred():
+            self.set_callibration_status(self.CallibrationStatus.NEEDS_CALLIBRATION)
+        if self.get_callibration_status().value is self.CallibrationStatus.NEEDS_CALLIBRATION:
+            self.config_max_speed(0)
+
+        wpilib.SmartDashboard.putNumber('Turret/Callibration Status', self.get_callibration_status().value)
+        wpilib.SmartDashboard.putNumber('Turret/Angular Velocity', self._motors.get_configured_lead_encoder_velocity())
+        wpilib.SmartDashboard.putNumber('Turret/Robot Angle', self._motors.get_configured_lead_encoder_position())
+        wpilib.SmartDashboard.putNumber('Turret/Raw Pos', self.get_raw_position())
+
+        self.sim_collection.setLimitFwd(wpilib.SmartDashboard.getBoolean('Turret/Sim/Forward Limit Switch', False))
+        self.sim_collection.setLimitRev(wpilib.SmartDashboard.getBoolean('Turret/Sim/Reverse Limit Switch', False))
 
     def __init__(
             self,
@@ -38,20 +53,56 @@ class Turret(commands2.SubsystemBase):
 
         self._motors = utils.motor.HeadedDefaultMotorGroup(motor_IDs)
         self._motors.configure_units(encoder_counts_per_degree)
+        self._motors.lead.configAllSettings(constants.Shooter.Turret.MOTOR_CONFIG)
+
+        self.sim_collection = self._motors.lead.getSimCollection()
+        wpilib.SmartDashboard.putBoolean('Turret/Sim/Forward Limit Switch', False)
+        wpilib.SmartDashboard.putBoolean('Turret/Sim/Reverse Limit Switch', False)
 
         self.set_speed(0)
+        self.set_callibration_status(self.CallibrationStatus.NEEDS_CALLIBRATION)
 
     def set_speed(self, speed: float):
         self._motors.set_output(speed)
+
+    def set_setpoint(self, angle: float):
+        self._motors.set_setpoint(angle)
+
+    def set_soft_offset(self, raw_offset: float):
+        self._motors.set_soft_offset(raw_offset)
 
     def get_raw_position(self):
         return self._motors.get_lead_encoder_position()
 
     def get_angle(self):
-        return self._motors.get_configured_lead_encoder_position
+        return self._motors.get_configured_lead_encoder_position()
 
     def get_angular_velocity(self):
         return self._motors.get_configured_lead_encoder_velocity()
 
     def get_robot_relative_rotation(self):
         return wpimath.geometry.Rotation2d(-self._motors.get_configured_lead_encoder_position())
+
+    def get_forward_limit_switch(self):
+        return self._motors.lead.isFwdLimitSwitchClosed()
+
+    def get_reverse_limit_switch(self):
+        return self._motors.lead.isRevLimitSwitchClosed()
+
+    def config_max_speed(self, value: float = 1):
+        value = max(min(math.fabs(value), 1), 0)
+        wpilib.SmartDashboard.putNumber('Turret/Max Speed Config', value)
+        self._motors.lead.configPeakOutputForward(value)
+        self._motors.lead.configPeakOutputReverse(-value)
+
+    def set_forward_soft_limit(self, value: bool):
+        self._motors.lead.configForwardSoftLimitEnable(value)
+
+    def set_reverse_soft_limit(self, value: bool):
+        self._motors.lead.configReverseSoftLimitEnable(value)
+
+    def set_callibration_status(self, status: CallibrationStatus):
+        self._callibration_status = status
+
+    def get_callibration_status(self):
+        return self._callibration_status
