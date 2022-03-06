@@ -1,6 +1,5 @@
 import math
 import ctre
-import wpilib
 
 from utils.constants import (
     ConstantsClass,
@@ -22,6 +21,7 @@ class Drivetrain(ConstantsClass):
         PID = PIDConfiguration(Ki=0, Kd=0)
 
     ENCODER_COUNTS_PER_METER = 2048 * (7.82887701) / (0.15 * math.pi) # Encoder counts/revolution * gear ratio / (wheel diameter (meters) * pi = wheel circumference)
+    # ENCODER_COUNTS_PER_METER = n # TODO: Get this value experimentally
 
     class Characterization(ConstantsClass): # TODO: https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/characterizing-drive.html
 
@@ -53,9 +53,10 @@ class Intake(ConstantsClass):
     DEFAULT_EXGEST_SPEED = -DEFAULT_INTAKE_SPEED
 
 class Limelight(ConstantsClass):
-    MOUNT_ANGLE = 0
-    MOUNT_HEIGHT = 0
-    TARGET_HEIGHT = 0
+    MOUNT_ANGLE = 46 # degrees
+    MOUNT_HEIGHT = 0.6477 # meters
+    TARGET_HEIGHT = 2.6114375 # meters
+    TARGET_RADIUS = 0.6096 # meters
 
     Ka = 0
     PIPELINE = 1

@@ -1,7 +1,8 @@
 import math
 import commands2
 from networktables import NetworkTables
-from wpilib import SmartDashboard
+import wpilib
+import wpimath.geometry
 
 import constants
 
@@ -11,7 +12,7 @@ class Limelight(commands2.SubsystemBase):
     This subsystem is not intended to be required by any command.
     """
     def periodic(self) -> None:
-        SmartDashboard.putNumberArray(
+        wpilib.SmartDashboard.putNumberArray(
             "Limelight XYAV",
             [self.tx, self.ty, self.ta, self.tv]
         )
@@ -29,6 +30,7 @@ class Limelight(commands2.SubsystemBase):
         self._ledmode_entry.setDouble(0)
 
         self._MOUNT_ANGLE = constants.Limelight.MOUNT_ANGLE
+        self._ACTUAL_HEIGHT = constants.Limelight.TARGET_HEIGHT - constants.Limelight.MOUNT_HEIGHT
 
     @property
     def tx(self):
@@ -67,14 +69,31 @@ class Limelight(commands2.SubsystemBase):
         Innacurate unless tx is 0
         """
         return math.cos(self.ty + self._MOUNT_ANGLE)
-    
+
+    def _nd(self):
+        z = 1
+        x = math.tan(self.tx)
+        y = math.tan(self.ty)
+        magnitude = math.sqrt(x**2 + y**2 + z**2)
+        x, y, z = x/magnitude, y/magnitude, z/magnitude
+        cos = math.cos(math.radians(-self._MOUNT_ANGLE))
+        sin = math.sin(math.radians(-self._MOUNT_ANGLE))
+        x, y, z = x, y * cos - z * sin, y * sin + z * cos # https://stackoverflow.com/questions/14607640/rotating-a-vector-in-3d-space
+        return x, y, z
+
     @property
     def distance(self):
-        return (constants.Limelight.TARGET_HEIGHT - constants.Limelight.MOUNT_HEIGHT) / math.tan(math.radians(self.ty + constants.Limelight.MOUNT_ANGLE))
+        x, y, z = self._nd()
+        normalized_horizontal_distance = (x ** 2 + z ** 2) ** 0.5
+        conversion_factor = self._ACTUAL_HEIGHT / y
+        return normalized_horizontal_distance * conversion_factor
+
+    def get_estimated_target_position(self, limelight_pose: wpimath.geometry.Pose2d):
+        return limelight_pose.translation() + wpimath.geometry.Translation2d(self.distance + constants.Limelight.TARGET_RADIUS, limelight_pose.rotation())
 
     @property
     def is_aligned(self):
-        return self.tv == 1 and math.fabs(self.tx) < constants.Limelight.X_TOLERANCE
+        return self.tv == 1 and (math.fabs(self.tx) < constants.Limelight.X_TOLERANCE)
 
     @property
     def led_mode(self):
