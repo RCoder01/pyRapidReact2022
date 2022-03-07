@@ -20,8 +20,9 @@ class Robot(commands2.TimedCommandRobot):
     def robotPeriodic(self) -> None:
         commands2.CommandScheduler.getInstance().run()
 
-        if subsystems.shooter.turret.get_callibration_status() is subsystems.shooter.turret.CallibrationStatus.NEEDS_CALLIBRATION:
-            self.turret_callibration_command.schedule(False)
+        # BIG TODO: Uncomment this
+        # if subsystems.shooter.turret.get_callibration_status() is subsystems.shooter.turret.CallibrationStatus.NEEDS_CALLIBRATION:
+        #     self.turret_callibration_command.schedule(False)
 
         return super().robotPeriodic()
 

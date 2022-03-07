@@ -12,10 +12,9 @@ class Limelight(commands2.SubsystemBase):
     This subsystem is not intended to be required by any command.
     """
     def periodic(self) -> None:
-        wpilib.SmartDashboard.putNumberArray(
-            "Limelight/XYAV",
-            [self.tx, self.ty, self.ta, self.tv]
-        )
+        wpilib.SmartDashboard.putNumberArray("Limelight/XYAV", [self.tx, self.ty, self.ta, self.tv])
+        wpilib.SmartDashboard.putNumberArray("Limelight/nd", self._nd())
+        wpilib.SmartDashboard.putNumberArray("Limelight/d", self._d())
         try:
             from subsystems import drivetrain
             from subsystems.shooter import turret
@@ -24,19 +23,22 @@ class Limelight(commands2.SubsystemBase):
         else:
             drivetrain_pose = drivetrain.get_pose()
             turret_rotation = turret.get_robot_relative_rotation()
-            limelight_pose = drivetrain_pose.transformBy(
-                wpimath.geometry.Transform2d(
-                    constants.Shooter.Turret.CENTER.rotateBy(drivetrain_pose.rotation())
-                  + constants.Limelight.TURRET_MOUNT_POSITION.rotateBy(drivetrain_pose.rotation() + turret_rotation),
-                    wpimath.geometry.Rotation2d(0)
-                )
-            )
+            # limelight_pose = drivetrain_pose.transformBy(
+            #     wpimath.geometry.Transform2d(
+            #         constants.Shooter.Turret.CENTER.rotateBy(drivetrain_pose.rotation())
+            #       + constants.Limelight.TURRET_MOUNT_POSITION.rotateBy(drivetrain_pose.rotation() + turret_rotation),
+            #         wpimath.geometry.Rotation2d(0)
+            #     )
+            # )
+            limelight_rotation = drivetrain_pose.rotation() + turret_rotation
+            x, y, z = self._d()
+            limelight_pose = wpimath.geometry.Pose2d(wpimath.geometry.Translation2d(z, x).rotateBy(limelight_rotation), wpimath.geometry.Rotation2d())
             wpilib.SmartDashboard.putString("Limelight/Estimated Target Position", str(self.get_estimated_target_position(limelight_pose)))
 
         try:
             self.field.getObject('Limelight Hub Estimate').setPose(wpimath.geometry.Pose2d(self.get_estimated_target_position(drivetrain_pose), wpimath.geometry.Rotation2d()))
         except (NameError, AttributeError):
-            self.field: wpilib.Field2d = wpilib.SmartDashboard.getData('Field', None)
+            self.field: wpilib.Field2d = wpilib.SmartDashboard.getData('Field')
 
     def __init__(self):
         commands2.SubsystemBase.__init__(self)
@@ -79,7 +81,7 @@ class Limelight(commands2.SubsystemBase):
 
         Innacurate unless tx is 0
         """
-        return math.sin(self.ty + self._MOUNT_ANGLE)
+        return math.sin(math.radians(self.ty + self._MOUNT_ANGLE))
 
     @property
     def z(self):
@@ -88,12 +90,12 @@ class Limelight(commands2.SubsystemBase):
 
         Innacurate unless tx is 0
         """
-        return math.cos(self.ty + self._MOUNT_ANGLE)
+        return math.cos(math.radians(self.ty + self._MOUNT_ANGLE))
 
     def _nd(self):
+        x = math.tan(math.radians(self.tx))
+        y = math.tan(math.radians(self.ty))
         z = 1
-        x = math.tan(self.tx)
-        y = math.tan(self.ty)
         magnitude = math.sqrt(x**2 + y**2 + z**2)
         x, y, z = x/magnitude, y/magnitude, z/magnitude
         cos = math.cos(math.radians(-self._MOUNT_ANGLE))
@@ -101,12 +103,18 @@ class Limelight(commands2.SubsystemBase):
         x, y, z = x, y * cos - z * sin, y * sin + z * cos # https://stackoverflow.com/questions/14607640/rotating-a-vector-in-3d-space
         return x, y, z
 
+    def _d(self):
+        x, y, z = self._nd()
+        try:
+            conversion_factor = self._ACTUAL_HEIGHT / y
+        except ZeroDivisionError:
+            return float('inf'), 0, float('inf')
+        return x * conversion_factor, y * conversion_factor, z * conversion_factor
+
     @property
     def distance(self):
-        x, y, z = self._nd()
-        normalized_horizontal_distance = (x ** 2 + z ** 2) ** 0.5
-        conversion_factor = self._ACTUAL_HEIGHT / y
-        return normalized_horizontal_distance * conversion_factor
+        x, y, z = self._d()
+        return (x ** 2 + z ** 2) ** 0.5
 
     def get_estimated_target_position(self, limelight_pose: wpimath.geometry.Pose2d):
         return limelight_pose.translation() + wpimath.geometry.Translation2d(self.distance + constants.Limelight.TARGET_RADIUS, limelight_pose.rotation())

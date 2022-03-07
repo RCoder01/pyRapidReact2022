@@ -154,6 +154,9 @@
       "Drivetrain": {
         "open": true
       },
+      "Limelight": {
+        "open": true
+      },
       "Turret": {
         "Sim": {
           "open": true
@@ -164,6 +167,9 @@
       "sensor": {
         "open": true
       }
+    },
+    "limelight": {
+      "open": true
     }
   }
 }
