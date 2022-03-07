@@ -40,19 +40,14 @@ class Turret(commands2.SubsystemBase):
         self.sim_collection.setLimitFwd(wpilib.SmartDashboard.getBoolean('Turret/Sim/Forward Limit Switch', False))
         self.sim_collection.setLimitRev(wpilib.SmartDashboard.getBoolean('Turret/Sim/Reverse Limit Switch', False))
 
-    def __init__(
-            self,
-            motor_IDs: typing.Collection[int],
-            angle_range_degrees: float = 360,
-            encoder_counts_per_degree: int = 1,
-            ) -> None:
+    def __init__(self) -> None:
         commands2.SubsystemBase.__init__(self)
         self.setName('Turret')
 
-        self._ANGLE_RANGE = angle_range_degrees
+        self._ANGLE_RANGE = constants.Shooter.Turret.ANGLE_MAX_DEGREES - constants.Shooter.Turret.ANGLE_MIN_DEGREES
 
-        self._motors = utils.motor.HeadedDefaultMotorGroup(motor_IDs)
-        self._motors.configure_units(encoder_counts_per_degree)
+        self._motors = utils.motor.HeadedDefaultMotorGroup(constants.Shooter.Turret.MOTOR_IDs)
+        self._motors.configure_units(constants.Shooter.Turret.ENCODER_COUNTS_PER_DEGREE)
         self._motors.lead.configAllSettings(constants.Shooter.Turret.MOTOR_CONFIG)
 
         self.sim_collection = self._motors.lead.getSimCollection()

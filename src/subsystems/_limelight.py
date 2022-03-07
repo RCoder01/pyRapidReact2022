@@ -13,10 +13,30 @@ class Limelight(commands2.SubsystemBase):
     """
     def periodic(self) -> None:
         wpilib.SmartDashboard.putNumberArray(
-            "Limelight XYAV",
+            "Limelight/XYAV",
             [self.tx, self.ty, self.ta, self.tv]
         )
-        return super().periodic()
+        try:
+            from subsystems import drivetrain
+            from subsystems.shooter import turret
+        except ImportError:
+            pass
+        else:
+            drivetrain_pose = drivetrain.get_pose()
+            turret_rotation = turret.get_robot_relative_rotation()
+            limelight_pose = drivetrain_pose.transformBy(
+                wpimath.geometry.Transform2d(
+                    constants.Shooter.Turret.CENTER.rotateBy(drivetrain_pose.rotation())
+                  + constants.Limelight.TURRET_MOUNT_POSITION.rotateBy(drivetrain_pose.rotation() + turret_rotation),
+                    wpimath.geometry.Rotation2d(0)
+                )
+            )
+            wpilib.SmartDashboard.putString("Limelight/Estimated Target Position", str(self.get_estimated_target_position(limelight_pose)))
+
+        try:
+            self.field.getObject('Limelight Hub Estimate').setPose(wpimath.geometry.Pose2d(self.get_estimated_target_position(drivetrain_pose), wpimath.geometry.Rotation2d()))
+        except (NameError, AttributeError):
+            self.field: wpilib.Field2d = wpilib.SmartDashboard.getData('Field', None)
 
     def __init__(self):
         commands2.SubsystemBase.__init__(self)

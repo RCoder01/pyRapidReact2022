@@ -1,6 +1,8 @@
 import math
 import ctre
 
+import wpimath.geometry
+
 from utils.constants import (
     ConstantsClass,
     PIDConfiguration,
@@ -12,6 +14,8 @@ from utils.constants import (
 
 
 class Drivetrain(ConstantsClass):
+    MOTORS_PER_SIDE = 2
+
     class LeftMotors(ConstantsClass):
         IDs = 1, 20
         PID = PIDConfiguration(Ki=0, Kd=0) # (https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/creating-following-trajectory.html)
@@ -20,14 +24,18 @@ class Drivetrain(ConstantsClass):
         IDs = 2, 3
         PID = PIDConfiguration(Ki=0, Kd=0)
 
-    ENCODER_COUNTS_PER_METER = 2048 * (7.82887701) / (0.15 * math.pi) # Encoder counts/revolution * gear ratio / (wheel diameter (meters) * pi = wheel circumference)
+    GEAR_RATIO = 7.82887701
+    WHEEL_RADIUS = 0.075
+
+    ENCODER_COUNTS_PER_METER = 2048 * GEAR_RATIO / (WHEEL_RADIUS * 2 * math.pi) # Encoder counts/revolution * gear ratio / (wheel diameter (meters) * pi = wheel circumference)
     # ENCODER_COUNTS_PER_METER = n # TODO: Get this value experimentally
 
     class Characterization(ConstantsClass): # TODO: https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/characterizing-drive.html
 
-        FeedForward = FeedForwardConfiguration()
+        LinearFeedForward = FeedForwardConfiguration(0.66847, 1.806, 0.27585)
+        AngularFeedForward = FeedForwardConfiguration(0.90843, 130.15, 12.776)
 
-        TRACK_WIDTH = 0.88 # meters
+        TRACK_WIDTH = 0.88817 # meters
 
         MAX_SPEED = 0 # meters per second
         MAX_ACCELERATION = 0 # meters per second per second
@@ -35,6 +43,8 @@ class Drivetrain(ConstantsClass):
         class Ramesete(ConstantsClass):
             B = 2
             ZETA = 0.7
+
+        MEASUREMENT_STDDEVS = 0, 0, 0.0001, 0.1, 0.1, 0.005, 0.005
 
 class Belt(ConstantsClass):
     MOTOR_IDs = 4,
@@ -57,6 +67,7 @@ class Limelight(ConstantsClass):
     MOUNT_HEIGHT = 0.6477 # meters
     TARGET_HEIGHT = 2.6114375 # meters
     TARGET_RADIUS = 0.6096 # meters
+    TURRET_MOUNT_POSITION = wpimath.geometry.Translation2d(0, 0)
 
     Ka = 0
     PIPELINE = 1
@@ -76,6 +87,7 @@ class Shooter(ConstantsClass):
         ENCODER_COUNTS_PER_DEGREE = 314
         ANGLE_MIN_DEGREES = -110
         ANGLE_MAX_DEGREES = 125.7
+        CENTER = wpimath.geometry.Translation2d(0, 0)
 
         CALLIBRATION_SPEED = -0.2
         CALLIBRATION_TIMEOUT = 5

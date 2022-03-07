@@ -4,6 +4,7 @@ import commands2.button
 import wpilib
 import wpimath.filter
 import wpimath.trajectory
+import traceback
 
 import commands
 
@@ -13,13 +14,16 @@ import subsystems
 
 
 class RobotContainer():
+    class CommandSchedulerEvent(RuntimeWarning):
+        pass
+
     def __init__(self):
-        self.configure_smartdashboard()
-        self.configure_bindings()
-        self.configure_default_commands()
+        self._configure_smartdashboard()
+        self._configure_bindings()
+        self._configure_default_commands()
         # self.init_ball_counting()
 
-    def configure_smartdashboard(self) -> None:
+    def _configure_smartdashboard(self) -> None:
         active_command_string_list = []
 
         def on_command_schedule(command: commands2.Command):
@@ -36,13 +40,21 @@ class RobotContainer():
             else:
                 wpilib.SmartDashboard.putStringArray("Active Commands", active_command_string_list)
 
+        def on_scheduler_event(event_type: str):
+            def print_traceback(command: commands2.Command):
+                print(f'Command "{command.getName()}" {event_type} with requirements {command.getRequirements()}')
+                traceback.print_list(traceback.extract_stack()[6:-1])
+            return print_traceback
+
         commands2.CommandScheduler.getInstance().onCommandInitialize(on_command_schedule)
         commands2.CommandScheduler.getInstance().onCommandFinish(on_command_finish)
         commands2.CommandScheduler.getInstance().onCommandInterrupt(on_command_finish)
 
-        wpilib.SmartDashboard.putData("Reset Drivetrain Odometry", commands2.InstantCommand(lambda: subsystems.drivetrain.reset_odometry()))
+        commands2.CommandScheduler.getInstance().onCommandInitialize(on_scheduler_event('initialized'))
+        commands2.CommandScheduler.getInstance().onCommandFinish(on_scheduler_event('finished'))
+        commands2.CommandScheduler.getInstance().onCommandInterrupt(on_scheduler_event('interrupted'))
 
-    def configure_bindings(self) -> None:
+    def _configure_bindings(self) -> None:
         # oi.Intake.activate \
         #     .whileHeld(commands.intake.Active())
 
@@ -68,7 +80,7 @@ class RobotContainer():
 
         self.pd = wpilib.PowerDistribution()
 
-    def configure_default_commands(self) -> None:
+    def _configure_default_commands(self) -> None:
         subsystems.drivetrain.setDefaultCommand(commands.drivetrain.ArcadeDrive(
             oi.Drivetrain.ArcadeDrive.get_forward_speed,
             oi.Drivetrain.ArcadeDrive.get_turn_speed,

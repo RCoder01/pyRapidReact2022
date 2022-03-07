@@ -3,6 +3,7 @@ import typing
 import commands2
 import wpilib
 
+import constants
 import utils.motor
 
 
@@ -13,11 +14,11 @@ class Intake(commands2.SubsystemBase):
 
         return super().periodic()
 
-    def __init__(self, motor_IDs: typing.Collection[int]) -> None:
+    def __init__(self) -> None:
         commands2.SubsystemBase.__init__(self)
         self.setName('Intake')
 
-        self._motors = utils.motor.HeadedDefaultMotorGroup(motor_IDs)
+        self._motors = utils.motor.HeadedDefaultMotorGroup(constants.Intake.MOTOR_IDs)
 
     def set_speed(self, speed: float) -> None:
         """Sets the speed of the intake motors."""

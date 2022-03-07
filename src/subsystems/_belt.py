@@ -8,6 +8,8 @@ import utils.motor
 import utils.sensor
 import utils.warnings
 
+import constants
+
 
 class Belt(commands2.SubsystemBase):
     def periodic(self) -> None:
@@ -17,21 +19,16 @@ class Belt(commands2.SubsystemBase):
         wpilib.SmartDashboard.putBoolean('Belt/Out Sensor Disagreement', bool(self._out_sensor.in_error_state()))
         wpilib.SmartDashboard.putNumber('Belt/Speed', self.get_current_speed())
 
-    def __init__(
-            self,
-            motor_IDs: typing.Collection[float],
-            in_sensor_IDs: tuple[int, int],
-            out_sensor_ID: tuple[int, int],
-            ) -> None:
+    def __init__(self) -> None:
         commands2.SubsystemBase.__init__(self)
         self.setName('Belt')
 
-        self._in_sensor = utils.sensor.DoubleDigitialInput(*in_sensor_IDs, False, True)
+        self._in_sensor = utils.sensor.DoubleDigitialInput(*constants.Belt.IN_SENSOR_IDs, False, True)
         self._in_sensor.config_default_get(self._in_sensor.get_leniant)
-        self._out_sensor = utils.sensor.DoubleDigitialInput(*out_sensor_ID, False, True)
+        self._out_sensor = utils.sensor.DoubleDigitialInput(*constants.Belt.OUT_SENSOR_IDs, False, True)
         self._out_sensor.config_default_get(self._out_sensor.get_leniant)
 
-        self._motor_group = utils.motor.HeadedDefaultMotorGroup(motor_IDs)
+        self._motor_group = utils.motor.HeadedDefaultMotorGroup(constants.Belt.MOTOR_IDs)
 
         self.set_speed(0)
 

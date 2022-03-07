@@ -25,6 +25,9 @@ class DriveTrajectory(commands2.RamseteCommand):
     @typing.overload
     def __init__(self, waypoints: typing.List[wpimath.geometry._geometry.Pose2d], /) -> None:
         pass
+    @typing.overload
+    def __init__(self, path_filename: str) -> None:
+        pass
 
     def __init__(self, *args) -> None:
         drive_kinematics = wpimath.kinematics.DifferentialDriveKinematics(
@@ -51,6 +54,8 @@ class DriveTrajectory(commands2.RamseteCommand):
 
         subsystems.drivetrain.reset_odometry()
 
+        if isinstance(args[0], str):
+            wpimath.trajectory.TrajectoryUtil.fromPathweaverJson()
         commands2.RamseteCommand.__init__(
             self,
             wpimath.trajectory.TrajectoryGenerator.generateTrajectory(

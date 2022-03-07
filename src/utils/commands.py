@@ -33,5 +33,5 @@ def set_name(command: commands2.Command, name: str):
     if isinstance(command, commands2.CommandBase):
         command.setName(name)
     else:
-        command.getName = lambda: name
+        command.getName = lambda self: name
     return command

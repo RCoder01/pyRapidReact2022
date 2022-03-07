@@ -1,15 +1,19 @@
+import warnings
 import wpilib
 import commands2
 import commands
 
+import utils.commands
 import robot_container
 import constants
 import subsystems
 
+warnings.simplefilter('always', category=Warning)
+
 class Robot(commands2.TimedCommandRobot):
     def robotInit(self) -> None:
         self._container = robot_container.RobotContainer()
-        self.turret_callibration_command = commands.shooter.turret.Callibrate().withTimeout(constants.Shooter.Turret.CALLIBRATION_TIMEOUT)
+        self.turret_callibration_command = utils.commands.set_name(commands.shooter.turret.Callibrate().withTimeout(constants.Shooter.Turret.CALLIBRATION_TIMEOUT), "Turret Callibration w/ Timeout")
 
         return super().robotInit()
 

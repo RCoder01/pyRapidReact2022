@@ -7,27 +7,6 @@ import wpilib
 import constants
 
 
-class CumulativeEncoder:
-    def __init__(self, encoder_counts_per_rotation):
-        self.ticks = 0
-        self.delta = 0
-        self.last_raw_ticks = 0
-        self.ENCODER_COUNTS_PER_ROTATION = encoder_counts_per_rotation
-
-    def update(self, raw_ticks: int, velocity_positive: bool | int | float) -> None:
-        if isinstance(velocity_positive, (int, float)):
-            velocity_positive = velocity_positive >= 0
-        self.delta = raw_ticks - self.last_raw_ticks
-        self.last_raw_ticks = raw_ticks
-        self.delta += (velocity_positive + (self.delta < 0) - 1) * self.ENCODER_COUNTS_PER_ROTATION
-        self.ticks += self.delta
-
-    def reset(self) -> int:
-        cum = self.ticks
-        self.ticks = 0
-        return cum
-
-
 class HeadedDefaultMotorGroup:
 
     ENCODER_COUNTS_PER_ROTATION: int = constants.Misc.ENCODER_COUNTS_PER_ROTATION
@@ -118,13 +97,35 @@ class HeadedDefaultMotorGroup:
 
     def set_configured_velocity(self, target_velocity: float):
         """Set the velocity of the motors in configured units/second."""
-        self.set_velocity(ctre.ControlMode.Velocity, target_velocity / (10 * self._encoder_counts_per_unit))
+        self.set_velocity(target_velocity * self._encoder_counts_per_unit / 10)
 
     def set_setpoint(self, target: int):
         self.lead.set(ctre.ControlMode.Position, target - self._soft_offset)
 
     def set_configured_setpoint(self, configured_target: float):
-        self.set_setpoint(int(configured_target * self._encoder_counts_per_unit))
+        self.set_setpoint(int(configured_target * self._encoder_counts_per_unit + 0.5))
+
+    def get_output_voltage(self):
+        return self.lead.getMotorOutputVoltage()
+
+
+class HeadedDefaultMotorGroupSim():
+    def __init__(self, motor_group: HeadedDefaultMotorGroup) -> None:
+        self.motor_group = motor_group
+        self.lead_sim_collection = self.motor_group.lead.getSimCollection()
+
+    def set_raw_distance(self, distance: int):
+        self.lead_sim_collection.setIntegratedSensorRawPosition(distance)
+
+    def set_configured_distance(self, distance: float):
+        self.set_raw_distance(int(distance * self.motor_group._encoder_counts_per_unit + 0.5))
+
+    def set_raw_velocity(self, velocity: int):
+        self.lead_sim_collection.setIntegratedSensorVelocity(velocity)
+
+    def set_configured_velocity(self, velocity: float):
+        self.set_raw_velocity(int(velocity * self.motor_group._encoder_counts_per_unit / 10 + 0.5))
+
 
 class LimitedHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
     class Status(enum.Enum):
@@ -165,32 +166,3 @@ class LimitedHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
         if self.status == self.Status.AT_UPPER_LIMIT and value > 0:
             return
         return super().set_output(value)
-
-
-class ContinuousHeadedDefaultMotorGroup(HeadedDefaultMotorGroup):
-    def __init__(
-            self,
-            ID_List: typing.Collection[int],
-            encoder_counts_per_rotation: int = None,
-            inversions: typing.Collection[bool] = None,
-            min_encoder_counts: int = 0,
-            max_encoder_counts: int = 0,
-            ) -> None:
-        super().__init__(ID_List, encoder_counts_per_rotation, inversions)
-
-        if min_encoder_counts > max_encoder_counts:
-            raise ValueError("min_encoder_counts must be less than or equal to max_encoder_counts")
-
-        self._MIN_ENCODER_COUNTS = min_encoder_counts
-        self._MAX_ENCODER_COUNTS = max_encoder_counts
-
-    def get_lead_encoder_position(self):
-        position = super().get_lead_encoder_position()
-
-        if position < self._MIN_ENCODER_COUNTS:
-            self.reset_lead_encoder_position(position + (self._MAX_ENCODER_COUNTS - self._MIN_ENCODER_COUNTS))
-
-        if position > self._MAX_ENCODER_COUNTS:
-            self.reset_lead_encoder_position(position - (self._MAX_ENCODER_COUNTS - self._MAX_ENCODER_COUNTS))
-
-        return super().get_lead_encoder_position()

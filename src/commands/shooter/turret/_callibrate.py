@@ -1,3 +1,4 @@
+from re import S
 import warnings
 import commands2
 
@@ -9,6 +10,7 @@ class Callibrate(commands2.CommandBase):
     def __init__(self) -> None:
         commands2.CommandBase.__init__(self)
         self.setName("Callibrate Turret")
+        self.addRequirements(subsystems.shooter.turret)
 
     def initialize(self) -> None:
         subsystems.shooter.turret.set_callibration_status(subsystems.shooter.turret.CallibrationStatus.CALLIBRATING)

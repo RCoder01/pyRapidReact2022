@@ -1,3 +1,4 @@
+import math
 import typing
 
 import commands2
@@ -5,52 +6,55 @@ import navx
 import wpilib
 import wpilib.simulation
 import wpimath.geometry
+import hal
+import wpimath.system
+import wpimath.system.plant
 import wpimath.kinematics
 
+import constants
 import utils.motor
 
 
 class Drivetrain(commands2.SubsystemBase):
     def periodic(self) -> None:
-        # if self._gyro_reset_time < 0:
-        wpilib.SmartDashboard.putString('Drivetrain/Pose', str(self._update_odometry()))
+        current_pose = self._update_odometry()
+        self.field.setRobotPose(current_pose)
+
+        wpilib.SmartDashboard.putString('Drivetrain/Pose', str(current_pose))
         wpilib.SmartDashboard.putNumber('Drivetrain/Left Speed', self._left_motors.get_configured_lead_encoder_velocity())
         wpilib.SmartDashboard.putNumber('Drivetrain/Left Position', self._left_motors.get_configured_lead_encoder_position())
         wpilib.SmartDashboard.putNumber('Drivetrain/Right Speed', self._right_motors.get_configured_lead_encoder_velocity())
         wpilib.SmartDashboard.putNumber('Drivetrain/Right Position', self._right_motors.get_configured_lead_encoder_position())
+        wpilib.SmartDashboard.putNumber('Drivetrain/Left Voltage', self._left_motors.get_output_voltage())
+        wpilib.SmartDashboard.putNumber('Drivetrain/Right Voltage', self._right_motors.get_output_voltage())
 
         # wpilib.SmartDashboard.putNumber('Gyro Rot2D', self.get_gyro().degrees())
         # wpilib.SmartDashboard.putNumber('Gyro Angle', self._gyro.getAngle())
         # wpilib.SmartDashboard.putNumber('Left Motor Output Percent', self._left_motors.lead.getMotorOutputPercent() * 100)
         # wpilib.SmartDashboard.putNumber('Right Motor Output Percent', self._right_motors.lead.getMotorOutputPercent() * 100)
 
-        # if self._gyro_reset_time >= 0:
-        #     if self._gyro_reset_time == 0:
-        #         self._gyro.reset()
-        #         self._init_odometry()
-        #     self._gyro_reset_time -= 1
-
-        return super().periodic()
-
     def simulationPeriodic(self) -> None:
-        # self._left_sim_collection.setIntegratedSensorVelocity(self._intended_left_speed)
-        # self._right_sim_collection.setIntegratedSensorVelocity(self._intended_right_speed)
+        self._drivetrain_sim.setInputs(
+            self._left_motors.get_output_voltage(),
+            self._right_motors.get_output_voltage(),
+        )
+        self._drivetrain_sim.update(constants.Misc.SIMULATION_PERIOD_MS / 1000)
 
-        return super().simulationPeriodic()
+        self._left_sim.set_configured_distance(self._drivetrain_sim.getLeftPosition())
+        self._left_sim.set_configured_velocity(self._drivetrain_sim.getLeftVelocity())
+        self._right_sim.set_configured_distance(-self._drivetrain_sim.getRightPosition())
+        self._right_sim.set_configured_velocity(-self._drivetrain_sim.getRightVelocity())
+        self._gyro.set_angle(self._drivetrain_sim.getHeading())
 
-    def __init__(
-            self,
-            left_motor_IDs: typing.Collection[int],
-            right_motor_IDs: typing.Collection[int],
-            encoder_counts_per_meter: float,
-            ) -> None:
+    def __init__(self) -> None:
         commands2.SubsystemBase.__init__(self)
         self.setName('Drivetrain')
 
-        self._left_motors = utils.motor.HeadedDefaultMotorGroup(left_motor_IDs)
+        encoder_counts_per_meter = constants.Drivetrain.ENCODER_COUNTS_PER_METER
+        self._left_motors = utils.motor.HeadedDefaultMotorGroup(constants.Drivetrain.LeftMotors.IDs)
         self._left_motors.configure_units(encoder_counts_per_meter)
         self._left_motors.set_neutral_mode_coast()
-        self._right_motors = utils.motor.HeadedDefaultMotorGroup(right_motor_IDs)
+        self._right_motors = utils.motor.HeadedDefaultMotorGroup(constants.Drivetrain.RightMotors.IDs)
         self._right_motors.configure_units(encoder_counts_per_meter)
         self._right_motors.set_neutral_mode_coast()
         self._right_motors.invert_all()
@@ -58,18 +62,50 @@ class Drivetrain(commands2.SubsystemBase):
         self.reset_encoders()
 
         self._gyro = navx.AHRS(wpilib.SPI.Port.kMXP)
-        # self._gyro_reset_time = 50
 
-        self._simulation_init()
+        self.field = wpilib.Field2d()
+        wpilib.SmartDashboard.putData('Field', self.field)
 
         self._init_odometry()
 
-    def _simulation_init(self):
-        self._intended_left_speed = 0
-        self._intended_right_speed = 0
+        self._simulation_init()
 
-        self._left_sim_collection = self._left_motors.lead.getSimCollection()
-        self._right_sim_collection = self._right_motors.lead.getSimCollection()
+    def _simulation_init(self):
+        characterization = constants.Drivetrain.Characterization
+        self._drivetrain_sim = wpilib.simulation.DifferentialDrivetrainSim(
+            wpimath.system.LinearSystemId.identifyDrivetrainSystem(
+                characterization.LinearFeedForward.kV,
+                characterization.LinearFeedForward.kA,
+                characterization.AngularFeedForward.kV,
+                characterization.AngularFeedForward.kA,
+                characterization.TRACK_WIDTH,
+            ),
+            characterization.TRACK_WIDTH,
+            wpimath.system.plant.DCMotor.falcon500(
+                constants.Drivetrain.MOTORS_PER_SIDE
+            ),
+            constants.Drivetrain.GEAR_RATIO,
+            constants.Drivetrain.WHEEL_RADIUS,
+            # characterization.MEASUREMENT_STDDEVS,
+        )
+
+        class AHRSSim:
+            def __init__(self) -> None:
+                self._last_angle = wpimath.geometry.Rotation2d()
+                self._angle = wpimath.geometry.Rotation2d()
+            def set_angle(self, angle: wpimath.geometry.Rotation2d):
+                self._last_angle = self._angle
+                self._angle = angle
+            def getRotation2d(self):
+                return self._angle
+            def getRate(self):
+                -(self._angle - self._last_angle).degrees() * (1000 / constants.Misc.SIMULATION_PERIOD_MS)
+
+        self._gyro = AHRSSim()
+
+        self._left_sim = utils.motor.HeadedDefaultMotorGroupSim(self._left_motors)
+        self._right_sim = utils.motor.HeadedDefaultMotorGroupSim(self._right_motors)
+
 
     def set_speed(self, left: float, right: float):
         """Sets the speed of the left and right motors."""
@@ -130,7 +166,7 @@ class Drivetrain(commands2.SubsystemBase):
         initial_heading = wpilib.SmartDashboard.getNumber('Initial Heading', 0)
 
         self._odometry = wpimath.kinematics.DifferentialDriveOdometry(
-            self._gyro.getRotation2d(),
+            self.get_gyro(),
             wpimath.geometry.Pose2d(initial_x, initial_y, initial_heading),
         )
 
@@ -141,7 +177,7 @@ class Drivetrain(commands2.SubsystemBase):
         Intended to be called periodically.
         """
         return self._odometry.update(
-            self._gyro.getRotation2d(),
+            self.get_gyro(),
             self.get_left_encoder_position(),
             self.get_right_encoder_position(),
         )

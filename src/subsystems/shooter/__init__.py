@@ -5,14 +5,8 @@ from . import _turret
 # from . import _hood
 from . import _josh
 
-# feeder = _feeder.Feeder(
-#     constants.Shooter.Feeder.MOTOR_IDs
-# )
-turret = _turret.Turret(
-    constants.Shooter.Turret.MOTOR_IDs,
-    constants.Shooter.Turret.ANGLE_MAX_DEGREES - constants.Shooter.Turret.ANGLE_MIN_DEGREES,
-    constants.Shooter.Turret.ENCODER_COUNTS_PER_DEGREE,
-)
+# feeder = _feeder.Feeder()
+turret = _turret.Turret()
 # hood = _hood.Hood(
 #     constants.Shooter.Hood.MOTOR_IDs,
 #     min_encoder_counts=constants.Shooter.Hood.EncoderLimits.MIN,
