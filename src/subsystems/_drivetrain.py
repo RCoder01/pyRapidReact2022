@@ -6,7 +6,6 @@ import navx
 import wpilib
 import wpilib.simulation
 import wpimath.geometry
-import hal
 import wpimath.system
 import wpimath.system.plant
 import wpimath.kinematics
@@ -51,10 +50,10 @@ class Drivetrain(commands2.SubsystemBase):
         self.setName('Drivetrain')
 
         encoder_counts_per_meter = constants.Drivetrain.ENCODER_COUNTS_PER_METER
-        self._left_motors = utils.motor.HeadedDefaultMotorGroup(constants.Drivetrain.LeftMotors.IDs)
+        self._left_motors = utils.motor.TalonFXGroup(constants.Drivetrain.LeftMotors.IDs)
         self._left_motors.configure_units(encoder_counts_per_meter)
         self._left_motors.set_neutral_mode_coast()
-        self._right_motors = utils.motor.HeadedDefaultMotorGroup(constants.Drivetrain.RightMotors.IDs)
+        self._right_motors = utils.motor.TalonFXGroup(constants.Drivetrain.RightMotors.IDs)
         self._right_motors.configure_units(encoder_counts_per_meter)
         self._right_motors.set_neutral_mode_coast()
         self._right_motors.invert_all()
@@ -103,8 +102,8 @@ class Drivetrain(commands2.SubsystemBase):
 
         self._gyro = AHRSSim()
 
-        self._left_sim = utils.motor.HeadedDefaultMotorGroupSim(self._left_motors)
-        self._right_sim = utils.motor.HeadedDefaultMotorGroupSim(self._right_motors)
+        self._left_sim = utils.motor.TalonFXGroupSim(self._left_motors)
+        self._right_sim = utils.motor.TalonFXGroupSim(self._right_motors)
 
 
     def set_speed(self, left: float, right: float):

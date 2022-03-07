@@ -18,7 +18,7 @@ class Intake(commands2.SubsystemBase):
         commands2.SubsystemBase.__init__(self)
         self.setName('Intake')
 
-        self._motors = utils.motor.HeadedDefaultMotorGroup(constants.Intake.MOTOR_IDs)
+        self._motors = utils.motor.TalonFXGroup(constants.Intake.MOTOR_IDs)
 
     def set_speed(self, speed: float) -> None:
         """Sets the speed of the intake motors."""

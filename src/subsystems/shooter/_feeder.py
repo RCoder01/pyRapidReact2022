@@ -15,7 +15,7 @@ class Feeder(commands2.SubsystemBase):
         commands2.SubsystemBase.__init__(self)
         self.setName('Feeder')
 
-        self._motor_group = utils.motor.HeadedDefaultMotorGroup(constants.Shooter.Feeder.MOTOR_IDs)
+        self._motor_group = utils.motor.TalonFXGroup(constants.Shooter.Feeder.MOTOR_IDs)
 
         self.set_speed(0)
 

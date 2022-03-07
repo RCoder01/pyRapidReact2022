@@ -46,7 +46,7 @@ class Turret(commands2.SubsystemBase):
 
         self._ANGLE_RANGE = constants.Shooter.Turret.ANGLE_MAX_DEGREES - constants.Shooter.Turret.ANGLE_MIN_DEGREES
 
-        self._motors = utils.motor.HeadedDefaultMotorGroup(constants.Shooter.Turret.MOTOR_IDs)
+        self._motors = utils.motor.TalonFXGroup(constants.Shooter.Turret.MOTOR_IDs)
         self._motors.configure_units(constants.Shooter.Turret.ENCODER_COUNTS_PER_DEGREE)
         self._motors.lead.configAllSettings(constants.Shooter.Turret.MOTOR_CONFIG)
 

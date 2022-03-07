@@ -14,7 +14,7 @@ class Josh(commands2.SubsystemBase):
         commands2.SubsystemBase.__init__(self)
         self.setName('Josh')
 
-        self._motors = utils.motor.HeadedDefaultMotorGroup(motor_ids)
+        self._motors = utils.motor.TalonFXGroup(motor_ids)
         self._motors.configure_units(gear_speed_increase)
 
         self.set_output(0)

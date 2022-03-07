@@ -28,7 +28,7 @@ class Belt(commands2.SubsystemBase):
         self._out_sensor = utils.sensor.DoubleDigitialInput(*constants.Belt.OUT_SENSOR_IDs, False, True)
         self._out_sensor.config_default_get(self._out_sensor.get_leniant)
 
-        self._motor_group = utils.motor.HeadedDefaultMotorGroup(constants.Belt.MOTOR_IDs)
+        self._motor_group = utils.motor.TalonFXGroup(constants.Belt.MOTOR_IDs)
 
         self.set_speed(0)
 
