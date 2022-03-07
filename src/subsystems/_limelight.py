@@ -15,6 +15,8 @@ class Limelight(commands2.SubsystemBase):
         wpilib.SmartDashboard.putNumberArray("Limelight/XYAV", [self.tx, self.ty, self.ta, self.tv])
         wpilib.SmartDashboard.putNumberArray("Limelight/nd", self._nd())
         wpilib.SmartDashboard.putNumberArray("Limelight/d", self._d())
+        wpilib.SmartDashboard.putNumberArray("Limelight/components", self.component_distances)
+        wpilib.SmartDashboard.putNumberArray("Limelight/distance", (self.distance, self.distance2))
         try:
             from subsystems import drivetrain
             from subsystems.shooter import turret
@@ -30,9 +32,7 @@ class Limelight(commands2.SubsystemBase):
             #         wpimath.geometry.Rotation2d(0)
             #     )
             # )
-            limelight_rotation = drivetrain_pose.rotation() + turret_rotation
-            x, y, z = self._d()
-            limelight_pose = wpimath.geometry.Pose2d(wpimath.geometry.Translation2d(z, x).rotateBy(limelight_rotation), wpimath.geometry.Rotation2d())
+            limelight_pose = drivetrain_pose.transformBy(wpimath.geometry.Transform2d(wpimath.geometry.Translation2d(), turret_rotation))
             wpilib.SmartDashboard.putString("Limelight/Estimated Target Position", str(self.get_estimated_target_position(limelight_pose)))
 
         try:
@@ -113,11 +113,19 @@ class Limelight(commands2.SubsystemBase):
 
     @property
     def distance(self):
+        return self._ACTUAL_HEIGHT / math.tan(math.radians(self.ty + self._MOUNT_ANGLE))
+
+    @property
+    def component_distances(self):
+        return self.distance * math.sin(math.radians(self.tx)), self._ACTUAL_HEIGHT, self.distance * math.cos(math.radians(self.tx))
+
+    @property
+    def distance2(self):
         x, y, z = self._d()
         return (x ** 2 + z ** 2) ** 0.5
 
     def get_estimated_target_position(self, limelight_pose: wpimath.geometry.Pose2d):
-        return limelight_pose.translation() + wpimath.geometry.Translation2d(self.distance + constants.Limelight.TARGET_RADIUS, limelight_pose.rotation())
+        return limelight_pose.translation() + wpimath.geometry.Translation2d(self.distance + constants.Limelight.TARGET_RADIUS, limelight_pose.rotation() + wpimath.geometry.Rotation2d.fromDegrees(self.tx))
 
     @property
     def is_aligned(self):
