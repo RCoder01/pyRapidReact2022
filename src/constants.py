@@ -63,7 +63,7 @@ class Intake(ConstantsClass):
     DEFAULT_EXGEST_SPEED = -DEFAULT_INTAKE_SPEED
 
 class Limelight(ConstantsClass):
-    MOUNT_ANGLE = 46 # degrees
+    MOUNT_ANGLE = 41.3 # degrees
     MOUNT_HEIGHT = 0.6477 # meters
     TARGET_HEIGHT = 2.6114375 # meters
     TARGET_RADIUS = 0.6096 # meters
@@ -114,26 +114,47 @@ class Shooter(ConstantsClass):
         MOTOR_CONFIG.clearPositionOnLimitR = True
 
     class Hood(ConstantsClass):
-        MOTOR_IDs = -6,
+        MOTOR_IDs = 9,
         EncoderLimits = (0, 2048)
         PID = PIDConfiguration()
 
+        MOTOR_CONFIG = ctre.TalonFXConfiguration()
+        MOTOR_CONFIG.slot0 = ctre.SlotConfiguration()
+        
+        MOTOR_CONFIG = ctre.TalonFXConfiguration()
+        MOTOR_CONFIG.slot0 = ctre.SlotConfiguration()
+        MOTOR_CONFIG.slot0.kP = 0.5
+        MOTOR_CONFIG.slot0.kI = 0.01
+        MOTOR_CONFIG.slot0.kD = 15
+        MOTOR_CONFIG.slot0.kF = 0
+        MOTOR_CONFIG.slot0.integralZone = 100
+        MOTOR_CONFIG.neutralDeadband = 0
+        
+
     class Josh(ConstantsClass):
         class Mo(ConstantsClass):
-            MOTOR_IDs = -7,
-            SPEED_DECREASE_FACTOR = 1
+            MOTOR_IDs = 13,
+            SPEED_INCREASE_FACTOR = 1
 
-            PID = PIDConfiguration(0.5)
-            PIDTolerance = PIDSetpointConfiguration()
-            FeedForward = FeedForwardConfiguration()
+            MOTOR_CONFIG = ctre.TalonFXConfiguration()
+            MOTOR_CONFIG.slot0 = ctre.SlotConfiguration()
+            MOTOR_CONFIG.slot0.kP = 0.013
+            MOTOR_CONFIG.slot0.kI = 0.0001
+            MOTOR_CONFIG.slot0.kD = 0.01
+            MOTOR_CONFIG.slot0.kF = 0.053
+            MOTOR_CONFIG.slot0.maxIntegralAccumulator = 1e-8
 
         class Lester(ConstantsClass):
-            MOTOR_IDs = -8,
-            SPEED_DECREASE_FACTOR = 1
+            MOTOR_IDs = 15,
+            SPEED_INCREASE_FACTOR = 1
 
-            PID = PIDConfiguration(0.5)
-            PIDTolerance = PIDSetpointConfiguration()
-            FeedForward = FeedForwardConfiguration()
+            MOTOR_CONFIG = ctre.TalonFXConfiguration()
+            MOTOR_CONFIG.slot0 = ctre.SlotConfiguration()
+            MOTOR_CONFIG.slot0.kP = 0.013
+            MOTOR_CONFIG.slot0.kI = 5e-5
+            MOTOR_CONFIG.slot0.kD = 0.01
+            MOTOR_CONFIG.slot0.kF = 0.053
+            MOTOR_CONFIG.slot0.maxIntegralAccumulator = 1e-8
 
 
 class Misc(ConstantsClass):

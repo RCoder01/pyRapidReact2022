@@ -1,3 +1,4 @@
+import typing
 import commands2
 import wpimath.controller
 
@@ -11,9 +12,6 @@ class SetSpeed(commands2.CommandBase):
             self,
             josh: subsystems.shooter._josh.Josh,
             speed: float,
-            PID_controller: wpimath.controller.PIDController,
-            feedforward_constants: utils.constants.FeedForwardConfiguration,
-            tolerance_constants: utils.constants.PIDSetpointConfiguration,
             ) -> None:
         commands2.CommandBase.__init__(self)
         self.addRequirements(josh)
@@ -21,27 +19,11 @@ class SetSpeed(commands2.CommandBase):
 
         self._josh = josh
 
-        self._pid_controller = PID_controller
-        self._pid_controller.setTolerance(*tolerance_constants)
-
-        self._feedforward = wpimath.controller.SimpleMotorFeedforwardMeters(*feedforward_constants)
         self._speed_setpoint = speed
 
-    def initialize(self) -> None:
-        self._pid_controller.setSetpoint(self._speed_setpoint)
-        return super().initialize()
-
     def execute(self) -> None:
-        self._josh.set_output(self.calculate_output())
-
-    def calculate_output(self) -> float:
-        output = 0
-        output += self._pid_controller.calculate(self._josh.get_jeff(), self._speed_setpoint)
-        output += self._feedforward.calculate(self._josh.get_jeff())
-        return output
-
-    def isFinished(self) -> bool:
-        return self._pid_controller.atSetpoint()
+        self._josh.set_velocity_rpm(self._speed_setpoint)
+        return super().execute()
 
     def end(self, interrupted: bool) -> None:
         self._josh.set_output(0)

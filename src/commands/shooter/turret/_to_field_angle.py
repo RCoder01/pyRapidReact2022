@@ -33,7 +33,7 @@ class ToFieldAngle(ToRobotAngle):
         self._field_relative_angle = angle
 
     def execute(self) -> None:
-        wpilib.SmartDashboard.putNumber('Turret/Field Angle Setpoint', self._field_relative_angle)
+        wpilib.SmartDashboard.putNumber('Turret/Field Angle Setpoint', self._field_relative_angle.degrees())
         return super().execute()
 
     @property

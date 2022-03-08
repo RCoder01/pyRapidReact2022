@@ -9,7 +9,7 @@ import constants
 
 class Feeder(commands2.SubsystemBase):
     def periodic(self) -> None:
-        wpilib.SmartDashboard.putNumber('Feeder Speed', self.get_speed())
+        wpilib.SmartDashboard.putNumber('Feeder/Speed', self.get_speed())
 
     def __init__(self) -> None:
         commands2.SubsystemBase.__init__(self)

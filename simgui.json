@@ -18,14 +18,7 @@
         }
       },
       "Talon FX[13]": {
-        "header": {
-          "open": false
-        }
-      },
-      "Talon FX[13]/Integrated Sensor": {
-        "header": {
-          "open": false
-        }
+        "name": "Mo"
       },
       "Talon FX[14]": {
         "header": {
@@ -33,9 +26,7 @@
         }
       },
       "Talon FX[15]": {
-        "header": {
-          "open": false
-        }
+        "name": "Lester"
       },
       "Talon FX[1]": {
         "header": {
@@ -56,21 +47,12 @@
         "name": "DT R 2"
       },
       "Talon FX[4]": {
-        "header": {
-          "open": true
-        },
         "name": "Belt"
       },
       "Talon FX[5]": {
-        "header": {
-          "open": true
-        },
         "name": "Feeder"
       },
       "Talon FX[6]": {
-        "header": {
-          "open": true
-        },
         "name": "Turret"
       },
       "Talon FX[7]": {
@@ -83,9 +65,7 @@
         "name": "DT R 2"
       },
       "Talon FX[9]": {
-        "header": {
-          "open": false
-        }
+        "name": "Hood"
       }
     },
     "RoboRIO": {
@@ -119,6 +99,7 @@
       "/LiveWindow/Ungrouped/DigitalInput[5]": "Digital Input",
       "/LiveWindow/Ungrouped/Drivetrain": "Subsystem",
       "/LiveWindow/Ungrouped/Feeder": "Subsystem",
+      "/LiveWindow/Ungrouped/Hood": "Subsystem",
       "/LiveWindow/Ungrouped/Intake": "Subsystem",
       "/LiveWindow/Ungrouped/Josh": "Subsystem",
       "/LiveWindow/Ungrouped/Lester": "Subsystem",
@@ -143,6 +124,12 @@
         "DigitalInput[1]": {
           "open": true
         },
+        "DigitalInput[2]": {
+          "open": true
+        },
+        "DigitalInput[3]": {
+          "open": true
+        },
         "class frc2::SubsystemBase": {
           "open": true
         },
@@ -151,17 +138,10 @@
       "open": true
     },
     "SmartDashboard": {
-      "Drivetrain": {
-        "open": true
-      },
-      "Limelight": {
-        "open": true
-      },
       "Turret": {
         "Sim": {
           "open": true
-        },
-        "open": true
+        }
       },
       "open": true,
       "sensor": {

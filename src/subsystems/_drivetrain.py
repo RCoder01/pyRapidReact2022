@@ -67,7 +67,8 @@ class Drivetrain(commands2.SubsystemBase):
 
         self._init_odometry()
 
-        self._simulation_init()
+        if wpilib.RobotBase.isSimulation():
+            self._simulation_init()
 
     def _simulation_init(self):
         characterization = constants.Drivetrain.Characterization
@@ -168,6 +169,7 @@ class Drivetrain(commands2.SubsystemBase):
             self.get_gyro(),
             wpimath.geometry.Pose2d(initial_x, initial_y, initial_heading),
         )
+
 
     def _update_odometry(self):
         """

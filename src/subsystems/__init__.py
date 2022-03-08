@@ -11,6 +11,6 @@ drivetrain = _drivetrain.Drivetrain()
 
 limelight = _limelight.Limelight()
 
-# intake = _intake.Intake()
+intake = _intake.Intake()
 
-# belt = _belt.Belt()
+belt = _belt.Belt()

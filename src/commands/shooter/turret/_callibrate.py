@@ -30,7 +30,7 @@ class Callibrate(commands2.CommandBase):
             warnings.warn("Callibration interrupted!", RuntimeWarning)
         else:
             subsystems.shooter.turret.set_callibration_status(subsystems.shooter.turret.CallibrationStatus.CALLIBRATED)
-            subsystems.shooter.turret.set_forward_soft_limit(True)
+            subsystems.shooter.turret.set_reverse_soft_limit(True)
             subsystems.shooter.turret.config_max_speed(constants.Shooter.Turret.STANDARD_TOP_SPEED)
             subsystems.shooter.turret.set_soft_offset(constants.Shooter.Turret.ANGLE_MIN_DEGREES * constants.Shooter.Turret.ENCODER_COUNTS_PER_DEGREE)
         return super().end(interrupted)

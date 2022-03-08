@@ -17,14 +17,11 @@ class SetVariableSpeed(SetSpeed):
     def __init__(
             self,
             josh: subsystems.shooter._josh.Josh,
-            speed_supplier: typing.Callable[[], float], 
-            PID_controller: wpimath.controller.PIDController,
-            feedforward_constants: utils.constants.FeedForwardConfiguration,
-            tolerance_constants: utils.constants.PIDSetpointConfiguration,
+            speed_supplier: typing.Callable[[], float],
             ) -> None:
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", category=self.SpeedSetpointOverrideWarning)
-            super().__init__(josh, 0, PID_controller, feedforward_constants, tolerance_constants)
+            super().__init__(josh, 0)
         self.setName(f"Set {josh.getName()} Variable Speed")
 
         self._speed_supplier = speed_supplier

@@ -61,7 +61,7 @@ class Turret(commands2.SubsystemBase):
         self._motors.set_output(speed)
 
     def set_setpoint(self, angle: float):
-        self._motors.set_setpoint(angle)
+        self._motors.set_configured_setpoint(angle)
 
     def set_soft_offset(self, raw_offset: float):
         self._motors.set_soft_offset(raw_offset)

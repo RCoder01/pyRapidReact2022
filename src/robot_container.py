@@ -87,11 +87,12 @@ class RobotContainer():
         ))
         # commands2.button.Button(subsystems.shooter.turret.check_reset) \
         #     .whenPressed(commands.shooter.turret.Callibrate().withTimeout(constants.Shooter.Turret.CALLIBRATION_TIMEOUT))
+        import wpimath.geometry
         commands2.button.JoystickButton(oi._driver, oi._driver.Button.kB) \
-            .whenActive(commands.shooter.turret.ToRobotAngle(wpilib.SmartDashboard.getNumber("Turret Angle?", 0)))
+            .whenActive(commands.shooter.turret.ToFieldAngle(wpimath.geometry.Rotation2d.fromDegrees(-180)))
         commands2.button.JoystickButton(oi._driver, oi._driver.Button.kA) \
             .whenActive(commands.shooter.turret.Callibrate().withTimeout(constants.Shooter.Turret.CALLIBRATION_TIMEOUT))
-        # subsystems.belt.setDefaultCommand(commands.belt.Monitor())
+        subsystems.belt.setDefaultCommand(commands.belt.Monitor())
 
     def get_autonomous_command(self) -> commands2.Command:
         trajectory_generator = wpimath.trajectory.TrajectoryGenerator.generateTrajectory(

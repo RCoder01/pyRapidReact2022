@@ -10,7 +10,7 @@ import utils.motor
 class Intake(commands2.SubsystemBase):
 
     def periodic(self) -> None:
-        wpilib.SmartDashboard.putNumber('Intake Speed', self.get_speed())
+        wpilib.SmartDashboard.putNumber('Intake/Speed', self.get_speed())
 
         return super().periodic()
 

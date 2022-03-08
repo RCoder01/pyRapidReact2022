@@ -18,3 +18,6 @@ class Robot(wpilib.TimedRobot):
         for m in self.ms:
             m.setNeutralMode(ctre.NeutralMode.Coast)
         return super().teleopInit()
+
+if __name__ == '__main__':
+    wpilib.run(Robot)
