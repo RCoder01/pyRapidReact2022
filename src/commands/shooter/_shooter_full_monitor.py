@@ -5,18 +5,19 @@ import subsystems
 
 from . import hood
 from . import josh
+from . import turret
 
 
 class ShooterFullMonitor(commands2.ParallelCommandGroup):
     def get_shooter_config(self):
         self.distance = subsystems.limelight.distance
-        return shooter_numbers[
+        return shooter_numbers.positions[
             min(
                 shooter_numbers.positions_list,
                 lambda distance: abs(distance - self.distance)
             )
         ]
-    
+
     def get_mo(self):
         return self.get_shooter_config().mo
     def get_lester(self):
@@ -28,7 +29,9 @@ class ShooterFullMonitor(commands2.ParallelCommandGroup):
         commands2.ParallelCommandGroup.__init__(
             self,
             [
-                josh.SetLesterVariableSpeed
+                josh.SetLesterVariableSpeed(self.get_lester),
+                josh.SetMoVariableSpeed(self.get_lester),
+                hood.SetVariableAngle(self.get_hood),
             ]
         )
 

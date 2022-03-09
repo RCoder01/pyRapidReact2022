@@ -28,14 +28,17 @@ class Drivetrain(ConstantsClass):
     WHEEL_RADIUS = 0.075
 
     ENCODER_COUNTS_PER_METER = 2048 * GEAR_RATIO / (WHEEL_RADIUS * 2 * math.pi) # Encoder counts/revolution * gear ratio / (wheel diameter (meters) * pi = wheel circumference)
-    # ENCODER_COUNTS_PER_METER = n # TODO: Get this value experimentally
+    # ENCODER_COUNTS_PER_METER = 37600
+
+    # 0.012 degrees gyro drift when standing still in 2 min 30 s
 
     class Characterization(ConstantsClass): # TODO: https://docs.wpilib.org/en/stable/docs/software/pathplanning/trajectory-tutorial/characterizing-drive.html
 
-        LinearFeedForward = FeedForwardConfiguration(0.66847, 1.806, 0.27585)
-        AngularFeedForward = FeedForwardConfiguration(0.90843, 130.15, 12.776)
+        LinearFeedForward = FeedForwardConfiguration(0.64434, 1.8175, 0.23827)
+        AngularFeedForward = FeedForwardConfiguration(0.88663, 128.44, 15.542)
 
         TRACK_WIDTH = 0.88817 # meters
+        # TRACK_WIDTH = 0.7493 # actual meters
 
         MAX_SPEED = 0 # meters per second
         MAX_ACCELERATION = 0 # meters per second per second
@@ -44,7 +47,7 @@ class Drivetrain(ConstantsClass):
             B = 2
             ZETA = 0.7
 
-        MEASUREMENT_STDDEVS = 0, 0, 0.0001, 0.1, 0.1, 0.005, 0.005
+        # MEASUREMENT_STDDEVS = 0, 0, 0.0001, 0.1, 0.1, 0.005, 0.005
 
 class Belt(ConstantsClass):
     MOTOR_IDs = 4,
@@ -52,10 +55,12 @@ class Belt(ConstantsClass):
     DEFAULT_EXGEST_SPEED = -DEFAULT_SPEED
 
     STAGING_RUN_TIME = 0.5
+    TIMEOUT = 3
 
     IN_SENSOR_IDs = 0, 1
     OUT_SENSOR_IDs = 2, 3
     IN_SENSOR_DEBOUNCE_TIME = 0.5
+    OUT_SENSOR_DEBOUNCE_TIME = 0.5
 
 class Intake(ConstantsClass):
     MOTOR_IDs = 8,
@@ -72,7 +77,7 @@ class Limelight(ConstantsClass):
     Ka = 0
     PIPELINE = 1
     LED_MODE = 3
-    X_TOLERANCE = 0.1
+    X_TOLERANCE = 1
 
 class Shooter(ConstantsClass):
     class Feeder(ConstantsClass):
@@ -88,15 +93,16 @@ class Shooter(ConstantsClass):
         ANGLE_MIN_DEGREES = -110
         ANGLE_MAX_DEGREES = 125.7
         CENTER = wpimath.geometry.Translation2d(0, 0)
+        kL = 0.3
 
         CALLIBRATION_SPEED = -0.2
         CALLIBRATION_TIMEOUT = 5
 
-        STANDARD_TOP_SPEED = 0.3
+        STANDARD_TOP_SPEED = 0.5
 
         PID = PIDConfiguration(0.1, 0.001)
         SETPOINT_TOLERANCE = 10
-        FeedForward = FeedForwardConfiguration()
+        FeedForward = FeedForwardConfiguration(kV = -0.3)
         HeadingFeedForward = 0
 
         MOTOR_CONFIG = ctre.TalonFXConfiguration()
@@ -108,9 +114,8 @@ class Shooter(ConstantsClass):
         MOTOR_CONFIG.slot0.integralZone = 1000
         MOTOR_CONFIG.slot0.integralZone = 1000
         MOTOR_CONFIG.forwardSoftLimitEnable = True
-        MOTOR_CONFIG.forwardSoftLimitThreshold = 69000
-        MOTOR_CONFIG.forwardSoftLimitThreshold = 69000
-        MOTOR_CONFIG.reverseSoftLimitThreshold = 2000
+        MOTOR_CONFIG.forwardSoftLimitThreshold = 65000
+        MOTOR_CONFIG.reverseSoftLimitThreshold = 5000
         MOTOR_CONFIG.clearPositionOnLimitR = True
 
     class Hood(ConstantsClass):

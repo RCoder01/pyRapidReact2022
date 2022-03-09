@@ -77,6 +77,24 @@ class RobotContainer():
 
         # oi.JoystickButton(oi._driver, oi._driver.Button.kA) \
         #     .whenHeld(commands.shooter.feeder.Active())
+        import wpimath.geometry
+        import commands.shooter.turret._test_limelight
+        # commands2.button.JoystickButton(oi._driver, oi._driver.Button.kB) \
+        #     .whileHeld(commands.shooter.turret.ToHubAngle())
+        commands2.button.JoystickButton(oi._driver, oi._driver.Button.kB) \
+            .whileHeld(commands.shooter.turret._test_limelight.TargetHub())
+        # commands2.button.JoystickButton(oi._driver, oi._driver.Button.kB) \
+        #     .whileHeld(commands.shooter.turret.ToFieldAngle(wpimath.geometry.Rotation2d(-180)))
+        commands2.button.JoystickButton(oi._driver, oi._driver.Button.kA) \
+            .whenPressed(commands.shooter.turret.Callibrate().withTimeout(constants.Shooter.Turret.CALLIBRATION_TIMEOUT), False)
+        commands2.button.JoystickButton(oi._driver, oi._driver.Button.kX) \
+            .whenPressed(commands2.InstantCommand(lambda: subsystems.drivetrain.reset_odometry(wpimath.geometry.Pose2d(
+                wpilib.SmartDashboard.getNumber('Drivetrain/Initial X', 0),
+                wpilib.SmartDashboard.getNumber('Drivetrain/Initial Y', 0),
+                wpilib.SmartDashboard.getNumber('Drivetrain/Initial Heading', 0),
+            ))))
+        # commands2.button.JoystickButton(oi._driver, oi._driver.Button.kX) \
+        #     .whenPressed(commands2.PrintCommand('hi'))
 
         self.pd = wpilib.PowerDistribution()
 
@@ -85,13 +103,6 @@ class RobotContainer():
             oi.Drivetrain.ArcadeDrive.get_forward_speed,
             oi.Drivetrain.ArcadeDrive.get_turn_speed,
         ))
-        # commands2.button.Button(subsystems.shooter.turret.check_reset) \
-        #     .whenPressed(commands.shooter.turret.Callibrate().withTimeout(constants.Shooter.Turret.CALLIBRATION_TIMEOUT))
-        import wpimath.geometry
-        commands2.button.JoystickButton(oi._driver, oi._driver.Button.kB) \
-            .whenActive(commands.shooter.turret.ToFieldAngle(wpimath.geometry.Rotation2d.fromDegrees(-180)))
-        commands2.button.JoystickButton(oi._driver, oi._driver.Button.kA) \
-            .whenActive(commands.shooter.turret.Callibrate().withTimeout(constants.Shooter.Turret.CALLIBRATION_TIMEOUT))
         subsystems.belt.setDefaultCommand(commands.belt.Monitor())
 
     def get_autonomous_command(self) -> commands2.Command:
@@ -123,7 +134,7 @@ class RobotContainer():
 
         in_sensor_debouncer = wpimath.filter.Debouncer(constants.Misc.BallCounting.IN_DEBOUNCE_TIME)
         out_sensor_debouncer = wpimath.filter.Debouncer(constants.Misc.BallCounting.OUT_DEBOUNCE_TIME)
-        commands2.button.Button(lambda: in_sensor_debouncer.calculate(subsystems.belt.get_in_sensor())) \
-            .whenPressed(passed_sensor(True))
-        commands2.button.Button(lambda: out_sensor_debouncer.calculate(subsystems.belt.get_out_sensor())) \
-            .whenPressed(passed_sensor(False))
+        # commands2.button.Button(lambda: in_sensor_debouncer.calculate(subsystems.belt.get_in_sensor())) \
+        #     .whenPressed(passed_sensor(True))
+        # commands2.button.Button(lambda: out_sensor_debouncer.calculate(subsystems.belt.get_out_sensor())) \
+        #     .whenPressed(passed_sensor(False))

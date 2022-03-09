@@ -1,6 +1,3 @@
-import math
-import typing
-
 import commands2
 import navx
 import wpilib
@@ -24,8 +21,12 @@ class Drivetrain(commands2.SubsystemBase):
         wpilib.SmartDashboard.putNumber('Drivetrain/Left Position', self._left_motors.get_configured_lead_encoder_position())
         wpilib.SmartDashboard.putNumber('Drivetrain/Right Speed', self._right_motors.get_configured_lead_encoder_velocity())
         wpilib.SmartDashboard.putNumber('Drivetrain/Right Position', self._right_motors.get_configured_lead_encoder_position())
-        wpilib.SmartDashboard.putNumber('Drivetrain/Left Voltage', self._left_motors.get_output_voltage())
-        wpilib.SmartDashboard.putNumber('Drivetrain/Right Voltage', self._right_motors.get_output_voltage())
+        wpilib.SmartDashboard.putNumber('Drivetrain/.Raw/Left Position', self._left_motors.get_lead_encoder_position())
+        wpilib.SmartDashboard.putNumber('Drivetrain/.Raw/Right Position', self._right_motors.get_lead_encoder_position())
+        wpilib.SmartDashboard.putNumber('Drivetrain/.Raw/Left Velocity', self._left_motors.get_lead_encoder_velocity())
+        wpilib.SmartDashboard.putNumber('Drivetrain/.Raw/Right Velocity', self._right_motors.get_lead_encoder_velocity())
+        wpilib.SmartDashboard.putNumber('Drivetrain/.Raw/Left Voltage', self._left_motors.get_output_voltage())
+        wpilib.SmartDashboard.putNumber('Drivetrain/.Raw/Right Voltage', self._right_motors.get_output_voltage())
 
         # wpilib.SmartDashboard.putNumber('Gyro Rot2D', self.get_gyro().degrees())
         # wpilib.SmartDashboard.putNumber('Gyro Angle', self._gyro.getAngle())
@@ -106,7 +107,6 @@ class Drivetrain(commands2.SubsystemBase):
         self._left_sim = utils.motor.TalonFXGroupSim(self._left_motors)
         self._right_sim = utils.motor.TalonFXGroupSim(self._right_motors)
 
-
     def set_speed(self, left: float, right: float):
         """Sets the speed of the left and right motors."""
         self._intended_left_speed = left
@@ -170,7 +170,6 @@ class Drivetrain(commands2.SubsystemBase):
             wpimath.geometry.Pose2d(initial_x, initial_y, initial_heading),
         )
 
-
     def _update_odometry(self):
         """
         Updates the odometry object.
@@ -179,6 +178,8 @@ class Drivetrain(commands2.SubsystemBase):
         """
         return self._odometry.update(
             self.get_gyro(),
+            # self._left_motors.lead.getSelectedSensorPosition() / constants.Drivetrain.ENCODER_COUNTS_PER_METER,
+            # self._right_motors.lead.getSelectedSensorPosition() / constants.Drivetrain.ENCODER_COUNTS_PER_METER,
             self.get_left_encoder_position(),
             self.get_right_encoder_position(),
         )

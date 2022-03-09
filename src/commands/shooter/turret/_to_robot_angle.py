@@ -2,25 +2,28 @@ import math
 import commands2
 import wpilib
 import wpimath.controller
+import wpimath.geometry
 
 import constants
 import subsystems
 
 
 class ToRobotAngle(commands2.CommandBase):
-    def __init__(self, angle: float) -> None:
+    def __init__(self, angle: wpimath.geometry.Rotation2d = wpimath.geometry.Rotation2d()) -> None:
         commands2.CommandBase.__init__(self)
         self.addRequirements(subsystems.shooter.turret)
         self.setName('Turret To Robot Angle')
 
-        self._setpoint = angle
+        self._setpoint = self.optimize_setpoint(angle.degrees())
+
+    def optimize_setpoint(self, angle: float) -> float:
+        if not (-180 <= angle < 180):
+            angle %= 360
+        if angle > 180:
+            angle -= 360
+        return angle
 
     def execute(self) -> None:
-        _angle_setpoint = self._setpoint
-        if not (-180 <= _angle_setpoint < 180):
-            _angle_setpoint %= 360
-        if _angle_setpoint > 180:
-            _angle_setpoint -= 360
         subsystems.shooter.turret.set_setpoint(self._setpoint)
         wpilib.SmartDashboard.putNumber('Turret/Robot Angle Setpoint', self._setpoint)
 

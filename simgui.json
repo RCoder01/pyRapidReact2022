@@ -47,6 +47,9 @@
         "name": "DT R 2"
       },
       "Talon FX[4]": {
+        "header": {
+          "open": true
+        },
         "name": "Belt"
       },
       "Talon FX[5]": {
@@ -138,6 +141,9 @@
       "open": true
     },
     "SmartDashboard": {
+      "Drivetrain": {
+        "open": true
+      },
       "Turret": {
         "Sim": {
           "open": true

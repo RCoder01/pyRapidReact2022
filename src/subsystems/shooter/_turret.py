@@ -27,7 +27,7 @@ class Turret(commands2.SubsystemBase):
         self._encoder_counts_per_degree = value
 
     def periodic(self) -> None:
-        if self._motors.lead.hasResetOccurred():
+        if self._motors.lead.hasResetOccurred() or self.get_reverse_limit_switch():
             self.set_callibration_status(self.CallibrationStatus.NEEDS_CALLIBRATION)
         if self.get_callibration_status().value is self.CallibrationStatus.NEEDS_CALLIBRATION:
             self.config_max_speed(0)
@@ -60,8 +60,8 @@ class Turret(commands2.SubsystemBase):
     def set_speed(self, speed: float):
         self._motors.set_output(speed)
 
-    def set_setpoint(self, angle: float):
-        self._motors.set_configured_setpoint(angle)
+    def set_setpoint(self, angle: float, feed_forward: float = 0):
+        self._motors.set_configured_setpoint(angle, feed_forward)
 
     def set_soft_offset(self, raw_offset: float):
         self._motors.set_soft_offset(raw_offset)
