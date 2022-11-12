@@ -10,14 +10,31 @@
 #  def teleopPeriodic(s):
 #   s.d.arcadeDrive(s.c.getLeftX(),s.c.getRightY())
 
+# import wpiutil
+# class Send(wpiutil.Sendable):
+#     def initSendable(self, builder: wpiutil.SendableBuilder) -> None:
+#         super().initSendable(builder)
+#         builder.setSmartDashboardType('Send')
+#         def get(*args, **kwargs):
+#             print(f'get {args=} {kwargs=}')
+#             return 1
+#         def set(val, *args, **kwargs):
+#             print(f'set {val}, {args=} {kwargs=}')
+#         builder.addDoubleProperty('left', get, set)
+
 import wpilib
 import ctre
 class Robot(wpilib.TimedRobot):
+    def robotInit(self) -> None:
+        pass
+        # wpilib.SmartDashboard.putData('Send', Send())
     def teleopInit(self) -> None:
-        self.ms = (ctre.WPI_TalonFX(i) for i in (2, 6, 7, 8))
-        for m in self.ms:
-            m.setNeutralMode(ctre.NeutralMode.Coast)
-        return super().teleopInit()
+        pass
+        # self.ms = (ctre.WPI_TalonFX(i) for i in (2, 6, 7, 8))
+        # for m in self.ms:
+        #     m.setNeutralMode(ctre.NeutralMode.Coast)
+        # return super().teleopInit()
+
 
 if __name__ == '__main__':
     wpilib.run(Robot)

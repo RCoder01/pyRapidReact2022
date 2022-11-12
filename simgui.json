@@ -137,25 +137,17 @@
           "open": true
         },
         "open": true
-      },
-      "open": true
+      }
     },
     "SmartDashboard": {
-      "Drivetrain": {
-        "open": true
-      },
       "Turret": {
         "Sim": {
           "open": true
         }
       },
-      "open": true,
       "sensor": {
         "open": true
       }
-    },
-    "limelight": {
-      "open": true
     }
   }
 }
