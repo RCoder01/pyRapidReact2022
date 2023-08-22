@@ -1,0 +1,2 @@
+robotpy[commands2, ctre, navx, rev, sim] >= 2022.0.0, <2023.0.0
+matplotlib
